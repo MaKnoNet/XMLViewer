@@ -67,12 +67,14 @@ public class MainView extends VerticalLayout {
     }
 
     private HorizontalLayout createActionBar(Element highlightTarget, Element book025) {
-        Button highlight = new Button("Kapitel (Buch 25) hervorheben", event -> viewer.highlight(highlightTarget));
-        Button highlightBook025 = new Button("Buch b-025 hervorheben", event -> viewer.highlight(book025));
-        Button clearHighlight = new Button("Highlight löschen", event -> viewer.clearHighlight());
+        // Beide Buttons können gleichzeitig aktiv sein – highlight() ist akkumulativ.
+        Button highlight = new Button("+ Kapitel (Buch 25)", event -> viewer.highlight(highlightTarget));
+        Button highlightBook025 = new Button("+ Buch b-025", event -> viewer.highlight(book025));
+        Button clearOne = new Button("– Buch b-025", event -> viewer.clearHighlight(book025));
+        Button clearAll = new Button("Alle Highlights löschen", event -> viewer.clearHighlight());
         Button expandAll = new Button("Alle aufklappen", event -> viewer.expandAll());
         Button collapseAll = new Button("Alle zuklappen", event -> viewer.collapseAll());
-        return new HorizontalLayout(highlight, highlightBook025, clearHighlight, expandAll, collapseAll);
+        return new HorizontalLayout(highlight, highlightBook025, clearOne, clearAll, expandAll, collapseAll);
     }
 
     private void updateCounter(int matchCount, int currentMatchIndex) {

@@ -11,7 +11,9 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.shared.Registration;
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 import org.jdom2.Element;
 
 /**
@@ -54,7 +56,12 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
 
     private RenderedTree tree;
     private XmlSearchController search;
-    private Div highlightedHeader;
+
+    /**
+     * Identitätsbasierte Menge aller aktuell hervorgehobenen Elemente. {@link IdentityHashMap} als
+     * Backing stellt sicher, dass dieselbe {@link Element}-Instanz verglichen wird (kein equals).
+     */
+    private final Set<Element> highlightedElements = Collections.newSetFromMap(new IdentityHashMap<>());
 
     public XmlViewer() {
         getContent().addClassName(CssClasses.ROOT);
@@ -86,11 +93,11 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
 
     /**
      * Hebt das angegebene Element hervor ({@link CssClasses#HIGHLIGHT}), klappt dessen Vorfahren auf
-     * und scrollt es in den sichtbaren Bereich. Das Element muss dieselbe Instanz sein wie im
+     * und scrollt es in den sichtbaren Bereich. Bereits hervorgehobene Elemente bleiben erhalten –
+     * mehrere Elemente können gleichzeitig aktiv sein. Das Element muss dieselbe Instanz sein wie im
      * gesetzten Baum (Identitätsvergleich).
      */
     public void highlight(Element element) {
-        clearHighlight();
         if (element == null) {
             return;
         }
@@ -100,16 +107,34 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
         }
         expandTo(element);
         header.addClassName(CssClasses.HIGHLIGHT);
-        highlightedHeader = header;
+        highlightedElements.add(element);
         scrollTo(header);
     }
 
-    /** Entfernt eine zuvor mit {@link #highlight(Element)} gesetzte Hervorhebung. */
-    public void clearHighlight() {
-        if (highlightedHeader != null) {
-            highlightedHeader.removeClassName(CssClasses.HIGHLIGHT);
-            highlightedHeader = null;
+    /**
+     * Entfernt die Hervorhebung des angegebenen Elements. Alle anderen hervorgehobenen Elemente
+     * bleiben unberührt.
+     */
+    public void clearHighlight(Element element) {
+        if (element == null) {
+            return;
         }
+        Div header = tree.elementHeaders().get(element);
+        if (header != null) {
+            header.removeClassName(CssClasses.HIGHLIGHT);
+        }
+        highlightedElements.remove(element);
+    }
+
+    /** Entfernt alle aktiven Hervorhebungen. */
+    public void clearHighlight() {
+        highlightedElements.forEach(element -> {
+            Div header = tree.elementHeaders().get(element);
+            if (header != null) {
+                header.removeClassName(CssClasses.HIGHLIGHT);
+            }
+        });
+        highlightedElements.clear();
     }
 
     // ------------------------------------------------------------------------

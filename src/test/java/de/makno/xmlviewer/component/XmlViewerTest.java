@@ -73,16 +73,33 @@ class XmlViewerTest {
     }
 
     @Test
-    void highlightSetztUndLoeschtKlasse() {
+    void highlightMehrerElementeGleichzeitig() {
+        // Beide Elemente können gleichzeitig hervorgehoben sein.
         viewer.highlight(child);
-        assertTrue(viewer.headerOf(child).getElement().getClassList().contains(CssClasses.HIGHLIGHT));
-
-        // Neues Highlight löst das alte ab.
         viewer.highlight(item);
+        assertTrue(viewer.headerOf(child).getElement().getClassList().contains(CssClasses.HIGHLIGHT));
+        assertTrue(viewer.headerOf(item).getElement().getClassList().contains(CssClasses.HIGHLIGHT));
+    }
+
+    @Test
+    void clearHighlightEinzelnEntferntNurDasEineElement() {
+        viewer.highlight(child);
+        viewer.highlight(item);
+
+        viewer.clearHighlight(child);
+
         assertFalse(viewer.headerOf(child).getElement().getClassList().contains(CssClasses.HIGHLIGHT));
         assertTrue(viewer.headerOf(item).getElement().getClassList().contains(CssClasses.HIGHLIGHT));
+    }
+
+    @Test
+    void clearHighlightAlleEntferntAlleHervorhebungen() {
+        viewer.highlight(child);
+        viewer.highlight(item);
 
         viewer.clearHighlight();
+
+        assertFalse(viewer.headerOf(child).getElement().getClassList().contains(CssClasses.HIGHLIGHT));
         assertFalse(viewer.headerOf(item).getElement().getClassList().contains(CssClasses.HIGHLIGHT));
     }
 
