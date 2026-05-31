@@ -25,6 +25,7 @@
     --xmlviewer-search-current-bg: #ff9d4d; /* aktueller Treffer   – Orange     */
 
     --xmlviewer-indent-width: 1.25em;       /* Einrückung je Ebene / Breite des Dreiecks */
+    --xmlviewer-guide-color: #cbd5e1;       /* Führungslinie aufgeklappter Elemente – Hellgrau */
 
     display: flex;
     flex-direction: column;
@@ -53,9 +54,13 @@
     white-space: pre;
 }
 
-/* Kinder-Container: sorgt für die Einrückung der nächsten Ebene. */
+/* Kinder-Container: Einrückung der nächsten Ebene + vertikale Führungslinie vom Start- bis zum
+   End-Tag (zeigt den Geltungsbereich des Elements). Beim Zuklappen ist der Container ausgeblendet,
+   die Linie verschwindet also automatisch. Die Linie sitzt mittig unter dem Aufklapp-Dreieck. */
 .xml-children {
-    padding-left: var(--xmlviewer-indent-width);
+    margin-left: calc(var(--xmlviewer-indent-width) / 2);
+    padding-left: calc(var(--xmlviewer-indent-width) / 2);
+    border-left: 1px solid var(--xmlviewer-guide-color);
 }
 
 /* Aufklapp-Dreieck und Platzhalter (gleiche Breite -> Bündigkeit). */
