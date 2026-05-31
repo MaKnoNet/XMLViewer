@@ -174,6 +174,17 @@ class XmlViewerTest {
     }
 
     @Test
+    void zuklappenBlendetSchliessendenTagAus() {
+        assertTrue(viewer.endTagVisible(root), "End-Tag sollte initial sichtbar sein");
+
+        viewer.collapseAll();
+        assertFalse(viewer.endTagVisible(root), "End-Tag soll beim Zuklappen ausgeblendet werden");
+
+        viewer.expandAll();
+        assertTrue(viewer.endTagVisible(root), "End-Tag soll beim Aufklappen wieder sichtbar sein");
+    }
+
+    @Test
     void nullWurzelLeertOhneFehler() {
         viewer.setRoot(null);
         assertEquals(0, viewer.getMatchCount());

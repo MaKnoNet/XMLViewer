@@ -282,6 +282,10 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
             return;
         }
         container.setVisible(!collapsed);
+        Div endTag = tree.endTags().get(element);
+        if (endTag != null) {
+            endTag.setVisible(!collapsed);
+        }
         Span toggle = tree.toggles().get(element);
         if (toggle != null) {
             toggle.setText(collapsed ? TRIANGLE_COLLAPSED : TRIANGLE_EXPANDED);
@@ -310,7 +314,12 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
 
     private static RenderedTree emptyTree() {
         return new RenderedTree(
-                new Div(), Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(), List.of());
+                new Div(),
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                List.of());
     }
 
     // ------------------------------------------------------------------------
@@ -324,6 +333,11 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
     boolean isExpanded(Element element) {
         Div container = tree.childContainers().get(element);
         return container == null || container.isVisible();
+    }
+
+    boolean endTagVisible(Element element) {
+        Div endTag = tree.endTags().get(element);
+        return endTag != null && endTag.isVisible();
     }
 
     List<String> searchableTexts() {

@@ -74,6 +74,8 @@
 .xml-toggle {
     cursor: pointer;
     color: var(--xmlviewer-punct-color);
+    /* Glyph mittig in der Box -> sitzt exakt über der Führungslinie (.xml-children) */
+    text-align: center;
 }
 
 /* ---- Farbklassen (referenzieren die Custom Properties) ---- */

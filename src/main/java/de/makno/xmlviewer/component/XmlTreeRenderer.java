@@ -32,6 +32,7 @@ final class XmlTreeRenderer {
 
     private final Map<Element, Div> elementHeaders = new IdentityHashMap<>();
     private final Map<Element, Div> childContainers = new IdentityHashMap<>();
+    private final Map<Element, Div> endTags = new IdentityHashMap<>();
     private final Map<Element, Span> toggles = new IdentityHashMap<>();
     private final List<SearchableToken> tokens = new ArrayList<>();
 
@@ -44,7 +45,7 @@ final class XmlTreeRenderer {
         Div container = new Div();
         container.addClassName(CssClasses.TREE);
         renderElement(root, container);
-        return new RenderedTree(container, elementHeaders, childContainers, toggles, tokens);
+        return new RenderedTree(container, elementHeaders, childContainers, endTags, toggles, tokens);
     }
 
     private void renderElement(Element element, Div container) {
@@ -79,7 +80,9 @@ final class XmlTreeRenderer {
         header.add(punct(">"));
         container.add(header);
         container.add(renderChildren(element, meaningful));
-        container.add(endTagLine(element));
+        Div endTag = endTagLine(element);
+        endTags.put(element, endTag);
+        container.add(endTag);
     }
 
     private Div renderChildren(Element element, List<Content> meaningful) {
