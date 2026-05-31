@@ -33,6 +33,7 @@ public class MainView extends VerticalLayout {
 
         Element library = SampleXmlFactory.createLibrary();
         Element highlightTarget = SampleXmlFactory.findHighlightTarget(library);
+        Element book025 = SampleXmlFactory.findBookById(library, "b-025");
 
         viewer = new XmlViewer(library);
         viewer.setSizeFull();
@@ -43,7 +44,7 @@ public class MainView extends VerticalLayout {
                 new Paragraph("Such-UI und Buttons liegen in der Demo-App; die Komponente bietet nur die API. "
                         + "Großer Baum zum Testen von vertikalem und horizontalem Scrollen."),
                 createSearchBar(),
-                createActionBar(highlightTarget),
+                createActionBar(highlightTarget, book025),
                 viewer);
         setFlexGrow(1, viewer);
     }
@@ -65,12 +66,13 @@ public class MainView extends VerticalLayout {
         return bar;
     }
 
-    private HorizontalLayout createActionBar(Element highlightTarget) {
+    private HorizontalLayout createActionBar(Element highlightTarget, Element book025) {
         Button highlight = new Button("Kapitel (Buch 25) hervorheben", event -> viewer.highlight(highlightTarget));
+        Button highlightBook025 = new Button("Buch b-025 hervorheben", event -> viewer.highlight(book025));
         Button clearHighlight = new Button("Highlight löschen", event -> viewer.clearHighlight());
         Button expandAll = new Button("Alle aufklappen", event -> viewer.expandAll());
         Button collapseAll = new Button("Alle zuklappen", event -> viewer.collapseAll());
-        return new HorizontalLayout(highlight, clearHighlight, expandAll, collapseAll);
+        return new HorizontalLayout(highlight, highlightBook025, clearHighlight, expandAll, collapseAll);
     }
 
     private void updateCounter(int matchCount, int currentMatchIndex) {

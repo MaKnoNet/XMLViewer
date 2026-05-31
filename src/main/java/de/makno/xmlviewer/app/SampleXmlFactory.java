@@ -43,6 +43,18 @@ final class SampleXmlFactory {
         return book.getChild("chapters", LIB).getChildren("chapter", LIB).get(0);
     }
 
+    /**
+     * Sucht das erste {@code <lib:book>}-Element mit dem angegebenen {@code id}-Attribut.
+     *
+     * @throws IllegalArgumentException wenn kein Buch mit dieser ID existiert
+     */
+    static Element findBookById(Element library, String id) {
+        return library.getChildren("book", LIB).stream()
+                .filter(book -> id.equals(book.getAttributeValue("id")))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Kein Buch mit id=" + id));
+    }
+
     private static Element createBook(int index) {
         Element book = new Element("book", LIB);
         book.setAttribute("id", "b-%03d".formatted(index));
