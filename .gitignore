@@ -1,0 +1,34 @@
+# Gradle
+build/
+.gradle/
+bin/
+
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+RemoteSystemsTempFiles/
+
+# Maschinenspezifischer TLS-Truststore (aus dem Windows-Zertifikatspeicher exportiert)
+certs/
+
+# Claude Code – persönliche lokale Einstellungen (Credentials etc.)
+.claude/settings.local.json
+
+# Lokale statische Vorschau (kein Bestandteil des Projekts)
+preview/
+
+# Vaadin / Frontend
+node_modules/
+frontend/generated/
+src/main/frontend/generated/
+package-lock.json
+pnpm-lock.yaml
+vite.generated.ts
+tsconfig.json
+types.d.ts
+
+# Betriebssystem
+Thumbs.db
+.DS_Store

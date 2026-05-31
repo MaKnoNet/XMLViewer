@@ -1,0 +1,96 @@
+/*
+ * Styling der XmlViewer-Komponente.
+ *
+ * Alle Farben/Stile sind hier zentral als CSS Custom Properties definiert und werden von den
+ * Klassen-Regeln referenziert. Anwender überschreiben das Aussehen, indem sie die Properties (oder
+ * die Klassen-Regeln) in ihrem eigenen Theme/CSS neu setzen – ohne Java-Änderung. Beispiel:
+ *
+ *     .xmlviewer { --xmlviewer-tag-color: #c026d3; }
+ */
+
+.xmlviewer {
+    /* ---- Anpassbare Stell­schrauben (Defaults) ---- */
+    --xmlviewer-font-family: ui-monospace, "Cascadia Code", "Consolas", "Courier New", monospace;
+    --xmlviewer-font-size: 13px;
+
+    --xmlviewer-tag-color: #2563eb;         /* Tag-Namen           – Blau   */
+    --xmlviewer-attr-name-color: #b45309;   /* Attributnamen       – Braun  */
+    --xmlviewer-attr-value-color: #16a34a;  /* Attributwerte       – Grün   */
+    --xmlviewer-text-color: #334155;        /* Textinhalte         – Dunkel */
+    --xmlviewer-comment-color: #94a3b8;     /* Kommentare          – Grau   */
+    --xmlviewer-punct-color: #64748b;       /* < > / = "           – Grau   */
+
+    --xmlviewer-highlight-bg: #fff3a3;      /* highlight(Element)  – Gelb       */
+    --xmlviewer-search-match-bg: #ffd9a3;   /* Suchtreffer         – Hellorange */
+    --xmlviewer-search-current-bg: #ff9d4d; /* aktueller Treffer   – Orange     */
+
+    --xmlviewer-indent-width: 1.25em;       /* Einrückung je Ebene / Breite des Dreiecks */
+
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.xmlviewer-tree {
+    font-family: var(--xmlviewer-font-family);
+    font-size: var(--xmlviewer-font-size);
+    line-height: 1.5;
+    /* füllt den Flex-Container und scrollt bei Überlauf in beide Richtungen */
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 0.5em;
+}
+
+.xmlviewer-empty {
+    color: var(--xmlviewer-comment-color);
+    font-style: italic;
+}
+
+/* Eine Zeile (Start-Tag, Text, Kommentar oder End-Tag).
+   white-space: pre verhindert den Umbruch -> lange Zeilen erzeugen horizontales Scrollen. */
+.xml-line {
+    white-space: pre;
+}
+
+/* Kinder-Container: sorgt für die Einrückung der nächsten Ebene. */
+.xml-children {
+    padding-left: var(--xmlviewer-indent-width);
+}
+
+/* Aufklapp-Dreieck und Platzhalter (gleiche Breite -> Bündigkeit). */
+.xml-toggle,
+.xml-indent {
+    display: inline-block;
+    width: var(--xmlviewer-indent-width);
+    user-select: none;
+}
+
+.xml-toggle {
+    cursor: pointer;
+    color: var(--xmlviewer-punct-color);
+}
+
+/* ---- Farbklassen (referenzieren die Custom Properties) ---- */
+.xml-tag        { color: var(--xmlviewer-tag-color); }
+.xml-attr-name  { color: var(--xmlviewer-attr-name-color); }
+.xml-attr-value { color: var(--xmlviewer-attr-value-color); }
+.xml-text       { color: var(--xmlviewer-text-color); }
+.xml-comment    { color: var(--xmlviewer-comment-color); font-style: italic; }
+.xml-punct      { color: var(--xmlviewer-punct-color); }
+
+/* ---- Hervorhebung & Suche ---- */
+.xml-highlight {
+    background: var(--xmlviewer-highlight-bg);
+    border-radius: 3px;
+}
+
+.xml-search-match {
+    background: var(--xmlviewer-search-match-bg);
+    border-radius: 2px;
+}
+
+.xml-search-current {
+    background: var(--xmlviewer-search-current-bg);
+    border-radius: 2px;
+}

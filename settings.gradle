@@ -1,0 +1,9 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        maven { url = 'https://maven.vaadin.com/vaadin-prereleases' }
+    }
+}
+
+rootProject.name = 'xmlviewer'

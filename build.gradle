@@ -1,0 +1,93 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.vaadin' version '24.5.3'
+    // Code-Formatierung: erzwingt palantir-java-format (siehe spotless-Block unten).
+    id 'com.diffplug.spotless' version '6.25.0'
+}
+
+group = 'de.makno.xmlviewer'
+version = '1.0.0'
+
+ext {
+    // Zentral gepflegte Vaadin-Version; das gleichnamige Gradle-Plugin (oben) und die vaadin-bom
+    // müssen zueinander passen, sonst gibt es Frontend-/Flow-Versionskonflikte.
+    vaadinVersion = '24.5.3'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+// UTF-8 für die Kompilierung erzwingen: die Quellen enthalten Umlaute (ä/ö/ü) in Kommentaren und
+// String-Literalen; ohne diese Festlegung verwendet javac/Eclipse unter Windows Cp1252 und zerstört sie.
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+tasks.withType(Javadoc).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.vaadin.com/vaadin-addons' }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:$vaadinVersion"
+    }
+}
+
+dependencies {
+    // Vaadin Flow + eingebetteter Spring-Boot-Server (nur für die lauffähige Demo nötig).
+    // Die Komponente de.makno.xmlviewer.XmlViewer selbst hat KEINE Spring-Abhängigkeit.
+    implementation 'com.vaadin:vaadin-spring-boot-starter'
+
+    // JDOM2: Eingabemodell der Komponente (org.jdom2.Element & Co.).
+    implementation 'org.jdom:jdom2:2.0.6.1'
+
+    // Tests: JUnit 5 (Version wird über die Spring-Boot-BOM verwaltet).
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+}
+
+// Code-Formatierung mit palantir-java-format (verbindliche Projekt-Konvention, siehe CLAUDE.md).
+//   ./gradlew spotlessApply   -> formatiert den Java-Code
+//   ./gradlew spotlessCheck   -> prüft das Format (läuft als Teil von `check`/`build`)
+spotless {
+    java {
+        target 'src/**/*.java'
+        palantirJavaFormat()
+        removeUnusedImports()
+    }
+}
+
+// TLS-Vertrauen für das von Vaadin gebündelte Node/npm.
+//
+// Hintergrund (analog zur JVM-Einstellung in gradle.properties): Der TLS-inspizierende Proxy
+// terminiert auch die Verbindungen von Node/npm zur npm-Registry. Node bringt eine eigene CA-Liste
+// mit und kennt das Proxy-Root-Zertifikat nicht -> "UNABLE_TO_VERIFY_LEAF_SIGNATURE". Mit
+// NODE_EXTRA_CA_CERTS auf ein PEM aus dem Windows-Zertifikatspeicher vertraut Node dem Proxy.
+//
+// Das PEM wird einmalig erzeugt mit (PowerShell):
+//   Get-ChildItem Cert:\LocalMachine\Root, Cert:\CurrentUser\Root | Sort-Object Thumbprint -Unique |
+//     ForEach-Object { "-----BEGIN CERTIFICATE-----"; [Convert]::ToBase64String($_.RawData,'InsertLineBreaks'); "-----END CERTIFICATE-----" } |
+//     Set-Content certs\windows-root-ca.pem -Encoding ascii
+// Die Datei ist maschinenspezifisch und daher in .gitignore ausgenommen.
+def caBundle = file('certs/windows-root-ca.pem')
+if (caBundle.exists()) {
+    tasks.withType(JavaExec).configureEach {
+        environment 'NODE_EXTRA_CA_CERTS', caBundle.absolutePath
+    }
+}
