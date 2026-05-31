@@ -23,6 +23,8 @@ import org.jdom2.Element;
 @PageTitle("XmlViewer – Demo")
 public class MainView extends VerticalLayout {
 
+    private static final long serialVersionUID = 1L;
+
     private final XmlViewer viewer;
     private final Span matchCounter = new Span();
 

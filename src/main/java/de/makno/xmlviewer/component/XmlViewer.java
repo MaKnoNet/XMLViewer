@@ -42,6 +42,8 @@ import org.jdom2.Element;
 @CssImport("./styles/xml-viewer.css")
 public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
 
+    private static final long serialVersionUID = 1L;
+
     private static final String TRIANGLE_EXPANDED = "▾";
     private static final String TRIANGLE_COLLAPSED = "▸";
     private static final String EMPTY_TEXT = "Kein XML-Element gesetzt.";
@@ -191,6 +193,9 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
 
     /** Ereignis, das bei Änderung der Suchtreffer/-navigation gefeuert wird. */
     public static class MatchChangeEvent extends ComponentEvent<XmlViewer> {
+
+        private static final long serialVersionUID = 1L;
+
         private final int matchCount;
         private final int currentMatchIndex;
 

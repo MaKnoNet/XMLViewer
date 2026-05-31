@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+
+    <!-- Verknüpft die Run-Config mit der Main-Klasse im Projekt-Explorer -->
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/xmlviewer/src/main/java/de/makno/xmlviewer/app/Application.java"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+
+    <!-- Classpath: Gradle-Buildship-Classpath des Projekts verwenden -->
+    <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="true"/>
+
+    <!-- Einstiegsklasse -->
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="de.makno.xmlviewer.app.Application"/>
+
+    <!-- Projektname muss mit dem rootProject.name in settings.gradle übereinstimmen -->
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="xmlviewer"/>
+
+    <!--
+        VM-Argumente:
+        - Windows-ROOT: JVM nutzt den Windows-Zertifikatspeicher (nötig bei TLS-inspizierendem Proxy)
+        - UTF-8: verhindert Cp1252-Kodierung von Umlauten unter Windows
+    -->
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS"
+        value="-Djavax.net.ssl.trustStoreType=Windows-ROOT -Dfile.encoding=UTF-8"/>
+
+    <!-- Arbeitsverzeichnis = Projektwurzel (damit Gradle-Properties etc. gefunden werden) -->
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY"
+        value="${workspace_loc:xmlviewer}"/>
+
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER"
+        value="org.eclipse.jdt.launching.sourceLookup.javaSourcePathProvider"/>
+
+</launchConfiguration>
