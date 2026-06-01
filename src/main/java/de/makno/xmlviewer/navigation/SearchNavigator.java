@@ -4,15 +4,13 @@ import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import java.util.Objects;
 
 /**
- * Eigenständige UI-Leiste zum Durchlaufen von Suchtreffern: zeigt links ein Lupen-Icon und ein
- * ausgeschriebenes Treffer-Label („Treffer X von Y") und rechts zwei Pfeil-Buttons für vor/zurück.
+ * Eigenständige UI-Leiste zum Durchlaufen von Suchtreffern: ein ausgeschriebenes Treffer-Label
+ * („Treffer X von Y") zwischen zwei Pfeil-Buttons für zurück/vor.
  *
  * <p>Die Komponente steuert eine beliebige {@link MatchNavigable}-Quelle und hält ihre Anzeige über
  * deren {@link MatchChangeEvent} automatisch synchron. Sie kennt die Such-Implementierung nicht –
@@ -46,8 +44,7 @@ public class SearchNavigator extends Composite<Div> {
         previousButton.addClickListener(event -> navigable.previousMatch());
         nextButton.addClickListener(event -> navigable.nextMatch());
 
-        HorizontalLayout layout =
-                new HorizontalLayout(new Icon(VaadinIcon.SEARCH), positionLabel, previousButton, nextButton);
+        HorizontalLayout layout = new HorizontalLayout(previousButton, positionLabel, nextButton);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
         return layout;
     }
