@@ -1,7 +1,6 @@
 package de.makno.xmlviewer.component;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.HasSize;
@@ -10,6 +9,8 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.shared.Registration;
+import de.makno.xmlviewer.navigation.MatchChangeEvent;
+import de.makno.xmlviewer.navigation.MatchNavigable;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -42,7 +43,7 @@ import org.jdom2.Element;
  * (z.&nbsp;B. {@code --xmlviewer-tag-color}) von außen ohne Java-Änderung override-bar.
  */
 @CssImport("./styles/xml-viewer.css")
-public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
+public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, MatchNavigable {
 
     private static final long serialVersionUID = 1L;
 
@@ -172,11 +173,13 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
     }
 
     /** Springt zum nächsten Suchtreffer (umlaufend). */
+    @Override
     public void nextMatch() {
         search.nextMatch();
     }
 
     /** Springt zum vorherigen Suchtreffer (umlaufend). */
+    @Override
     public void previousMatch() {
         search.previousMatch();
     }
@@ -187,11 +190,13 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
     }
 
     /** Anzahl der aktuellen Suchtreffer. */
+    @Override
     public int getMatchCount() {
         return search.getMatchCount();
     }
 
     /** 0-basierter Index des aktuellen Treffers, oder {@code -1}, wenn keiner aktiv ist. */
+    @Override
     public int getCurrentMatchIndex() {
         return search.getCurrentMatchIndex();
     }
@@ -210,33 +215,9 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
      * Registriert einen Listener, der bei jeder Änderung der Suchtreffer oder der Treffer-Navigation
      * gefeuert wird – ideal, um eine externe Zähleranzeige (z.&nbsp;B. „3/12") synchron zu halten.
      */
+    @Override
     public Registration addMatchChangeListener(ComponentEventListener<MatchChangeEvent> listener) {
         return addListener(MatchChangeEvent.class, listener);
-    }
-
-    /** Ereignis, das bei Änderung der Suchtreffer/-navigation gefeuert wird. */
-    public static class MatchChangeEvent extends ComponentEvent<XmlViewer> {
-
-        private static final long serialVersionUID = 1L;
-
-        private final int matchCount;
-        private final int currentMatchIndex;
-
-        MatchChangeEvent(XmlViewer source, int matchCount, int currentMatchIndex) {
-            super(source, false);
-            this.matchCount = matchCount;
-            this.currentMatchIndex = currentMatchIndex;
-        }
-
-        /** Anzahl der Treffer der aktuellen Suche. */
-        public int getMatchCount() {
-            return matchCount;
-        }
-
-        /** 0-basierter Index des aktuellen Treffers, oder {@code -1}. */
-        public int getCurrentMatchIndex() {
-            return currentMatchIndex;
-        }
     }
 
     // ------------------------------------------------------------------------

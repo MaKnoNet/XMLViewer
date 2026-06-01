@@ -26,6 +26,7 @@ frontend/generated/
 src/main/frontend/generated/
 package-lock.json
 pnpm-lock.yaml
+vite.config.ts
 vite.generated.ts
 tsconfig.json
 types.d.ts

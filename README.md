@@ -177,8 +177,9 @@ Auf-/Zuklappen, Suche sowie horizontales und vertikales Scrollen.
 
 ## Architektur (Kurzüberblick)
 
-Die Quellen sind in zwei Packages getrennt: die wiederverwendbare Komponente in
-`de.makno.xmlviewer.component`, die Demo-App in `de.makno.xmlviewer.app`.
+Die Quellen sind in drei Packages getrennt: die wiederverwendbare Anzeige-Komponente in
+`de.makno.xmlviewer.component`, die Such-Navigations-Komponente in `de.makno.xmlviewer.navigation`
+und die Demo-App in `de.makno.xmlviewer.app`.
 
 | Klasse | Aufgabe |
 |---|---|
@@ -187,9 +188,19 @@ Die Quellen sind in zwei Packages getrennt: die wiederverwendbare Komponente in
 | `component.XmlSearchController` | Textsuche: Treffer markieren, navigieren, Änderungen melden |
 | `component.CssClasses` | Zentrale CSS-Klassennamen (keine Magic-Strings) |
 | `component.RenderedTree` / `SearchableToken` | Records: Render-Ergebnis bzw. durchsuchbares Token |
+| `navigation.MatchNavigable` | Interface: Treffer durchlaufen + Stand abfragen (entkoppelt die UI) |
+| `navigation.MatchChangeEvent` | Event bei Änderung der Treffer/-navigation |
+| `navigation.SearchNavigator` | UI-Leiste „Treffer X von Y" + Vor/Zurück; steuert ein `MatchNavigable` |
 | `frontend/styles/xml-viewer.css` | Farb-/Layout-Regeln + Custom Properties |
 | `app.Application` | Spring-Boot-Start der Demo |
-| `app.MainView` / `app.SampleXmlFactory` | Demo-View mit eigener Such-UI / großer Beispielbaum |
+| `app.MainView` / `app.SampleXmlFactory` | Demo-View / großer Beispielbaum |
+
+`XmlViewer` implementiert `MatchNavigable`, daher genügt zum Anbinden der Navigation:
+
+```java
+XmlViewer viewer = new XmlViewer(wurzel);
+add(new SearchNavigator(viewer)); // zeigt „Treffer X von Y" + ‹ / ›
+```
 
 Rendering-Prinzip: pro `Element` eine Start-Tag-Zeile (`Span`-Folge), ein eingerückter
 Kinder-Container und eine End-Tag-Zeile. Ein `IdentityHashMap<Element, Div>` bildet Elemente auf ihre
