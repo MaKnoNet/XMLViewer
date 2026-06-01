@@ -3,11 +3,8 @@ package de.makno.xmlviewer.app;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.makno.xmlviewer.component.XmlViewer;
@@ -15,9 +12,9 @@ import de.makno.xmlviewer.navigation.SearchNavigator;
 import org.jdom2.Element;
 
 /**
- * Demo-View: zeigt einen großen Beispiel-XML-Baum im {@link XmlViewer} und stellt die Such-UI
- * (Suchfeld, Vor-/Zurück-Buttons, Treffer-Zähler) selbst bereit – die Komponente liefert nur die
- * programmatische Such-API. Demonstriert außerdem Hervorheben sowie Auf-/Zuklappen.
+ * Demo-View: zeigt einen großen Beispiel-XML-Baum im {@link XmlViewer}. Die komplette Such-UI
+ * (Eingabefeld, Treffer-Zähler, Vor-/Zurück) liefert die eigenständige {@link SearchNavigator}
+ * -Komponente. Demonstriert außerdem Hervorheben sowie Auf-/Zuklappen.
  */
 @Route("")
 @PageTitle("XmlViewer – Demo")
@@ -41,25 +38,10 @@ public class MainView extends VerticalLayout {
                 new H3("XmlViewer – Demo"),
                 new Paragraph("Such-UI und Buttons liegen in der Demo-App; die Komponente bietet nur die API. "
                         + "Großer Baum zum Testen von vertikalem und horizontalem Scrollen."),
-                createSearchBar(),
+                new SearchNavigator(viewer),
                 createActionBar(highlightTarget, book025),
                 viewer);
         setFlexGrow(1, viewer);
-    }
-
-    private HorizontalLayout createSearchBar() {
-        TextField searchField = new TextField();
-        searchField.setPlaceholder("Suchen…");
-        searchField.setClearButtonVisible(true);
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
-        searchField.addValueChangeListener(event -> viewer.search(event.getValue()));
-
-        // Such-Navigation (Vor/Zurück + Treffer-Zähler) als eigenständige Komponente.
-        SearchNavigator navigator = new SearchNavigator(viewer);
-
-        HorizontalLayout bar = new HorizontalLayout(searchField, navigator);
-        bar.setAlignItems(FlexComponent.Alignment.CENTER);
-        return bar;
     }
 
     private HorizontalLayout createActionBar(Element highlightTarget, Element book025) {

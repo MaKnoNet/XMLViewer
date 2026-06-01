@@ -188,9 +188,9 @@ und die Demo-App in `de.makno.xmlviewer.app`.
 | `component.XmlSearchController` | Textsuche: Treffer markieren, navigieren, Änderungen melden |
 | `component.CssClasses` | Zentrale CSS-Klassennamen (keine Magic-Strings) |
 | `component.RenderedTree` / `SearchableToken` | Records: Render-Ergebnis bzw. durchsuchbares Token |
-| `navigation.MatchNavigable` | Interface: Treffer durchlaufen + Stand abfragen (entkoppelt die UI) |
+| `navigation.MatchNavigable` | Interface: suchen + Treffer durchlaufen + Stand abfragen (entkoppelt die UI) |
 | `navigation.MatchChangeEvent` | Event bei Änderung der Treffer/-navigation |
-| `navigation.SearchNavigator` | UI-Leiste „Treffer X von Y" + Vor/Zurück; steuert ein `MatchNavigable` |
+| `navigation.SearchNavigator` | Such-Pille: Eingabefeld + „Treffer X von Y" + Vor/Zurück (Buttons nur bei Treffern aktiv); steuert ein `MatchNavigable` |
 | `frontend/styles/xml-viewer.css` | Farb-/Layout-Regeln + Custom Properties |
 | `app.Application` | Spring-Boot-Start der Demo |
 | `app.MainView` / `app.SampleXmlFactory` | Demo-View / großer Beispielbaum |

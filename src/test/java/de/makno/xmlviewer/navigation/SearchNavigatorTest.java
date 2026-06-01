@@ -9,6 +9,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.shared.Registration;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +68,21 @@ class SearchNavigatorTest {
         assertFalse(nextButton().isEnabled());
     }
 
+    @Test
+    void eingabefeldReichtSuchtextDurch() {
+        searchField().setValue("EUR");
+        assertEquals("EUR", navigable.lastQuery);
+    }
+
     // ---- Helfer -------------------------------------------------------------
+
+    private TextField searchField() {
+        return descendantsOf(navigator)
+                .filter(TextField.class::isInstance)
+                .map(TextField.class::cast)
+                .findFirst()
+                .orElseThrow();
+    }
 
     private String label() {
         return descendantsOf(navigator)
@@ -110,6 +125,12 @@ class SearchNavigatorTest {
         private int currentMatchIndex = -1;
         private int nextCalls = 0;
         private int previousCalls = 0;
+        private String lastQuery = null;
+
+        @Override
+        public void search(String query) {
+            lastQuery = query;
+        }
 
         @Override
         public void nextMatch() {

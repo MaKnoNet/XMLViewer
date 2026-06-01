@@ -168,6 +168,7 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
      * Sucht {@code query} im dargestellten Inhalt, markiert alle Treffer und springt zum ersten.
      * Leerer/{@code null}-Text löscht die Suche.
      */
+    @Override
     public void search(String query) {
         search.search(query);
     }

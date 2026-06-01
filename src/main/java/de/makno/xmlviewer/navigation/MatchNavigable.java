@@ -13,6 +13,12 @@ import com.vaadin.flow.shared.Registration;
  */
 public interface MatchNavigable {
 
+    /**
+     * Sucht den angegebenen Text, markiert alle Treffer und springt zum ersten. Leerer/{@code null}
+     * Text löscht die Suche.
+     */
+    void search(String query);
+
     /** Springt zum nächsten Suchtreffer (umlaufend). */
     void nextMatch();
 
