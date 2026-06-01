@@ -33,9 +33,9 @@
 
     /* ---- Marker-Zeichen (Unicode, Emoji ODER SVG via url()/mask) ----
        Beispiel SVG:  --xmlviewer-marker-expanded: url("data:image/svg+xml,..."); */
-    --xmlviewer-marker-expanded: "\25BE";   /* ▾ aufgeklappt   */
-    --xmlviewer-marker-collapsed: "\25B8";  /* ▸ zugeklappt    */
-    --xmlviewer-marker-endtag: "\2514";     /* └ am Linienende vor dem schließenden Tag */
+    --xmlviewer-marker-expanded: "\229F";   /* ⊟ Quadrat mit Minus – aufgeklappt */
+    --xmlviewer-marker-collapsed: "\229E";  /* ⊞ Quadrat mit Plus  – zugeklappt  */
+    --xmlviewer-marker-endtag: "\2514";     /* └ am Ende der Linie vor dem schließenden Tag */
     --xmlviewer-marker-color: var(--xmlviewer-punct-color); /* Farbe aller Marker */
 
     display: flex;
@@ -65,43 +65,35 @@
     white-space: pre;
 }
 
-/* Kinder-Container UND schließende Tag-Zeile tragen dieselbe vertikale Führungslinie. Dadurch läuft
-   die Linie durchgehend vom öffnenden Tag bis hinunter zum schließenden Tag (zeigt den
-   Geltungsbereich des Elements). Die Linie sitzt mittig unter dem Aufklapp-Dreieck; beim Zuklappen
-   sind beide ausgeblendet, die Linie verschwindet also automatisch. */
-.xml-children,
-.xml-endtag {
+/* Kinder-Container trägt die vertikale Führungslinie. Sie läuft vom öffnenden Tag bis zum letzten
+   Kind (nicht bis zum schließenden Tag); das Abschluss-Symbol am End-Tag markiert das Ende. Die
+   Linie sitzt mittig unter dem Aufklapp-Marker; beim Zuklappen ist der Container ausgeblendet, die
+   Linie verschwindet also automatisch. */
+.xml-children {
     margin-left: calc(var(--xmlviewer-indent-width) / 2);
     padding-left: calc(var(--xmlviewer-indent-width) / 2);
     border-left: var(--xmlviewer-guide-width) var(--xmlviewer-guide-style) var(--xmlviewer-guide-color);
 }
 
-/* Die End-Tag-Zeile trägt das Abschluss-Symbol als ::before direkt auf der Linie -> keine eigene
-   Layoutbreite, der </tag>-Text bleibt exakt unter dem öffnenden Tag. */
-.xml-endtag {
-    position: relative;
-}
-
-.xml-endtag::before {
+/* Symbol am Ende der Linie vor dem schließenden Tag; eigene zentrierte Box (gleiche Breite wie der
+   Aufklapp-Marker) -> sitzt exakt auf der Linien-X, der </tag>-Text bleibt bündig zum öffnenden Tag. */
+.xml-endtag-marker::before {
     content: var(--xmlviewer-marker-endtag);
     color: var(--xmlviewer-marker-color);
-    position: absolute;
-    left: calc(var(--xmlviewer-indent-width) / -2);
-    transform: translateX(-50%);
 }
 
-/* Aufklapp-Dreieck und Platzhalter (gleiche Breite -> Bündigkeit). */
+/* Aufklapp-Marker, Platzhalter und End-Tag-Symbol: gleiche Breite + zentriert -> alles bündig. */
 .xml-toggle,
-.xml-indent {
+.xml-indent,
+.xml-endtag-marker {
     display: inline-block;
     width: var(--xmlviewer-indent-width);
+    text-align: center;
     user-select: none;
 }
 
 .xml-toggle {
     cursor: pointer;
-    /* Marker mittig in der Box -> sitzt exakt über der Führungslinie (.xml-children) */
-    text-align: center;
 }
 
 /* ---- Marker-Zeichen: kommen aus CSS, damit Entwickler sie ohne Java ersetzen können

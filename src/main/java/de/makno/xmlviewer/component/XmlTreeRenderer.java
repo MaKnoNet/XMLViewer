@@ -130,13 +130,20 @@ final class XmlTreeRenderer {
 
     private Div endTagLine(Element element) {
         Div line = newLine();
-        // Marker am Linienende kommt aus CSS (.xml-endtag::before) – keine Layoutbreite, kein Java-Text.
         line.addClassName(CssClasses.ENDTAG);
-        line.add(newIndent());
+        // Zentrierte Marker-Box (gleiche Breite wie der Toggle); das Symbol liefert CSS
+        // (.xml-endtag-marker::before), damit Entwickler es ersetzen können.
+        line.add(endTagMarker());
         line.add(punct("</"));
         line.add(tag(element));
         line.add(punct(">"));
         return line;
+    }
+
+    private static Span endTagMarker() {
+        Span marker = new Span();
+        marker.addClassName(CssClasses.ENDTAG_MARKER);
+        return marker;
     }
 
     private Div textLine(String text, Element owner) {

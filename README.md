@@ -126,8 +126,8 @@ die Symbole durch **Unicode, Emoji oder ein SVG** ersetzen, ohne Java anzufassen
 
 | Custom Property | Default | Bedeutung |
 |---|---|---|
-| `--xmlviewer-marker-expanded` | `"\25BE"` (▾) | Marker am aufgeklappten Element |
-| `--xmlviewer-marker-collapsed` | `"\25B8"` (▸) | Marker am zugeklappten Element |
+| `--xmlviewer-marker-expanded` | `"\229F"` (⊟) | Marker am aufgeklappten Element |
+| `--xmlviewer-marker-collapsed` | `"\229E"` (⊞) | Marker am zugeklappten Element |
 | `--xmlviewer-marker-endtag` | `"\2514"` (└) | Symbol am Ende der Linie vor dem `</tag>` |
 | `--xmlviewer-marker-color` | `--xmlviewer-punct-color` | Farbe aller Marker |
 | `--xmlviewer-guide-color` | `#cbd5e1` | Linienfarbe |

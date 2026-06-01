@@ -19,11 +19,10 @@ final class CssClasses {
     static final String LINE = "xml-line";
     /** Eingerückter Container für die Kindknoten. */
     static final String CHILDREN = "xml-children";
-    /**
-     * Schließende-Tag-Zeile (führt die Führungslinie bis zum Tag-Ende weiter und trägt das
-     * Abschluss-Symbol als CSS {@code ::before}).
-     */
+    /** Schließende-Tag-Zeile. */
     static final String ENDTAG = "xml-endtag";
+    /** Zentrierte Marker-Box am Ende der Linie; das Abschluss-Symbol liefert CSS {@code ::before}. */
+    static final String ENDTAG_MARKER = "xml-endtag-marker";
     /** Klickbares Auf-/Zuklapp-Dreieck (Marker kommt aus CSS {@code ::before}). */
     static final String TOGGLE = "xml-toggle";
     /** Zustands-Modifier am Toggle: gesetzt = zugeklappt (wählt den Collapsed-Marker per CSS). */
