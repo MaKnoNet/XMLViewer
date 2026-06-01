@@ -118,6 +118,10 @@ Im Java-Code werden **nur CSS-Klassen** gesetzt. Farben/Größen kommen aus
 
 Weiter: `--xmlviewer-font-family`, `--xmlviewer-font-size`, `--xmlviewer-indent-width`.
 
+**Abgrenzung zum Hintergrund** (Rahmen der Komponente): `--xmlviewer-border-color` (Standard
+`#cbd5e1`), `--xmlviewer-border-width` (`1px`), `--xmlviewer-border-radius` (`6px`),
+`--xmlviewer-background` (`#ffffff`).
+
 ### Marker und Führungslinie anpassen
 
 Die Auf-/Zuklapp-Marker, das Symbol am schließenden Tag und der Stil der Führungslinie kommen

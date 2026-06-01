@@ -47,9 +47,21 @@
     --xmlviewer-guide-width: 2px;
     --xmlviewer-guide-style: solid;
 
+    /* ---- Abgrenzung der Komponente zum Hintergrund ---- */
+    --xmlviewer-border-color: #cbd5e1;   /* Rahmenfarbe        */
+    --xmlviewer-border-width: 1px;       /* Rahmenstärke       */
+    --xmlviewer-border-radius: 6px;      /* Eckenradius        */
+    --xmlviewer-background: #ffffff;     /* Hintergrund        */
+
     display: flex;
     flex-direction: column;
     min-height: 0;
+
+    /* Sichtbare Abgrenzung zum umgebenden Hintergrund. */
+    border: var(--xmlviewer-border-width) solid var(--xmlviewer-border-color);
+    border-radius: var(--xmlviewer-border-radius);
+    background: var(--xmlviewer-background);
+    box-sizing: border-box;
 }
 
 .xmlviewer-tree {
