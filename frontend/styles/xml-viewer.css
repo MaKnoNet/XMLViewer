@@ -28,7 +28,7 @@
 
     /* ---- Führungslinie (anpassbar in Farbe, Breite, Stil) ---- */
     --xmlviewer-guide-color: #cbd5e1;       /* Linienfarbe – Hellgrau           */
-    --xmlviewer-guide-width: 1px;           /* Linienbreite                     */
+    --xmlviewer-guide-width: 2px;           /* Linienbreite – passt zur Strichstärke des Marker-Symbols */
     --xmlviewer-guide-style: solid;         /* solid | dashed | dotted          */
 
     /* ---- Marker-Zeichen (Unicode, Emoji ODER SVG via url()/mask) ----
