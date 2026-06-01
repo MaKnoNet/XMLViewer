@@ -30,8 +30,8 @@ class SearchNavigatorTest {
     }
 
     @Test
-    void zeigtKeineTrefferUndDeaktiviertButtonsOhneTreffer() {
-        assertEquals("Keine Treffer", label());
+    void zeigtNullVonNullUndDeaktiviertButtonsOhneTreffer() {
+        assertEquals("0/0", label());
         assertFalse(previousButton().isEnabled());
         assertFalse(nextButton().isEnabled());
     }
@@ -39,9 +39,16 @@ class SearchNavigatorTest {
     @Test
     void zeigtPositionUndAktiviertButtonsBeiTreffern() {
         navigable.fire(62, 11);
-        assertEquals("Treffer 12 von 62", label());
+        assertEquals("12/62", label());
         assertTrue(previousButton().isEnabled());
         assertTrue(nextButton().isEnabled());
+    }
+
+    @Test
+    void verwendetBenutzerdefiniertesLabelFormat() {
+        navigator.setLabelFormatter((count, position) -> "Treffer " + position + " von " + count);
+        navigable.fire(62, 11);
+        assertEquals("Treffer 12 von 62", label());
     }
 
     @Test
@@ -61,10 +68,10 @@ class SearchNavigatorTest {
     }
 
     @Test
-    void wechseltZurueckZuKeineTrefferWennSucheGeleert() {
+    void wechseltZurueckZuNullVonNullWennSucheGeleert() {
         navigable.fire(62, 11);
         navigable.fire(0, -1);
-        assertEquals("Keine Treffer", label());
+        assertEquals("0/0", label());
         assertFalse(nextButton().isEnabled());
     }
 

@@ -190,7 +190,8 @@ und die Demo-App in `de.makno.xmlviewer.app`.
 | `component.RenderedTree` / `SearchableToken` | Records: Render-Ergebnis bzw. durchsuchbares Token |
 | `navigation.MatchNavigable` | Interface: suchen + Treffer durchlaufen + Stand abfragen (entkoppelt die UI) |
 | `navigation.MatchChangeEvent` | Event bei Änderung der Treffer/-navigation |
-| `navigation.SearchNavigator` | Such-Pille: Eingabefeld + „Treffer X von Y" + Vor/Zurück (Buttons nur bei Treffern aktiv); steuert ein `MatchNavigable` |
+| `navigation.MatchLabelFormatter` | Funktionales Interface: Label-Format frei bestimmbar (Standard „12/66") |
+| `navigation.SearchNavigator` | Such-Pille: Eingabefeld + Treffer-Label + Vor/Zurück (Buttons nur bei Treffern aktiv); steuert ein `MatchNavigable` |
 | `frontend/styles/xml-viewer.css` | Farb-/Layout-Regeln + Custom Properties |
 | `app.Application` | Spring-Boot-Start der Demo |
 | `app.MainView` / `app.SampleXmlFactory` | Demo-View / großer Beispielbaum |
@@ -199,7 +200,11 @@ und die Demo-App in `de.makno.xmlviewer.app`.
 
 ```java
 XmlViewer viewer = new XmlViewer(wurzel);
-add(new SearchNavigator(viewer)); // zeigt „Treffer X von Y" + ‹ / ›
+SearchNavigator navigator = new SearchNavigator(viewer); // Suchfeld + „12/66" + ‹ / ›
+add(navigator);
+
+// Label-Format frei bestimmbar (Standard ist „aktuell/gesamt", z. B. „12/66"):
+navigator.setLabelFormatter((count, position) -> "Treffer " + position + " von " + count);
 ```
 
 Rendering-Prinzip: pro `Element` eine Start-Tag-Zeile (`Span`-Folge), ein eingerückter
