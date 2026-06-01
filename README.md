@@ -130,7 +130,7 @@ die Symbole durch **Unicode, Emoji oder ein SVG** ersetzen, ohne Java anzufassen
 | `--xmlviewer-marker-collapsed` | `"\229E"` (⊞) | Marker am zugeklappten Element |
 | `--xmlviewer-marker-endtag` | `"\2514"` (└) | Symbol am Ende der Linie vor dem `</tag>` |
 | `--xmlviewer-marker-color` | `--xmlviewer-punct-color` | Farbe aller Marker |
-| `--xmlviewer-guide-color` | `#cbd5e1` | Linienfarbe |
+| `--xmlviewer-guide-color` | `--xmlviewer-marker-color` | Linienfarbe (Default = Markerfarbe) |
 | `--xmlviewer-guide-width` | `2px` | Linienbreite |
 | `--xmlviewer-guide-style` | `solid` | Linienstil (`solid`/`dashed`/`dotted`) |
 
