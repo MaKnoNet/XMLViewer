@@ -146,6 +146,25 @@ class XmlViewerTest {
     }
 
     @Test
+    void eigenerSplitterBestimmtDasTrennzeichen() {
+        // Komma-Splitter: "Hello,findme" -> "Hello" (1x) + "findme" (2x) = 3 Treffer.
+        viewer.setSearchTermSplitter(query -> java.util.Arrays.stream(query.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList());
+        viewer.search("Hello, findme");
+        assertEquals(3, viewer.getMatchCount());
+    }
+
+    @Test
+    void eigenerSplitterTrenntNichtAnLeerzeichen() {
+        // Mit Komma-Splitter ist "findme here" EIN Begriff -> kommt im item-Text nicht vor (0 Treffer).
+        viewer.setSearchTermSplitter(query -> java.util.List.of(query));
+        viewer.search("findme here findme");
+        assertEquals(1, viewer.getMatchCount()); // ganzer Text "findme here findme" = genau 1 Vorkommen
+    }
+
+    @Test
     void caseSensitiveSucheUnterscheidetGrossKlein() {
         viewer.setSearchCaseSensitive(true);
         viewer.search("FINDME");

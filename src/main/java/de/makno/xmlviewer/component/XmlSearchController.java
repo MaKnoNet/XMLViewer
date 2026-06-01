@@ -20,6 +20,16 @@ import org.jdom2.Element;
  */
 final class XmlSearchController {
 
+    /** Standard-Aufteilung: an Whitespace trennen, leere Begriffe verwerfen. */
+    static final SearchTermSplitter DEFAULT_TERM_SPLITTER = query -> {
+        if (query == null || query.isBlank()) {
+            return List.of();
+        }
+        return Arrays.stream(query.trim().split("\\s+"))
+                .filter(term -> !term.isEmpty())
+                .toList();
+    };
+
     private final List<SearchableToken> tokens;
     private final Consumer<Element> expandToElement;
     private final Consumer<Span> scrollToSpan;
@@ -29,6 +39,7 @@ final class XmlSearchController {
     private int currentMatchIndex = -1;
     private String currentQuery;
     private boolean caseSensitive;
+    private SearchTermSplitter termSplitter = DEFAULT_TERM_SPLITTER;
 
     XmlSearchController(
             List<SearchableToken> tokens,
@@ -63,6 +74,14 @@ final class XmlSearchController {
         }
     }
 
+    /** Setzt die Begriff-Aufteilung; eine aktive Suche wird mit dem neuen Splitter neu ausgeführt. */
+    void setTermSplitter(SearchTermSplitter termSplitter) {
+        this.termSplitter = java.util.Objects.requireNonNull(termSplitter, "termSplitter");
+        if (hasActiveQuery()) {
+            search(currentQuery);
+        }
+    }
+
     /**
      * Markiert alle Treffer von {@code query} und springt zum ersten. Mehrere durch Whitespace
      * getrennte Begriffe werden einzeln gesucht (ODER-Verknüpfung). Leer/{@code null} löscht die Suche.
@@ -75,6 +94,7 @@ final class XmlSearchController {
             notifyChange();
             return;
         }
+        // ab hier: terms enthält nur nicht-leere Begriffe (siehe splitTerms)
         Set<Element> ownersToExpand = new LinkedHashSet<>();
         for (SearchableToken token : tokens) {
             if (markMatchesIn(token, terms)) {
@@ -91,14 +111,13 @@ final class XmlSearchController {
         }
     }
 
-    /** Zerlegt die Eingabe an Whitespace in einzelne Suchbegriffe (leere werden verworfen). */
-    private static List<String> splitTerms(String query) {
-        if (query == null || query.isBlank()) {
+    /** Zerlegt die Eingabe über den (anpassbaren) {@link SearchTermSplitter}; {@code null}/leere Begriffe werden verworfen. */
+    private List<String> splitTerms(String query) {
+        List<String> terms = termSplitter.split(query);
+        if (terms == null) {
             return List.of();
         }
-        return Arrays.stream(query.trim().split("\\s+"))
-                .filter(term -> !term.isEmpty())
-                .toList();
+        return terms.stream().filter(term -> term != null && !term.isEmpty()).toList();
     }
 
     /** Springt umlaufend zum nächsten Treffer. */

@@ -52,6 +52,7 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
     private Element root;
     private boolean collapsible = true;
     private boolean searchCaseSensitive = false;
+    private SearchTermSplitter searchTermSplitter = XmlSearchController.DEFAULT_TERM_SPLITTER;
 
     private RenderedTree tree;
     private XmlSearchController search;
@@ -213,6 +214,18 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
     }
 
     /**
+     * Legt fest, wie der Suchtext in die einzeln hervorzuhebenden Begriffe zerlegt wird (z.&nbsp;B.
+     * Trennung an Komma statt an Leerzeichen). Standard: Trennung an Whitespace. Eine aktive Suche
+     * wird mit dem neuen Splitter sofort neu ausgeführt.
+     *
+     * @see SearchTermSplitter
+     */
+    public void setSearchTermSplitter(SearchTermSplitter splitter) {
+        this.searchTermSplitter = java.util.Objects.requireNonNull(splitter, "splitter");
+        search.setTermSplitter(splitter);
+    }
+
+    /**
      * Registriert einen Listener, der bei jeder Änderung der Suchtreffer oder der Treffer-Navigation
      * gefeuert wird – ideal, um eine externe Zähleranzeige (z.&nbsp;B. „3/12") synchron zu halten.
      */
@@ -238,6 +251,8 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
             getContent().add(tree.root());
         }
         search = new XmlSearchController(tree.tokens(), this::expandTo, this::scrollTo, this::fireMatchChange);
+        search.setCaseSensitive(searchCaseSensitive);
+        search.setTermSplitter(searchTermSplitter);
     }
 
     /** Verbindet die vom Renderer erzeugten Aufklapp-Dreiecke mit der Klapp-Logik des Viewers. */

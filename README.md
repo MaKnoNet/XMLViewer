@@ -85,9 +85,25 @@ viewer.addMatchChangeListener(e -> zaehler.setText(
 | `getCurrentMatchIndex()` | 0-basierter Index des aktuellen Treffers (`-1` = keiner) |
 | `addMatchChangeListener(...)` | Event bei jeder Such-/Navigationsänderung (für externe Zähleranzeige) |
 | `setSearchCaseSensitive(boolean)` | Groß-/Kleinschreibung der Suche (Standard: aus) |
+| `setSearchTermSplitter(SearchTermSplitter)` | Trennverhalten der Begriffe frei bestimmen (Standard: Whitespace) |
 
 > **Hinweis:** `highlight(...)` vergleicht **per Identität**. Übergib dieselbe `Element`-Instanz, die
 > auch im angezeigten Baum steckt.
+
+### Suchbegriffe anders trennen
+
+Standardmäßig wird an Leerzeichen getrennt. Über ein eigenes `SearchTermSplitter` (funktionales
+Interface: Suchtext → Liste der hervorzuhebenden Begriffe) lässt sich das frei ändern – z.&nbsp;B.
+Trennung an Komma oder „gar nicht trennen":
+
+```java
+// An Komma trennen statt an Leerzeichen:
+viewer.setSearchTermSplitter(query ->
+        Arrays.stream(query.split(",")).map(String::trim).filter(s -> !s.isEmpty()).toList());
+
+// Gesamten Text als EINEN Begriff behandeln (kein Aufsplitten):
+viewer.setSearchTermSplitter(List::of);
+```
 
 ## Styling anpassen
 
@@ -190,6 +206,7 @@ und die Demo-App in `de.makno.xmlviewer.app`.
 | `component.XmlViewer` | Öffentliche API + Highlight/Collapse/Scroll; orchestriert Renderer & Suche (kein Spring) |
 | `component.XmlTreeRenderer` | Rekursives Rendern eines `Element`-Baums in `Div`/`Span` |
 | `component.XmlSearchController` | Textsuche: Treffer markieren, navigieren, Änderungen melden |
+| `component.SearchTermSplitter` | Funktionales Interface: zerlegt den Suchtext in Begriffe (Trennzeichen frei wählbar) |
 | `component.CssClasses` | Zentrale CSS-Klassennamen (keine Magic-Strings) |
 | `component.RenderedTree` / `SearchableToken` | Records: Render-Ergebnis bzw. durchsuchbares Token |
 | `navigation.MatchNavigable` | Interface: suchen + Treffer durchlaufen + Stand abfragen (entkoppelt die UI) |
