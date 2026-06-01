@@ -3,6 +3,7 @@ package de.makno.xmlviewer.app;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -38,10 +39,17 @@ public class MainView extends VerticalLayout {
                 new H3("XmlViewer – Demo"),
                 new Paragraph("Such-UI und Buttons liegen in der Demo-App; die Komponente bietet nur die API. "
                         + "Großer Baum zum Testen von vertikalem und horizontalem Scrollen."),
-                new SearchNavigator(viewer),
-                createActionBar(highlightTarget, book025),
+                createToolbar(highlightTarget, book025),
                 viewer);
         setFlexGrow(1, viewer);
+    }
+
+    /** Such-Navigation und die Demo-Aktions-Buttons nebeneinander in einer Zeile. */
+    private HorizontalLayout createToolbar(Element highlightTarget, Element book025) {
+        HorizontalLayout toolbar =
+                new HorizontalLayout(new SearchNavigator(viewer), createActionBar(highlightTarget, book025));
+        toolbar.setAlignItems(FlexComponent.Alignment.CENTER);
+        return toolbar;
     }
 
     private HorizontalLayout createActionBar(Element highlightTarget, Element book025) {
