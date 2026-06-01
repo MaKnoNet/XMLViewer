@@ -2,6 +2,8 @@ package de.makno.xmlviewer.component;
 
 import com.vaadin.flow.component.html.Span;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -61,17 +63,21 @@ final class XmlSearchController {
         }
     }
 
-    /** Markiert alle Treffer von {@code query} und springt zum ersten. Leer/{@code null} löscht die Suche. */
+    /**
+     * Markiert alle Treffer von {@code query} und springt zum ersten. Mehrere durch Whitespace
+     * getrennte Begriffe werden einzeln gesucht (ODER-Verknüpfung). Leer/{@code null} löscht die Suche.
+     */
     void search(String query) {
         clearMarks();
         currentQuery = query;
-        if (query == null || query.isEmpty()) {
+        List<String> terms = splitTerms(query);
+        if (terms.isEmpty()) {
             notifyChange();
             return;
         }
         Set<Element> ownersToExpand = new LinkedHashSet<>();
         for (SearchableToken token : tokens) {
-            if (markMatchesIn(token, query)) {
+            if (markMatchesIn(token, terms)) {
                 addIfPresent(ownersToExpand, token.owner());
             }
         }
@@ -83,6 +89,16 @@ final class XmlSearchController {
         } else {
             moveCurrentTo(0);
         }
+    }
+
+    /** Zerlegt die Eingabe an Whitespace in einzelne Suchbegriffe (leere werden verworfen). */
+    private static List<String> splitTerms(String query) {
+        if (query == null || query.isBlank()) {
+            return List.of();
+        }
+        return Arrays.stream(query.trim().split("\\s+"))
+                .filter(term -> !term.isEmpty())
+                .toList();
     }
 
     /** Springt umlaufend zum nächsten Treffer. */
@@ -107,35 +123,64 @@ final class XmlSearchController {
     }
 
     /**
-     * Zerlegt den Span eines Tokens in Treffer- und Nicht-Treffer-Teile und markiert die Treffer.
+     * Zerlegt den Span eines Tokens in Treffer- und Nicht-Treffer-Teile und markiert die Treffer
+     * aller Suchbegriffe.
      *
      * @return {@code true}, wenn mindestens ein Treffer gefunden wurde
      */
-    private boolean markMatchesIn(SearchableToken token, String query) {
-        String haystack = normalize(token.text());
-        String needle = normalize(query);
-        int index = haystack.indexOf(needle);
-        if (index < 0) {
+    private boolean markMatchesIn(SearchableToken token, List<String> terms) {
+        List<int[]> ranges = findMatchRanges(token.text(), terms);
+        if (ranges.isEmpty()) {
             return false;
         }
         Span span = token.span();
         span.removeAll();
         int from = 0;
-        while (index >= 0) {
-            if (index > from) {
-                span.add(new Span(token.text().substring(from, index)));
+        for (int[] range : ranges) {
+            if (range[0] > from) {
+                span.add(new Span(token.text().substring(from, range[0])));
             }
-            Span match = new Span(token.text().substring(index, index + query.length()));
+            Span match = new Span(token.text().substring(range[0], range[1]));
             match.addClassName(CssClasses.SEARCH_MATCH);
             span.add(match);
             matchSpans.add(match);
-            from = index + query.length();
-            index = haystack.indexOf(needle, from);
+            from = range[1];
         }
         if (from < token.text().length()) {
             span.add(new Span(token.text().substring(from)));
         }
         return true;
+    }
+
+    /**
+     * Findet alle Treffer-Intervalle aller Begriffe im Text, sortiert nach Start und mit
+     * verschmolzenen Überlappungen (z.&nbsp;B. „EUR" und „EU"), sodass die Span-Zerlegung lückenlos ist.
+     */
+    private List<int[]> findMatchRanges(String text, List<String> terms) {
+        String haystack = normalize(text);
+        List<int[]> ranges = new ArrayList<>();
+        for (String term : terms) {
+            String needle = normalize(term);
+            for (int index = haystack.indexOf(needle); index >= 0; index = haystack.indexOf(needle, index + 1)) {
+                ranges.add(new int[] {index, index + term.length()});
+            }
+        }
+        ranges.sort(Comparator.comparingInt(range -> range[0]));
+        return mergeOverlaps(ranges);
+    }
+
+    /** Verschmilzt überlappende/anschließende Intervalle einer nach Start sortierten Liste. */
+    private static List<int[]> mergeOverlaps(List<int[]> sortedRanges) {
+        List<int[]> merged = new ArrayList<>();
+        for (int[] range : sortedRanges) {
+            int[] last = merged.isEmpty() ? null : merged.get(merged.size() - 1);
+            if (last != null && range[0] <= last[1]) {
+                last[1] = Math.max(last[1], range[1]);
+            } else {
+                merged.add(new int[] {range[0], range[1]});
+            }
+        }
+        return merged;
     }
 
     private void moveCurrentTo(int newIndex) {

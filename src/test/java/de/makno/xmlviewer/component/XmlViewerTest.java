@@ -126,6 +126,26 @@ class XmlViewerTest {
     }
 
     @Test
+    void sucheFindetMehrereBegriffeGetrenntDurchLeerzeichen() {
+        // "Hello" (1x in child) + "findme" (2x in item) -> 3 Treffer gesamt.
+        viewer.search("Hello findme");
+        assertEquals(3, viewer.getMatchCount());
+    }
+
+    @Test
+    void mehrfacheLeerzeichenZwischenBegriffenWerdenIgnoriert() {
+        viewer.search("  Hello    findme  ");
+        assertEquals(3, viewer.getMatchCount());
+    }
+
+    @Test
+    void ueberlappendeBegriffeWerdenNichtDoppeltGezaehlt() {
+        // "findme" und "find" ueberlappen im selben Text -> ein zusammengefuehrter Treffer je Vorkommen.
+        viewer.search("findme find");
+        assertEquals(2, viewer.getMatchCount());
+    }
+
+    @Test
     void caseSensitiveSucheUnterscheidetGrossKlein() {
         viewer.setSearchCaseSensitive(true);
         viewer.search("FINDME");

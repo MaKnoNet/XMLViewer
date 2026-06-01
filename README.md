@@ -78,7 +78,7 @@ viewer.addMatchChangeListener(e -> zaehler.setText(
 | `clearHighlight()` | Hervorhebung entfernen |
 | `expandAll()` / `collapseAll()` | alle Elemente auf-/zuklappen |
 | `setCollapsible(boolean)` | Aufklapp-Dreiecke an/aus |
-| `search(String)` | Treffer markieren und zum ersten springen (leer = Suche löschen) |
+| `search(String)` | Treffer markieren und zum ersten springen; mehrere durch Leerzeichen getrennte Begriffe werden einzeln gesucht (ODER); leer = Suche löschen |
 | `nextMatch()` / `previousMatch()` | durch die Treffer navigieren (umlaufend) |
 | `clearSearch()` | Such-Markierungen entfernen |
 | `getMatchCount()` | Anzahl der aktuellen Treffer |
