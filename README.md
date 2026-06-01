@@ -126,7 +126,7 @@ die Symbole durch **Unicode, Emoji oder ein SVG** ersetzen, ohne Java anzufassen
 
 | Custom Property | Default | Bedeutung |
 |---|---|---|
-| `--xmlviewer-marker-expanded` | `"\229F"` (⊟) | Marker am aufgeklappten Element |
+| `--xmlviewer-marker-expanded` | SVG (Quadrat mit Minus) | Marker am aufgeklappten Element – als CSS-Maske gerendert (einfärbbar) |
 | `--xmlviewer-marker-collapsed` | `"\229E"` (⊞) | Marker am zugeklappten Element |
 | `--xmlviewer-marker-endtag` | `"\2514"` (└) | Symbol am Ende der Linie vor dem `</tag>` |
 | `--xmlviewer-marker-color` | `--xmlviewer-punct-color` | Farbe aller Marker |
@@ -145,16 +145,20 @@ die Symbole durch **Unicode, Emoji oder ein SVG** ersetzen, ohne Java anzufassen
     --xmlviewer-guide-style: dashed;
 }
 
-/* Beispiel 2 – eigenes SVG als Marker (inline data-URI oder Datei-URL) */
+/* Beispiel 2 – eigenes SVG für den aufgeklappten Marker.
+   Der aufgeklappte Marker wird per CSS-Maske gezeichnet (siehe .xml-toggle::before): Es zählt nur
+   der Alpha-Kanal des SVG, die Farbe kommt aus --xmlviewer-marker-color. Daher genügt ein SVG ohne
+   eigene Farbe; einfach die url(...) ersetzen (data-URI oder Datei-URL). */
 .xmlviewer {
-    --xmlviewer-marker-expanded: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23333' fill='none'/%3E%3C/svg%3E");
-    --xmlviewer-marker-collapsed: url("/icons/chevron-right.svg");
+    --xmlviewer-marker-expanded: url("/icons/folder-open.svg");
 }
 ```
 
-> **SVG vs. Zeichen:** Für simple Dreiecke/Chevrons sind Unicode-Zeichen leichter, scharf in jeder
-> Größe und über `--xmlviewer-marker-color` einfärbbar. Ein SVG lohnt sich nur für grafisch
-> anspruchsvollere Symbole – und ist über `content: url(...)` problemlos möglich.
+> **SVG vs. Zeichen:** Der aufgeklappte Marker ist standardmäßig ein SVG (Quadrat mit Minus) und per
+> Maske einfärbbar. Für `--xmlviewer-marker-collapsed` und `--xmlviewer-marker-endtag` werden
+> Text-Zeichen über `content` gesetzt – dort eignen sich Unicode/Emoji am besten (leicht, scharf,
+> über `--xmlviewer-marker-color` einfärbbar). Wer auch dort ein SVG braucht, kann die jeweilige
+> `::before`-Regel analog zu `.xml-toggle::before` auf `mask` umstellen.
 
 ## Bauen & Starten
 

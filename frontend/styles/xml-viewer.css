@@ -26,10 +26,13 @@
 
     --xmlviewer-indent-width: 1.25em;       /* Einrückung je Ebene / Breite des Dreiecks */
 
-    /* ---- Marker-Zeichen (Unicode, Emoji ODER SVG via url()/mask) ----
-       Beispiel SVG:  --xmlviewer-marker-expanded: url("data:image/svg+xml,..."); */
-    --xmlviewer-marker-expanded: "\229F";   /* ⊟ Quadrat mit Minus – aufgeklappt */
-    --xmlviewer-marker-collapsed: "\229E";  /* ⊞ Quadrat mit Plus  – zugeklappt  */
+    /* ---- Marker ----
+       Der aufgeklappte Marker ist ein SVG (Quadrat mit Plus), das per CSS-Maske gerendert wird:
+       skaliert auf 1em und nimmt --xmlviewer-marker-color an (deshalb braucht das SVG nur den
+       Alpha-Kanal, keine eigene Farbe). Ersetzbar durch ein anderes SVG (mask-url) – siehe README.
+       Die übrigen Marker sind Text-Zeichen (Unicode/Emoji) und über `content` gesetzt. */
+    --xmlviewer-marker-expanded: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='12' y1='8' x2='12' y2='16'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3C/svg%3E");
+    --xmlviewer-marker-collapsed: "\229E";  /* ⊞ Quadrat mit Plus  – zugeklappt */
     --xmlviewer-marker-endtag: "\2514";     /* └ am Ende der Linie vor dem schließenden Tag */
     --xmlviewer-marker-color: var(--xmlviewer-punct-color); /* Farbe aller Marker */
 
@@ -106,16 +109,28 @@
     cursor: pointer;
 }
 
-/* ---- Marker-Zeichen: kommen aus CSS, damit Entwickler sie ohne Java ersetzen können
-   (Unicode, Emoji oder SVG via content: url(...) / mask-image). ---- */
+/* ---- Marker kommen aus CSS, damit Entwickler sie ohne Java ersetzen können. ----
+   Aufgeklappt: SVG als Maske -> skaliert auf 1em und nimmt --xmlviewer-marker-color an. */
 .xml-toggle::before {
-    content: var(--xmlviewer-marker-expanded);
-    color: var(--xmlviewer-marker-color);
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    background-color: var(--xmlviewer-marker-color);
+    -webkit-mask: var(--xmlviewer-marker-expanded) center / contain no-repeat;
+    mask: var(--xmlviewer-marker-expanded) center / contain no-repeat;
 }
 
-/* Zustands-Modifier vom XmlViewer gesetzt: zugeklappt -> Collapsed-Marker. */
+/* Zugeklappt: Text-Zeichen (Unicode/Emoji) -> Maske zurücksetzen und über `content` zeichnen. */
 .xml-toggle--collapsed::before {
     content: var(--xmlviewer-marker-collapsed);
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    -webkit-mask: none;
+    mask: none;
+    color: var(--xmlviewer-marker-color);
 }
 
 /* ---- Farbklassen (referenzieren die Custom Properties) ---- */
