@@ -3,6 +3,9 @@ build/
 .gradle/
 bin/
 
+# Build-Output (z. B. von Eclipse-Plugins / Vaadin-Frontend-Build erzeugt)
+target/
+
 # Eclipse
 .classpath
 .project
