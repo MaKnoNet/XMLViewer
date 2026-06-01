@@ -124,41 +124,34 @@ Die Auf-/Zuklapp-Marker, das Symbol am schließenden Tag und der Stil der Führu
 vollständig aus CSS (über `::before`-Inhalte) – der Java-Code setzt **kein** Zeichen. So lassen sich
 die Symbole durch **Unicode, Emoji oder ein SVG** ersetzen, ohne Java anzufassen:
 
+Die vier Tree-Symbole (aufgeklappt, zugeklappt, End-Symbol, Linie) sind **SVGs**, die als
+`background-image` gerendert werden und zusammen eine durchgehende „Connected-Tree"-Optik ergeben.
+
 | Custom Property | Default | Bedeutung |
 |---|---|---|
-| `--xmlviewer-marker-expanded` | SVG (Quadrat mit Minus) | Marker am aufgeklappten Element – als CSS-Maske gerendert (einfärbbar) |
-| `--xmlviewer-marker-collapsed` | `"\229E"` (⊞) | Marker am zugeklappten Element |
-| `--xmlviewer-marker-endtag` | `"\2514"` (└) | Symbol am Ende der Linie vor dem `</tag>` |
-| `--xmlviewer-marker-color` | `--xmlviewer-punct-color` | Farbe aller Marker |
-| `--xmlviewer-guide-color` | `--xmlviewer-marker-color` | Linienfarbe (Default = Markerfarbe) |
-| `--xmlviewer-guide-width` | `2px` | Linienbreite |
-| `--xmlviewer-guide-style` | `solid` | Linienstil (`solid`/`dashed`/`dotted`) |
+| `--xmlviewer-marker-expanded` | SVG: Quadrat mit Minus + Linien-Stummel | Marker am aufgeklappten Element |
+| `--xmlviewer-marker-collapsed` | SVG: Quadrat mit Plus | Marker am zugeklappten Element |
+| `--xmlviewer-marker-endtag` | SVG: Elbow (`┘`) | Symbol am Ende der Linie vor dem `</tag>` |
+| `--xmlviewer-marker-line` | SVG: senkrechte Linie | durchgehende Führungslinie |
+
+> **Farbe der SVG-Symbole:** Die Strichfarbe ist im SVG fest eingebacken (`stroke=%2364748b`). Zum
+> Umfärben den Hex-Wert in der jeweiligen `--xmlviewer-marker-*`-Property ändern. Eine zentrale
+> Live-Färbung über eine einzelne Variable ist hier bewusst nicht möglich, weil die weiße
+> Innenfläche des Quadrats erhalten bleiben muss (Bild- statt Masken-Rendering).
 
 ```css
-/* Beispiel 1 – andere Unicode-/Emoji-Zeichen + auffälligere Linie */
+/* Eigene SVGs setzen – data-URI (inline) oder Datei-URL. Die senkrechte Linie sollte bei x=Mitte
+   des viewBox liegen, damit Marker und Linie bündig ineinander übergehen. */
 .xmlviewer {
-    --xmlviewer-marker-expanded: "📂";
-    --xmlviewer-marker-collapsed: "📁";
-    --xmlviewer-marker-endtag: "⤷";
-    --xmlviewer-guide-color: #e11d48;
-    --xmlviewer-guide-width: 2px;
-    --xmlviewer-guide-style: dashed;
-}
-
-/* Beispiel 2 – eigenes SVG für den aufgeklappten Marker.
-   Der aufgeklappte Marker wird per CSS-Maske gezeichnet (siehe .xml-toggle::before): Es zählt nur
-   der Alpha-Kanal des SVG, die Farbe kommt aus --xmlviewer-marker-color. Daher genügt ein SVG ohne
-   eigene Farbe; einfach die url(...) ersetzen (data-URI oder Datei-URL). */
-.xmlviewer {
-    --xmlviewer-marker-expanded: url("/icons/folder-open.svg");
+    --xmlviewer-marker-expanded: url("/icons/node-open.svg");
+    --xmlviewer-marker-collapsed: url("/icons/node-closed.svg");
+    --xmlviewer-marker-endtag: url("/icons/elbow.svg");
+    --xmlviewer-marker-line: url("/icons/line.svg");
 }
 ```
 
-> **SVG vs. Zeichen:** Der aufgeklappte Marker ist standardmäßig ein SVG (Quadrat mit Minus) und per
-> Maske einfärbbar. Für `--xmlviewer-marker-collapsed` und `--xmlviewer-marker-endtag` werden
-> Text-Zeichen über `content` gesetzt – dort eignen sich Unicode/Emoji am besten (leicht, scharf,
-> über `--xmlviewer-marker-color` einfärbbar). Wer auch dort ein SVG braucht, kann die jeweilige
-> `::before`-Regel analog zu `.xml-toggle::before` auf `mask` umstellen.
+Die übrigen Stell­schrauben (`--xmlviewer-marker-color`, `--xmlviewer-guide-*`) bleiben als
+Text-Fallback erhalten, wirken aber nicht auf die SVG-Bilder.
 
 ## Bauen & Starten
 

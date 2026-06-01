@@ -26,21 +26,23 @@
 
     --xmlviewer-indent-width: 1.25em;       /* Einrückung je Ebene / Breite des Dreiecks */
 
-    /* ---- Marker ----
-       Der aufgeklappte Marker ist ein SVG (Quadrat mit Plus), das per CSS-Maske gerendert wird:
-       skaliert auf 1em und nimmt --xmlviewer-marker-color an (deshalb braucht das SVG nur den
-       Alpha-Kanal, keine eigene Farbe). Ersetzbar durch ein anderes SVG (mask-url) – siehe README.
-       Die übrigen Marker sind Text-Zeichen (Unicode/Emoji) und über `content` gesetzt. */
-    --xmlviewer-marker-expanded: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='12' y1='8' x2='12' y2='16'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3C/svg%3E");
-    --xmlviewer-marker-collapsed: "\229E";  /* ⊞ Quadrat mit Plus  – zugeklappt */
-    --xmlviewer-marker-endtag: "\2514";     /* └ am Ende der Linie vor dem schließenden Tag */
-    --xmlviewer-marker-color: var(--xmlviewer-punct-color); /* Farbe aller Marker */
+    /* ---- Marker & Führungslinie (vier SVGs, als Bild gerendert) ----
+       Die vier SVGs bilden zusammen eine durchgehende „Connected-Tree"-Optik: aufgeklappter Marker
+       (Quadrat mit Minus + austretender Linien-Stummel), zugeklappter Marker (Quadrat mit Plus),
+       End-/Elbow-Symbol und die senkrechte Linie. Sie werden als `background-image` gezeichnet
+       (nicht als Maske), damit die weiße Innenfläche des Quadrats erhalten bleibt.
+       Die Strichfarbe ist im SVG fest eingebacken (stroke=%2364748b). Zum Umfärben den Hex-Wert in
+       der jeweiligen Property ändern – `--xmlviewer-marker-color` wirkt hier NICHT (nur Text-Fallback). */
+    --xmlviewer-marker-expanded: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='12' x2='12' y2='24'/%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2' fill='%23ffffff'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3C/svg%3E");
+    --xmlviewer-marker-collapsed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='12' y1='8' x2='12' y2='16'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3C/svg%3E");
+    --xmlviewer-marker-endtag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 12 L24 12'/%3E%3C/svg%3E");
+    --xmlviewer-marker-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='0' x2='12' y2='24'/%3E%3C/svg%3E");
+    --xmlviewer-marker-color: var(--xmlviewer-punct-color); /* Text-Fallback-Farbe (SVGs s. oben) */
 
-    /* ---- Führungslinie (anpassbar in Farbe, Breite, Stil) ----
-       Default = Marker-Farbe, damit Linie und Symbole einheitlich wirken. */
-    --xmlviewer-guide-color: var(--xmlviewer-marker-color); /* Linienfarbe = Markerfarbe */
-    --xmlviewer-guide-width: 2px;           /* Linienbreite – passt zur Strichstärke des Marker-Symbols */
-    --xmlviewer-guide-style: solid;         /* solid | dashed | dotted          */
+    /* ---- Führungslinie: Variablen bleiben für Text-Fallback erhalten (wirken nicht auf das SVG-Bild). */
+    --xmlviewer-guide-color: var(--xmlviewer-marker-color);
+    --xmlviewer-guide-width: 2px;
+    --xmlviewer-guide-style: solid;
 
     display: flex;
     flex-direction: column;
@@ -69,14 +71,15 @@
     white-space: pre;
 }
 
-/* Kinder-Container trägt die vertikale Führungslinie. Sie läuft vom öffnenden Tag bis zum letzten
-   Kind (nicht bis zum schließenden Tag); das Abschluss-Symbol am End-Tag markiert das Ende. Die
-   Linie sitzt mittig unter dem Aufklapp-Marker; beim Zuklappen ist der Container ausgeblendet, die
-   Linie verschwindet also automatisch. */
+/* Kinder-Container trägt die vertikale Führungslinie (SVG-Bild). Sie läuft vom öffnenden Tag bis zum
+   letzten Kind (nicht bis zum schließenden Tag); das Abschluss-Symbol am End-Tag markiert das Ende.
+   Das 1em breite Linien-Bild ist links so positioniert, dass seine Mitte (x=12 im viewBox) auf
+   indent/2 (= padding-box-Kante) liegt – exakt unter der Mitte des Aufklapp-Markers. 100% Höhe →
+   nahtlos ohne Kachelfugen. Beim Zuklappen ist der Container ausgeblendet, die Linie verschwindet. */
 .xml-children {
     margin-left: calc(var(--xmlviewer-indent-width) / 2);
     padding-left: calc(var(--xmlviewer-indent-width) / 2);
-    border-left: var(--xmlviewer-guide-width) var(--xmlviewer-guide-style) var(--xmlviewer-guide-color);
+    background: var(--xmlviewer-marker-line) -0.5em 0 / 1em 100% no-repeat;
 }
 
 /* Aufklapp-Marker und Platzhalter: gleiche Breite, Marker mittig -> bündig über der Führungslinie. */
@@ -88,49 +91,43 @@
     user-select: none;
 }
 
-/* Symbol am Ende der Linie vor dem schließenden Tag. Das └ ist linksbündig im Glyph (Stamm links),
-   deshalb NICHT zentrieren, sondern per padding-left exakt auf die Linien-X setzen (= halbe
-   Einrückung, dort sitzt auch die border-left von .xml-children). So trifft der senkrechte Stamm
-   des └ die Linie nahtlos; der </tag>-Text bleibt bündig zum öffnenden Tag. */
+/* Symbol am Ende der Linie vor dem schließenden Tag (Elbow-SVG). Die Vertikale liegt bei x=12
+   (Bild-Mitte) → in der zentrierten 1.25em-Box trifft sie die Führungslinie nahtlos; die Horizontale
+   zeigt zum </tag>-Text. */
 .xml-endtag-marker {
     display: inline-block;
-    box-sizing: border-box;
     width: var(--xmlviewer-indent-width);
-    padding-left: calc(var(--xmlviewer-indent-width) / 2);
+    text-align: center;
     user-select: none;
 }
 
 .xml-endtag-marker::before {
-    content: var(--xmlviewer-marker-endtag);
-    color: var(--xmlviewer-marker-color);
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    background: var(--xmlviewer-marker-endtag) center / contain no-repeat;
 }
 
 .xml-toggle {
     cursor: pointer;
 }
 
-/* ---- Marker kommen aus CSS, damit Entwickler sie ohne Java ersetzen können. ----
-   Aufgeklappt: SVG als Maske -> skaliert auf 1em und nimmt --xmlviewer-marker-color an. */
+/* ---- Marker kommen aus CSS (SVG als Bild), damit Entwickler sie ohne Java ersetzen können. ----
+   Aufgeklappt: Quadrat mit Minus + austretender Linien-Stummel. */
 .xml-toggle::before {
     content: "";
     display: inline-block;
     width: 1em;
     height: 1em;
     vertical-align: -0.15em;
-    background-color: var(--xmlviewer-marker-color);
-    -webkit-mask: var(--xmlviewer-marker-expanded) center / contain no-repeat;
-    mask: var(--xmlviewer-marker-expanded) center / contain no-repeat;
+    background: var(--xmlviewer-marker-expanded) center / contain no-repeat;
 }
 
-/* Zugeklappt: Text-Zeichen (Unicode/Emoji) -> Maske zurücksetzen und über `content` zeichnen. */
+/* Zugeklappt: Quadrat mit Plus. */
 .xml-toggle--collapsed::before {
-    content: var(--xmlviewer-marker-collapsed);
-    width: auto;
-    height: auto;
-    background-color: transparent;
-    -webkit-mask: none;
-    mask: none;
-    color: var(--xmlviewer-marker-color);
+    background-image: var(--xmlviewer-marker-collapsed);
 }
 
 /* ---- Farbklassen (referenzieren die Custom Properties) ---- */
