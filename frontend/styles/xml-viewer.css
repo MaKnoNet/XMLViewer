@@ -51,7 +51,7 @@
     --xmlviewer-border-color: #cbd5e1;   /* Rahmenfarbe        */
     --xmlviewer-border-width: 1px;       /* Rahmenstärke       */
     --xmlviewer-border-radius: 6px;      /* Eckenradius        */
-    --xmlviewer-background: #ffffff;     /* Hintergrund        */
+    --xmlviewer-background: #f8fafc;     /* Hintergrund (wie die Navigations-Pille) */
 
     display: flex;
     flex-direction: column;
