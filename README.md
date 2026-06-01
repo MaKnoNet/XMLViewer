@@ -118,6 +118,44 @@ Im Java-Code werden **nur CSS-Klassen** gesetzt. Farben/Größen kommen aus
 
 Weiter: `--xmlviewer-font-family`, `--xmlviewer-font-size`, `--xmlviewer-indent-width`.
 
+### Marker und Führungslinie anpassen
+
+Die Auf-/Zuklapp-Marker, das Symbol am schließenden Tag und der Stil der Führungslinie kommen
+vollständig aus CSS (über `::before`-Inhalte) – der Java-Code setzt **kein** Zeichen. So lassen sich
+die Symbole durch **Unicode, Emoji oder ein SVG** ersetzen, ohne Java anzufassen:
+
+| Custom Property | Default | Bedeutung |
+|---|---|---|
+| `--xmlviewer-marker-expanded` | `"\25BE"` (▾) | Marker am aufgeklappten Element |
+| `--xmlviewer-marker-collapsed` | `"\25B8"` (▸) | Marker am zugeklappten Element |
+| `--xmlviewer-marker-endtag` | `"\2514"` (└) | Symbol am Ende der Linie vor dem `</tag>` |
+| `--xmlviewer-marker-color` | `--xmlviewer-punct-color` | Farbe aller Marker |
+| `--xmlviewer-guide-color` | `#cbd5e1` | Linienfarbe |
+| `--xmlviewer-guide-width` | `1px` | Linienbreite |
+| `--xmlviewer-guide-style` | `solid` | Linienstil (`solid`/`dashed`/`dotted`) |
+
+```css
+/* Beispiel 1 – andere Unicode-/Emoji-Zeichen + auffälligere Linie */
+.xmlviewer {
+    --xmlviewer-marker-expanded: "📂";
+    --xmlviewer-marker-collapsed: "📁";
+    --xmlviewer-marker-endtag: "⤷";
+    --xmlviewer-guide-color: #e11d48;
+    --xmlviewer-guide-width: 2px;
+    --xmlviewer-guide-style: dashed;
+}
+
+/* Beispiel 2 – eigenes SVG als Marker (inline data-URI oder Datei-URL) */
+.xmlviewer {
+    --xmlviewer-marker-expanded: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23333' fill='none'/%3E%3C/svg%3E");
+    --xmlviewer-marker-collapsed: url("/icons/chevron-right.svg");
+}
+```
+
+> **SVG vs. Zeichen:** Für simple Dreiecke/Chevrons sind Unicode-Zeichen leichter, scharf in jeder
+> Größe und über `--xmlviewer-marker-color` einfärbbar. Ein SVG lohnt sich nur für grafisch
+> anspruchsvollere Symbole – und ist über `content: url(...)` problemlos möglich.
+
 ## Bauen & Starten
 
 ```bash

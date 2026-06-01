@@ -46,8 +46,6 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String TRIANGLE_EXPANDED = "▾";
-    private static final String TRIANGLE_COLLAPSED = "▸";
     private static final String EMPTY_TEXT = "Kein XML-Element gesetzt.";
 
     private Element root;
@@ -288,7 +286,8 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle {
         }
         Span toggle = tree.toggles().get(element);
         if (toggle != null) {
-            toggle.setText(collapsed ? TRIANGLE_COLLAPSED : TRIANGLE_EXPANDED);
+            // Marker-Zeichen liefert CSS; hier nur den Zustand umschalten.
+            toggle.getElement().getClassList().set(CssClasses.TOGGLE_COLLAPSED, collapsed);
         }
     }
 

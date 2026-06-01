@@ -26,8 +26,6 @@ import org.jdom2.Text;
  */
 final class XmlTreeRenderer {
 
-    private static final String TRIANGLE_EXPANDED = "▾";
-
     private final boolean collapsible;
 
     private final Map<Element, Div> elementHeaders = new IdentityHashMap<>();
@@ -132,7 +130,9 @@ final class XmlTreeRenderer {
 
     private Div endTagLine(Element element) {
         Div line = newLine();
+        // Marker am Linienende kommt aus CSS (.xml-endtag::before) – keine Layoutbreite, kein Java-Text.
         line.addClassName(CssClasses.ENDTAG);
+        line.add(newIndent());
         line.add(punct("</"));
         line.add(tag(element));
         line.add(punct(">"));
@@ -166,8 +166,9 @@ final class XmlTreeRenderer {
         return line;
     }
 
+    /** Klick-Marker; das sichtbare Zeichen liefert CSS ({@code .xml-toggle::before}), kein Java-Text. */
     private Span newToggle(Element element) {
-        Span toggle = new Span(TRIANGLE_EXPANDED);
+        Span toggle = new Span();
         toggle.addClassName(CssClasses.TOGGLE);
         toggles.put(element, toggle);
         return toggle;

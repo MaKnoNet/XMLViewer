@@ -25,7 +25,18 @@
     --xmlviewer-search-current-bg: #ff9d4d; /* aktueller Treffer   – Orange     */
 
     --xmlviewer-indent-width: 1.25em;       /* Einrückung je Ebene / Breite des Dreiecks */
-    --xmlviewer-guide-color: #cbd5e1;       /* Führungslinie aufgeklappter Elemente – Hellgrau */
+
+    /* ---- Führungslinie (anpassbar in Farbe, Breite, Stil) ---- */
+    --xmlviewer-guide-color: #cbd5e1;       /* Linienfarbe – Hellgrau           */
+    --xmlviewer-guide-width: 1px;           /* Linienbreite                     */
+    --xmlviewer-guide-style: solid;         /* solid | dashed | dotted          */
+
+    /* ---- Marker-Zeichen (Unicode, Emoji ODER SVG via url()/mask) ----
+       Beispiel SVG:  --xmlviewer-marker-expanded: url("data:image/svg+xml,..."); */
+    --xmlviewer-marker-expanded: "\25BE";   /* ▾ aufgeklappt   */
+    --xmlviewer-marker-collapsed: "\25B8";  /* ▸ zugeklappt    */
+    --xmlviewer-marker-endtag: "\2514";     /* └ am Linienende vor dem schließenden Tag */
+    --xmlviewer-marker-color: var(--xmlviewer-punct-color); /* Farbe aller Marker */
 
     display: flex;
     flex-direction: column;
@@ -62,7 +73,21 @@
 .xml-endtag {
     margin-left: calc(var(--xmlviewer-indent-width) / 2);
     padding-left: calc(var(--xmlviewer-indent-width) / 2);
-    border-left: 1px solid var(--xmlviewer-guide-color);
+    border-left: var(--xmlviewer-guide-width) var(--xmlviewer-guide-style) var(--xmlviewer-guide-color);
+}
+
+/* Die End-Tag-Zeile trägt das Abschluss-Symbol als ::before direkt auf der Linie -> keine eigene
+   Layoutbreite, der </tag>-Text bleibt exakt unter dem öffnenden Tag. */
+.xml-endtag {
+    position: relative;
+}
+
+.xml-endtag::before {
+    content: var(--xmlviewer-marker-endtag);
+    color: var(--xmlviewer-marker-color);
+    position: absolute;
+    left: calc(var(--xmlviewer-indent-width) / -2);
+    transform: translateX(-50%);
 }
 
 /* Aufklapp-Dreieck und Platzhalter (gleiche Breite -> Bündigkeit). */
@@ -75,9 +100,20 @@
 
 .xml-toggle {
     cursor: pointer;
-    color: var(--xmlviewer-punct-color);
-    /* Glyph mittig in der Box -> sitzt exakt über der Führungslinie (.xml-children) */
+    /* Marker mittig in der Box -> sitzt exakt über der Führungslinie (.xml-children) */
     text-align: center;
+}
+
+/* ---- Marker-Zeichen: kommen aus CSS, damit Entwickler sie ohne Java ersetzen können
+   (Unicode, Emoji oder SVG via content: url(...) / mask-image). ---- */
+.xml-toggle::before {
+    content: var(--xmlviewer-marker-expanded);
+    color: var(--xmlviewer-marker-color);
+}
+
+/* Zustands-Modifier vom XmlViewer gesetzt: zugeklappt -> Collapsed-Marker. */
+.xml-toggle--collapsed::before {
+    content: var(--xmlviewer-marker-collapsed);
 }
 
 /* ---- Farbklassen (referenzieren die Custom Properties) ---- */
