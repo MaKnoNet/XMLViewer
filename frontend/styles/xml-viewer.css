@@ -36,7 +36,7 @@
     --xmlviewer-marker-expanded: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='12' x2='12' y2='24'/%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2' fill='%23ffffff'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3C/svg%3E");
     --xmlviewer-marker-collapsed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='12' y1='8' x2='12' y2='16'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3C/svg%3E");
     --xmlviewer-marker-endtag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 12 L24 12'/%3E%3C/svg%3E");
-    --xmlviewer-marker-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='0' x2='12' y2='24'/%3E%3C/svg%3E");
+    --xmlviewer-marker-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='0' x2='12' y2='24'/%3E%3C/svg%3E");
     --xmlviewer-marker-color: var(--xmlviewer-punct-color); /* Text-Fallback-Farbe (SVGs s. oben) */
 
     /* ---- Führungslinie: Variablen bleiben für Text-Fallback erhalten (wirken nicht auf das SVG-Bild). */
@@ -74,8 +74,10 @@
 /* Kinder-Container trägt die vertikale Führungslinie (SVG-Bild). Sie läuft vom öffnenden Tag bis zum
    letzten Kind (nicht bis zum schließenden Tag); das Abschluss-Symbol am End-Tag markiert das Ende.
    Das 1em breite Linien-Bild ist links so positioniert, dass seine Mitte (x=12 im viewBox) auf
-   indent/2 (= padding-box-Kante) liegt – exakt unter der Mitte des Aufklapp-Markers. 100% Höhe →
-   nahtlos ohne Kachelfugen. Beim Zuklappen ist der Container ausgeblendet, die Linie verschwindet. */
+   indent/2 (= padding-box-Kante) liegt – exakt unter der Mitte des Aufklapp-Markers. Die Höhe ist
+   100% und das Linien-SVG nutzt preserveAspectRatio='none' → es wird über die volle Container-Höhe
+   gestreckt (durchgehende Linie auch bei vielen Kindern; ohne 'none' würde das SVG zentriert und
+   oben/unten Lücken lassen). Beim Zuklappen ist der Container ausgeblendet, die Linie verschwindet. */
 .xml-children {
     margin-left: calc(var(--xmlviewer-indent-width) / 2);
     padding-left: calc(var(--xmlviewer-indent-width) / 2);
