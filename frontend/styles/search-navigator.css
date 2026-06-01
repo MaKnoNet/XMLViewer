@@ -1,0 +1,41 @@
+/*
+ * Styling der SearchNavigator-Komponente (Such-Treffer-Navigation).
+ *
+ * Die drei Teile (Zurück-Button, Treffer-Label, Vor-Button) werden zu einer zusammenhängenden
+ * „Pille" gruppiert, damit sie als EINE Einheit wahrgenommen werden (nicht als drei lose Elemente).
+ * Anpassbar über CSS Custom Properties am Root .xmlviewer-search-navigator.
+ */
+
+.xmlviewer-search-navigator {
+    /* ---- Anpassbare Stellschrauben ---- */
+    --xmlviewer-nav-border-color: #cbd5e1;   /* Rahmen der Pille      */
+    --xmlviewer-nav-bg: #f8fafc;             /* Hintergrund der Pille */
+    --xmlviewer-nav-text-color: #334155;     /* Label-Textfarbe       */
+    --xmlviewer-nav-radius: 9999px;          /* voll abgerundet       */
+
+    display: inline-flex;
+}
+
+/* Der innere HorizontalLayout ist die eigentliche Pille: ein Rahmen, ein Hintergrund. */
+.xmlviewer-search-navigator > vaadin-horizontal-layout {
+    border: 1px solid var(--xmlviewer-nav-border-color);
+    border-radius: var(--xmlviewer-nav-radius);
+    background: var(--xmlviewer-nav-bg);
+    overflow: hidden;
+}
+
+/* Treffer-Label mittig, mit etwas Luft und dezenten Trennlinien zu den Buttons. */
+.xmlviewer-search-navigator-label {
+    padding: 0 0.75em;
+    color: var(--xmlviewer-nav-text-color);
+    white-space: nowrap;
+    border-left: 1px solid var(--xmlviewer-nav-border-color);
+    border-right: 1px solid var(--xmlviewer-nav-border-color);
+}
+
+/* Icon-Buttons in die Pille einpassen: keine eigenen Ränder/Radien, gleichmäßige Klickfläche. */
+.xmlviewer-search-navigator vaadin-button {
+    margin: 0;
+    border-radius: 0;
+    min-width: 2.25em;
+}
