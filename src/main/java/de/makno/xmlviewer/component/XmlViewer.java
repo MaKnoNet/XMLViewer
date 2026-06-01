@@ -324,4 +324,14 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
     List<String> searchableTexts() {
         return tree.tokens().stream().map(SearchableToken::text).toList();
     }
+
+    /** Liefert die CSS-Klasse(n) des Spans, dessen Token-Text exakt {@code text} ist (oder leer). */
+    java.util.Set<String> cssClassesOfTokenText(String text) {
+        return tree.tokens().stream()
+                .filter(token -> text.equals(token.text()))
+                .findFirst()
+                .map(token -> new java.util.HashSet<>(token.span().getElement().getClassList()))
+                .map(set -> (java.util.Set<String>) set)
+                .orElse(java.util.Set.of());
+    }
 }

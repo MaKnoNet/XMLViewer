@@ -192,6 +192,67 @@ class XmlViewerTest {
         assertNull(viewer.headerOf(root));
     }
 
+    @Test
+    void rendertKommentarMitKommentarKlasse() {
+        Element withComment = new Element("doc");
+        withComment.addContent(new org.jdom2.Comment("ein Hinweis"));
+        viewer.setRoot(withComment);
+
+        assertTrue(viewer.searchableTexts().contains("ein Hinweis"), "Kommentartext fehlt");
+        assertTrue(viewer.cssClassesOfTokenText("ein Hinweis").contains(CssClasses.COMMENT), "Kommentar-Klasse fehlt");
+    }
+
+    @Test
+    void rendertCdataMitTextKlasse() {
+        Element withCdata = new Element("doc");
+        withCdata.addContent(new org.jdom2.CDATA("a < b && c"));
+        viewer.setRoot(withCdata);
+
+        // CDATA wird roh übernommen (nur Vaadin escaped beim Rendern) und als Text-Token geführt.
+        assertTrue(viewer.searchableTexts().contains("a < b && c"), "CDATA-Text fehlt");
+        assertTrue(viewer.cssClassesOfTokenText("a < b && c").contains(CssClasses.TEXT), "CDATA-Text-Klasse fehlt");
+    }
+
+    @Test
+    void rendertNamespaceMitPraefixUndOhne() {
+        org.jdom2.Namespace lib = org.jdom2.Namespace.getNamespace("lib", "urn:lib");
+        Element withNs = new Element("catalog", lib);
+        org.jdom2.Namespace defaultNs = org.jdom2.Namespace.getNamespace("urn:default");
+        withNs.addNamespaceDeclaration(defaultNs);
+        viewer.setRoot(withNs);
+
+        // Sowohl der präfixbehaftete (xmlns:lib) als auch der Default-Namespace (xmlns) werden gerendert.
+        assertTrue(viewer.searchableTexts().contains("xmlns:lib"), "Präfix-Namespace fehlt");
+        assertTrue(viewer.searchableTexts().contains("xmlns"), "Default-Namespace fehlt");
+        assertTrue(viewer.searchableTexts().contains("urn:lib"), "Namespace-URI fehlt");
+    }
+
+    @Test
+    void rendertLeeresElementSelbstschliessend() {
+        Element empty = new Element("root");
+        empty.addContent(new Element("leer"));
+        viewer.setRoot(empty);
+
+        Element leer = empty.getChild("leer");
+        // Selbstschließendes Element hat keinen Kinder-Container -> isExpanded liefert true (kein null-Fehler).
+        assertNotNull(viewer.headerOf(leer));
+        assertTrue(viewer.isExpanded(leer));
+    }
+
+    @Test
+    void rendertInlineTextImStartTag() {
+        Element doc = new Element("doc");
+        Element title = new Element("title");
+        title.setText("Nur Text");
+        doc.addContent(title);
+        viewer.setRoot(doc);
+
+        // Ein Element mit reinem Textinhalt wird einzeilig (Inline) gerendert: kein eigener
+        // Kinder-Container, Text steht in der Start-Tag-Zeile.
+        assertTrue(viewer.searchableTexts().contains("Nur Text"));
+        assertTrue(viewer.isExpanded(title), "Inline-Text-Element hat keinen Kinder-Container");
+    }
+
     /** Sammelt eine Komponente und alle ihre Nachfahren. */
     private static List<Component> descendants(Component c) {
         List<Component> result = new ArrayList<>();

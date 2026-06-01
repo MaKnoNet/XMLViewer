@@ -5,6 +5,8 @@ plugins {
     id 'com.vaadin' version '24.5.3'
     // Code-Formatierung: erzwingt palantir-java-format (siehe spotless-Block unten).
     id 'com.diffplug.spotless' version '6.25.0'
+    // Test-Coverage (JaCoCo): Report unter build/reports/jacoco/test/html/index.html
+    id 'jacoco'
 }
 
 group = 'de.makno.xmlviewer'
@@ -59,6 +61,32 @@ test {
     useJUnitPlatform()
     testLogging {
         events 'passed', 'skipped', 'failed'
+    }
+    // Coverage-Report nach jedem Testlauf automatisch erzeugen.
+    finalizedBy jacocoTestReport
+}
+
+// Test-Coverage mit JaCoCo.
+//   ./gradlew test            -> erzeugt zugleich den Coverage-Report
+//   Report: build/reports/jacoco/test/html/index.html
+jacoco {
+    toolVersion = '0.8.12'
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.required = true
+        xml.required = true
+    }
+    // Demo-/Glue-Code (Spring-Boot-Start, Demo-View, Beispieldaten) nicht mitmessen –
+    // gemessen wird die wiederverwendbare Bibliothek (component + navigation).
+    afterEvaluate {
+        classDirectories.setFrom(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                'de/makno/xmlviewer/app/**'
+            ])
+        })
     }
 }
 
