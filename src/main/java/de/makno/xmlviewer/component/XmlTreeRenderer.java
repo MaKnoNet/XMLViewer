@@ -132,7 +132,7 @@ final class XmlTreeRenderer {
 
     private Div endTagLine(Element element) {
         Div line = newLine();
-        line.add(newIndent());
+        line.addClassName(CssClasses.ENDTAG);
         line.add(punct("</"));
         line.add(tag(element));
         line.add(punct(">"));

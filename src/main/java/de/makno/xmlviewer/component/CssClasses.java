@@ -19,6 +19,8 @@ final class CssClasses {
     static final String LINE = "xml-line";
     /** Eingerückter Container für die Kindknoten. */
     static final String CHILDREN = "xml-children";
+    /** Schließende-Tag-Zeile (führt die Führungslinie bis zum Tag-Ende weiter). */
+    static final String ENDTAG = "xml-endtag";
     /** Klickbares Auf-/Zuklapp-Dreieck. */
     static final String TOGGLE = "xml-toggle";
     /** Einrückungs-Platzhalter (gleiche Breite wie das Dreieck). */

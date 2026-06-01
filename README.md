@@ -111,7 +111,7 @@ Im Java-Code werden **nur CSS-Klassen** gesetzt. Farben/Größen kommen aus
 | `xml-text` | `--xmlviewer-text-color` | Textinhalte / CDATA |
 | `xml-comment` | `--xmlviewer-comment-color` | Kommentare |
 | `xml-punct` | `--xmlviewer-punct-color` | `< > / = "` |
-| `xml-children` | `--xmlviewer-guide-color` | vertikale Führungslinie aufgeklappter Elemente |
+| `xml-children` / `xml-endtag` | `--xmlviewer-guide-color` | durchgehende Führungslinie vom öffnenden bis zum schließenden Tag |
 | `xml-highlight` | `--xmlviewer-highlight-bg` | per `highlight(...)` markiertes Element |
 | `xml-search-match` | `--xmlviewer-search-match-bg` | Suchtreffer |
 | `xml-search-current` | `--xmlviewer-search-current-bg` | aktueller Suchtreffer |

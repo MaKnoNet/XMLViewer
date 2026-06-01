@@ -54,10 +54,12 @@
     white-space: pre;
 }
 
-/* Kinder-Container: Einrückung der nächsten Ebene + vertikale Führungslinie vom Start- bis zum
-   End-Tag (zeigt den Geltungsbereich des Elements). Beim Zuklappen ist der Container ausgeblendet,
-   die Linie verschwindet also automatisch. Die Linie sitzt mittig unter dem Aufklapp-Dreieck. */
-.xml-children {
+/* Kinder-Container UND schließende Tag-Zeile tragen dieselbe vertikale Führungslinie. Dadurch läuft
+   die Linie durchgehend vom öffnenden Tag bis hinunter zum schließenden Tag (zeigt den
+   Geltungsbereich des Elements). Die Linie sitzt mittig unter dem Aufklapp-Dreieck; beim Zuklappen
+   sind beide ausgeblendet, die Linie verschwindet also automatisch. */
+.xml-children,
+.xml-endtag {
     margin-left: calc(var(--xmlviewer-indent-width) / 2);
     padding-left: calc(var(--xmlviewer-indent-width) / 2);
     border-left: 1px solid var(--xmlviewer-guide-color);
