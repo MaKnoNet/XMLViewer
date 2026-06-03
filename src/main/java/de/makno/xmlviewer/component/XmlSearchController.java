@@ -36,6 +36,15 @@ final class XmlSearchController {
     private final Runnable onMatchChange;
 
     private final List<Span> matchSpans = new ArrayList<>();
+
+    /**
+     * Tokens, deren Span im letzten Such-Durchlauf in Treffer-/Nicht-Treffer-Teile zerlegt wurde.
+     * Nur diese müssen beim nächsten {@link #clearMarks()} zurückgesetzt werden – nicht alle Tokens.
+     * Das hält das (bei EAGER-Eingabe pro Tastendruck laufende) Aufräumen proportional zur Trefferzahl
+     * statt zur Gesamtzahl der Tokens.
+     */
+    private final List<SearchableToken> touchedTokens = new ArrayList<>();
+
     private int currentMatchIndex = -1;
     private String currentQuery;
     private boolean caseSensitive;
@@ -154,6 +163,7 @@ final class XmlSearchController {
         }
         Span span = token.span();
         span.removeAll();
+        touchedTokens.add(token);
         int from = 0;
         for (int[] range : ranges) {
             if (range[0] > from) {
@@ -214,10 +224,13 @@ final class XmlSearchController {
     }
 
     private void clearMarks() {
-        for (SearchableToken token : tokens) {
+        // Nur die im letzten Durchlauf zerlegten Tokens zurücksetzen (nicht alle): hält das Aufräumen
+        // proportional zur Trefferzahl statt zur Gesamtzahl der Tokens.
+        for (SearchableToken token : touchedTokens) {
             token.span().removeAll();
             token.span().setText(token.text());
         }
+        touchedTokens.clear();
         matchSpans.clear();
         currentMatchIndex = -1;
     }
