@@ -11,7 +11,7 @@
     --xmlviewer-nav-border-color: #cbd5e1;   /* Rahmen der Pille      */
     --xmlviewer-nav-bg: #f8fafc;             /* Hintergrund der Pille */
     --xmlviewer-nav-text-color: #334155;     /* Label-Textfarbe       */
-    --xmlviewer-nav-radius: 9999px;          /* voll abgerundet       */
+    --xmlviewer-nav-radius: 6px;             /* Eckenradius (wie der XmlViewer-Rahmen) */
 
     display: inline-flex;
 }
