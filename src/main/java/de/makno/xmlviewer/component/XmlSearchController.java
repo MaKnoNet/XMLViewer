@@ -17,6 +17,9 @@ import org.jdom2.Element;
  *
  * <p>Hält ausschließlich Such-Zustand; das Rendern und das Aufklappen/Scrollen liegen außerhalb und
  * werden über die übergebenen Callbacks angestoßen.
+ *
+ * <p>Nicht thread-safe: hält veränderlichen Such-Zustand und gehört zu genau einem {@link XmlViewer}
+ * (also zu einer UI/Session); Zugriff nur aus dem Session-Thread.
  */
 final class XmlSearchController {
 

@@ -37,6 +37,12 @@ import org.jdom2.Element;
  * eine solche baut die einbettende Anwendung selbst und ruft die Such-API auf. Ebenso hat die
  * Komponente keine Spring-Abhängigkeit und ist in jedes Vaadin-Projekt einbettbar.
  *
+ * <h2>Thread-Safety</h2>
+ * <strong>Nicht thread-safe.</strong> Eine Instanz gehört wie jede Vaadin-Komponente zu genau einer
+ * {@code UI}/Session; alle Methoden dürfen nur aus dem an die Session gebundenen Thread (mit
+ * gehaltenem Session-Lock) aufgerufen werden. Instanzen werden nicht zwischen Benutzern/Sessions
+ * geteilt – pro UI eine eigene Instanz.
+ *
  * <h2>Styling</h2>
  * Im Java-Code werden ausschließlich CSS-Klassen gesetzt, keine Farben inline. Alle Stilwerte kommen
  * aus {@code frontend/styles/xml-viewer.css} und sind über CSS Custom Properties

@@ -23,6 +23,9 @@ import java.util.Objects;
  * <p>Die Komponente steuert eine beliebige {@link MatchNavigable}-Quelle (suchen + navigieren) und
  * hält ihre Anzeige über deren {@link MatchChangeEvent} automatisch synchron. Sie kennt die
  * Such-Implementierung nicht – dadurch ist sie für jede durchsuchbare Quelle wiederverwendbar.
+ *
+ * <p><strong>Nicht thread-safe</strong> – wie jede Vaadin-Komponente an genau eine {@code UI}/Session
+ * gebunden; Methoden nur aus dem Session-Thread (mit Session-Lock) aufrufen, eine Instanz pro UI.
  */
 @CssImport("./styles/search-navigator.css")
 public class SearchNavigator extends Composite<Div> {
