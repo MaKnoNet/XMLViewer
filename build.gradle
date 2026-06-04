@@ -101,20 +101,26 @@ spotless {
     }
 }
 
-// TLS-Vertrauen für das von Vaadin gebündelte Node/npm.
+// TLS-Vertrauen für das von Vaadin gebündelte Node/npm (plattformübergreifend).
 //
-// Hintergrund (analog zur JVM-Einstellung in gradle.properties): Der TLS-inspizierende Proxy
-// terminiert auch die Verbindungen von Node/npm zur npm-Registry. Node bringt eine eigene CA-Liste
-// mit und kennt das Proxy-Root-Zertifikat nicht -> "UNABLE_TO_VERIFY_LEAF_SIGNATURE". Mit
-// NODE_EXTRA_CA_CERTS auf ein PEM aus dem Windows-Zertifikatspeicher vertraut Node dem Proxy.
+// Hintergrund: Der TLS-inspizierende Proxy terminiert auch die Verbindungen von Node/npm zur
+// npm-Registry. Node bringt eine eigene CA-Liste mit und kennt das Proxy-Root-Zertifikat nicht ->
+// "UNABLE_TO_VERIFY_LEAF_SIGNATURE". Über NODE_EXTRA_CA_CERTS (Pfad auf ein CA-Bundle im PEM-Format)
+// vertraut Node dem Proxy.
 //
-// Das PEM wird einmalig erzeugt mit (PowerShell):
+// Reihenfolge der Quellen (erste existierende gewinnt):
+//   1. bereits gesetztes NODE_EXTRA_CA_CERTS aus der Umgebung (z. B. pro Maschine/CI),
+//   2. certs/windows-root-ca.pem (Windows-Export, maschinenspezifisch, via .gitignore ausgenommen),
+//   3. /etc/ssl/certs/ca-certificates.crt (System-Bundle unter Debian/Ubuntu – enthält nach
+//      `update-ca-certificates` auch die systemweit installierte Proxy-CA).
+//
+// Der Windows-Export wird einmalig erzeugt mit (PowerShell):
 //   Get-ChildItem Cert:\LocalMachine\Root, Cert:\CurrentUser\Root | Sort-Object Thumbprint -Unique |
 //     ForEach-Object { "-----BEGIN CERTIFICATE-----"; [Convert]::ToBase64String($_.RawData,'InsertLineBreaks'); "-----END CERTIFICATE-----" } |
 //     Set-Content certs\windows-root-ca.pem -Encoding ascii
-// Die Datei ist maschinenspezifisch und daher in .gitignore ausgenommen.
-def caBundle = file('certs/windows-root-ca.pem')
-if (caBundle.exists()) {
+def caBundleCandidates = [System.getenv('NODE_EXTRA_CA_CERTS'), 'certs/windows-root-ca.pem', '/etc/ssl/certs/ca-certificates.crt']
+def caBundle = caBundleCandidates.findResult { it ? (file(it).exists() ? file(it) : null) : null }
+if (caBundle != null) {
     tasks.withType(JavaExec).configureEach {
         environment 'NODE_EXTRA_CA_CERTS', caBundle.absolutePath
     }
