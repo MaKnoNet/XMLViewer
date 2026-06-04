@@ -186,15 +186,15 @@ class XmlViewerTest {
 
     @Test
     void aufeinanderfolgendeSuchenSetzenVorherigeTrefferZurueck() {
-        // Sichert die "touchedTokens"-Optimierung ab: nach einer Suche auf einem Token (item)
-        // muss eine Folge-Suche auf einem ANDEREN Token (child) das erste sauber zurücksetzen.
+        // Folge-Suchen liefern jeweils nur ihre eigenen Treffer. Da Treffer im Frontend (als Ranges)
+        // gezeichnet werden, bleiben die Token-Spans grundsätzlich unverändert/ungeteilt.
         viewer.search("findme"); // Treffer nur in item
         assertEquals(2, viewer.getMatchCount());
 
-        viewer.search("Hello"); // Treffer nur in child -> item muss restauriert sein
+        viewer.search("Hello"); // Treffer nur in child
         assertEquals(1, viewer.getMatchCount());
 
-        // item-Text ist wieder als ein einziges, ungeteiltes Token vorhanden (kein Rest-Markup).
+        // Token-Texte sind unverändert vorhanden (kein server-seitiges Aufsplitten der Spans).
         assertTrue(viewer.searchableTexts().contains("findme here findme"));
         assertTrue(viewer.searchableTexts().contains("Hello & <world>"));
     }

@@ -1,22 +1,25 @@
 package de.makno.xmlviewer.component;
 
-import com.vaadin.flow.component.html.Span;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import org.jdom2.Element;
 
 /**
- * Steuert die Textsuche über die durchsuchbaren Tokens eines gerenderten Baums: markiert Treffer,
- * navigiert zwischen ihnen und meldet jede Änderung an die einbettende {@link XmlViewer}.
+ * Ermittelt die Textsuche über die durchsuchbaren Tokens eines gerenderten Baums: findet und zählt
+ * Treffer, navigiert zwischen ihnen und meldet jede Änderung an die einbettende {@link XmlViewer}.
  *
- * <p>Hält ausschließlich Such-Zustand; das Rendern und das Aufklappen/Scrollen liegen außerhalb und
- * werden über die übergebenen Callbacks angestoßen.
+ * <p>Das <em>Zeichnen</em> der Treffer ist bewusst ausgelagert: Der Controller erzeugt nur
+ * {@link TokenMatch}-Deskriptoren (Token-Index + Zeichen-Offsets) und übergibt sie an einen
+ * {@link SearchHighlightRenderer}. Die Standard-Implementierung highlightet im Frontend (CSS Custom
+ * Highlight API), sodass server-seitig <strong>keine</strong> Spans zerlegt werden und pro Treffer
+ * kein zusätzlicher DOM-Knoten/Heap entsteht. Die Token-Spans bleiben unverändert.
  *
  * <p>Nicht thread-safe: hält veränderlichen Such-Zustand und gehört zu genau einem {@link XmlViewer}
  * (also zu einer UI/Session); Zugriff nur aus dem Session-Thread.
@@ -35,19 +38,10 @@ final class XmlSearchController {
 
     private final List<SearchableToken> tokens;
     private final Consumer<Element> expandToElement;
-    private final Consumer<Span> scrollToSpan;
+    private final SearchHighlightRenderer highlightRenderer;
     private final Runnable onMatchChange;
 
-    private final List<Span> matchSpans = new ArrayList<>();
-
-    /**
-     * Tokens, deren Span im letzten Such-Durchlauf in Treffer-/Nicht-Treffer-Teile zerlegt wurde.
-     * Nur diese müssen beim nächsten {@link #clearMarks()} zurückgesetzt werden – nicht alle Tokens.
-     * Das hält das (bei EAGER-Eingabe pro Tastendruck laufende) Aufräumen proportional zur Trefferzahl
-     * statt zur Gesamtzahl der Tokens.
-     */
-    private final List<SearchableToken> touchedTokens = new ArrayList<>();
-
+    private List<TokenMatch> matches = List.of();
     private int currentMatchIndex = -1;
     private String currentQuery;
     private boolean caseSensitive;
@@ -56,24 +50,20 @@ final class XmlSearchController {
     XmlSearchController(
             List<SearchableToken> tokens,
             Consumer<Element> expandToElement,
-            Consumer<Span> scrollToSpan,
+            SearchHighlightRenderer highlightRenderer,
             Runnable onMatchChange) {
         this.tokens = tokens;
         this.expandToElement = expandToElement;
-        this.scrollToSpan = scrollToSpan;
+        this.highlightRenderer = highlightRenderer;
         this.onMatchChange = onMatchChange;
     }
 
     int getMatchCount() {
-        return matchSpans.size();
+        return matches.size();
     }
 
     int getCurrentMatchIndex() {
         return currentMatchIndex;
-    }
-
-    boolean isCaseSensitive() {
-        return caseSensitive;
     }
 
     void setCaseSensitive(boolean caseSensitive) {
@@ -88,42 +78,81 @@ final class XmlSearchController {
 
     /** Setzt die Begriff-Aufteilung; eine aktive Suche wird mit dem neuen Splitter neu ausgeführt. */
     void setTermSplitter(SearchTermSplitter termSplitter) {
-        this.termSplitter = java.util.Objects.requireNonNull(termSplitter, "termSplitter");
+        this.termSplitter = Objects.requireNonNull(termSplitter, "termSplitter");
         if (hasActiveQuery()) {
             search(currentQuery);
         }
     }
 
     /**
-     * Markiert alle Treffer von {@code query} und springt zum ersten. Mehrere durch Whitespace
-     * getrennte Begriffe werden einzeln gesucht (ODER-Verknüpfung). Leer/{@code null} löscht die Suche.
+     * Sucht alle Treffer von {@code query}, klappt deren Elemente auf, lässt sie zeichnen und springt
+     * zum ersten. Mehrere durch Whitespace getrennte Begriffe werden einzeln gesucht (ODER-Verknüpfung).
+     * Leer/{@code null} löscht die Suche.
      */
     void search(String query) {
-        clearMarks();
         currentQuery = query;
         List<String> terms = splitTerms(query);
-        if (terms.isEmpty()) {
-            notifyChange();
-            return;
-        }
-        // ab hier: terms enthält nur nicht-leere Begriffe (siehe splitTerms)
-        Set<Element> ownersToExpand = new LinkedHashSet<>();
-        for (SearchableToken token : tokens) {
-            if (markMatchesIn(token, terms)) {
-                addIfPresent(ownersToExpand, token.owner());
-            }
-        }
-        ownersToExpand.forEach(expandToElement);
+        matches = terms.isEmpty() ? List.of() : collectMatches(terms);
+        currentMatchIndex = matches.isEmpty() ? -1 : 0;
+        expandOwnersOfMatches();
+        highlightRenderer.render(matches, currentMatchIndex);
+        notifyChange();
+    }
 
-        currentMatchIndex = -1;
-        if (matchSpans.isEmpty()) {
-            notifyChange();
-        } else {
-            moveCurrentTo(0);
+    /** Springt umlaufend zum nächsten Treffer. */
+    void nextMatch() {
+        if (!matches.isEmpty()) {
+            moveCurrentTo((currentMatchIndex + 1) % matches.size());
         }
     }
 
-    /** Zerlegt die Eingabe über den (anpassbaren) {@link SearchTermSplitter}; {@code null}/leere Begriffe werden verworfen. */
+    /** Springt umlaufend zum vorherigen Treffer. */
+    void previousMatch() {
+        if (!matches.isEmpty()) {
+            moveCurrentTo((currentMatchIndex - 1 + matches.size()) % matches.size());
+        }
+    }
+
+    /** Entfernt alle Such-Markierungen. */
+    void clearSearch() {
+        currentQuery = null;
+        matches = List.of();
+        currentMatchIndex = -1;
+        highlightRenderer.clear();
+        notifyChange();
+    }
+
+    /** Sammelt alle Treffer aller Begriffe in Dokumentreihenfolge (Token-Index, dann Offset). */
+    private List<TokenMatch> collectMatches(List<String> terms) {
+        List<TokenMatch> found = new ArrayList<>();
+        for (int index = 0; index < tokens.size(); index++) {
+            String text = tokens.get(index).text();
+            for (int[] range : findMatchRanges(text, terms)) {
+                found.add(new TokenMatch(index, range[0], range[1]));
+            }
+        }
+        return found;
+    }
+
+    /** Klappt jedes Element auf, das mindestens einen Treffer enthält (damit dieser sichtbar wird). */
+    private void expandOwnersOfMatches() {
+        Set<Element> owners = new LinkedHashSet<>();
+        for (TokenMatch match : matches) {
+            Element owner = tokens.get(match.tokenIndex()).owner();
+            if (owner != null) {
+                owners.add(owner);
+            }
+        }
+        owners.forEach(expandToElement);
+    }
+
+    private void moveCurrentTo(int newIndex) {
+        currentMatchIndex = newIndex;
+        highlightRenderer.moveCurrent(currentMatchIndex);
+        notifyChange();
+    }
+
+    /** Zerlegt die Eingabe über den (anpassbaren) {@link SearchTermSplitter}; leere Begriffe werden verworfen. */
     private List<String> splitTerms(String query) {
         List<String> terms = termSplitter.split(query);
         if (terms == null) {
@@ -132,67 +161,18 @@ final class XmlSearchController {
         return terms.stream().filter(term -> term != null && !term.isEmpty()).toList();
     }
 
-    /** Springt umlaufend zum nächsten Treffer. */
-    void nextMatch() {
-        if (!matchSpans.isEmpty()) {
-            moveCurrentTo((currentMatchIndex + 1) % matchSpans.size());
-        }
-    }
-
-    /** Springt umlaufend zum vorherigen Treffer. */
-    void previousMatch() {
-        if (!matchSpans.isEmpty()) {
-            moveCurrentTo((currentMatchIndex - 1 + matchSpans.size()) % matchSpans.size());
-        }
-    }
-
-    /** Entfernt alle Such-Markierungen. */
-    void clearSearch() {
-        clearMarks();
-        currentQuery = null;
-        notifyChange();
-    }
-
-    /**
-     * Zerlegt den Span eines Tokens in Treffer- und Nicht-Treffer-Teile und markiert die Treffer
-     * aller Suchbegriffe.
-     *
-     * @return {@code true}, wenn mindestens ein Treffer gefunden wurde
-     */
-    private boolean markMatchesIn(SearchableToken token, List<String> terms) {
-        List<int[]> ranges = findMatchRanges(token.text(), terms);
-        if (ranges.isEmpty()) {
-            return false;
-        }
-        Span span = token.span();
-        span.removeAll();
-        touchedTokens.add(token);
-        int from = 0;
-        for (int[] range : ranges) {
-            if (range[0] > from) {
-                span.add(new Span(token.text().substring(from, range[0])));
-            }
-            Span match = new Span(token.text().substring(range[0], range[1]));
-            match.addClassName(CssClasses.SEARCH_MATCH);
-            span.add(match);
-            matchSpans.add(match);
-            from = range[1];
-        }
-        if (from < token.text().length()) {
-            span.add(new Span(token.text().substring(from)));
-        }
-        return true;
-    }
-
     /**
      * Findet alle Treffer-Intervalle aller Begriffe im Text, sortiert nach Start und mit
-     * verschmolzenen Überlappungen (z.&nbsp;B. „EUR" und „EU"), sodass die Span-Zerlegung lückenlos ist.
+     * verschmolzenen Überlappungen (z.&nbsp;B. „EUR" und „EU"), sodass sich Bereiche nicht überlagern.
      */
     private List<int[]> findMatchRanges(String text, List<String> terms) {
         String haystack = normalize(text);
         List<int[]> ranges = new ArrayList<>();
         for (String term : terms) {
             String needle = normalize(term);
+            if (needle.isEmpty()) {
+                continue;
+            }
             for (int index = haystack.indexOf(needle); index >= 0; index = haystack.indexOf(needle, index + 1)) {
                 ranges.add(new int[] {index, index + term.length()});
             }
@@ -215,35 +195,8 @@ final class XmlSearchController {
         return merged;
     }
 
-    private void moveCurrentTo(int newIndex) {
-        if (isValidIndex(currentMatchIndex)) {
-            matchSpans.get(currentMatchIndex).removeClassName(CssClasses.SEARCH_CURRENT);
-        }
-        currentMatchIndex = newIndex;
-        Span current = matchSpans.get(currentMatchIndex);
-        current.addClassName(CssClasses.SEARCH_CURRENT);
-        scrollToSpan.accept(current);
-        notifyChange();
-    }
-
-    private void clearMarks() {
-        // Nur die im letzten Durchlauf zerlegten Tokens zurücksetzen (nicht alle): hält das Aufräumen
-        // proportional zur Trefferzahl statt zur Gesamtzahl der Tokens.
-        for (SearchableToken token : touchedTokens) {
-            token.span().removeAll();
-            token.span().setText(token.text());
-        }
-        touchedTokens.clear();
-        matchSpans.clear();
-        currentMatchIndex = -1;
-    }
-
     private boolean hasActiveQuery() {
         return currentQuery != null && !currentQuery.isEmpty();
-    }
-
-    private boolean isValidIndex(int index) {
-        return index >= 0 && index < matchSpans.size();
     }
 
     private String normalize(String value) {
@@ -252,11 +205,5 @@ final class XmlSearchController {
 
     private void notifyChange() {
         onMatchChange.run();
-    }
-
-    private static void addIfPresent(Set<Element> set, Element element) {
-        if (element != null) {
-            set.add(element);
-        }
     }
 }

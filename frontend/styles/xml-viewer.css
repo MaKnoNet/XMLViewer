@@ -162,12 +162,15 @@
     border-radius: 3px;
 }
 
-.xml-search-match {
-    background: var(--xmlviewer-search-match-bg);
-    border-radius: 2px;
+/* Suchtreffer werden über die CSS Custom Highlight API gezeichnet (Ranges statt server-seitig
+   zerlegter Spans -> kein zusätzlicher DOM-Knoten/Heap pro Treffer). Gestylt werden nur Bereiche
+   innerhalb der Token-Spans (.xml-token). ::highlight() unterstützt nur eine begrenzte Menge an
+   Eigenschaften (u. a. color/background-color), daher kein border-radius. Der aktuelle Treffer wird
+   im JS zuletzt registriert und überzeichnet damit den allgemeinen Treffer-Highlight. */
+.xml-token::highlight(xml-search-match) {
+    background-color: var(--xmlviewer-search-match-bg);
 }
 
-.xml-search-current {
-    background: var(--xmlviewer-search-current-bg);
-    border-radius: 2px;
+.xml-token::highlight(xml-search-current) {
+    background-color: var(--xmlviewer-search-current-bg);
 }

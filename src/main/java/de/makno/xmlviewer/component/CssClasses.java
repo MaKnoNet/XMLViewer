@@ -45,10 +45,14 @@ final class CssClasses {
 
     /** Per {@link XmlViewer#highlight} hervorgehobenes Element. */
     static final String HIGHLIGHT = "xml-highlight";
-    /** Ein Suchtreffer. */
-    static final String SEARCH_MATCH = "xml-search-match";
-    /** Der aktuell fokussierte Suchtreffer. */
-    static final String SEARCH_CURRENT = "xml-search-current";
+
+    /**
+     * Markiert einen durchsuchbaren Token-Span. Über diese Klasse findet das Frontend-Highlighting die
+     * Treffer-Knoten positionsbasiert ({@code querySelectorAll('.xml-token')[tokenIndex]}); zugleich
+     * begrenzt sie die {@code ::highlight()}-Stilregeln auf Token-Texte. Die Reihenfolge dieser Spans
+     * im DOM entspricht exakt der Token-Liste (Dokumentreihenfolge).
+     */
+    static final String SEARCH_TOKEN = "xml-token";
 
     private CssClasses() {}
 }

@@ -213,6 +213,9 @@ final class XmlTreeRenderer {
         String value = text == null ? "" : text;
         Span span = new Span(value);
         span.addClassName(cssClass);
+        // Markiert den Span als durchsuchbares Token; das Frontend-Highlighting findet ihn darüber
+        // positionsbasiert (Dokumentreihenfolge == Reihenfolge in der Token-Liste).
+        span.addClassName(CssClasses.SEARCH_TOKEN);
         tokens.add(new SearchableToken(span, value, owner));
         return span;
     }

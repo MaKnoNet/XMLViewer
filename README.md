@@ -129,10 +129,19 @@ Im Java-Code werden **nur CSS-Klassen** gesetzt. Farben/Größen kommen aus
 | `xml-punct` | `--xmlviewer-punct-color` | `< > / = "` |
 | `xml-children` / `xml-endtag` | `--xmlviewer-guide-color` | durchgehende Führungslinie vom öffnenden bis zum schließenden Tag |
 | `xml-highlight` | `--xmlviewer-highlight-bg` | per `highlight(...)` markiertes Element |
-| `xml-search-match` | `--xmlviewer-search-match-bg` | Suchtreffer |
-| `xml-search-current` | `--xmlviewer-search-current-bg` | aktueller Suchtreffer |
+| `::highlight(xml-search-match)` | `--xmlviewer-search-match-bg` | Suchtreffer |
+| `::highlight(xml-search-current)` | `--xmlviewer-search-current-bg` | aktueller Suchtreffer |
 
 Weiter: `--xmlviewer-font-family`, `--xmlviewer-font-size`, `--xmlviewer-indent-width`.
+
+> **Suchtreffer-Highlighting (Frontend):** Treffer werden nicht server-seitig in Spans zerlegt,
+> sondern über die [CSS Custom Highlight API](https://developer.mozilla.org/docs/Web/API/CSS_Custom_Highlight_API)
+> als Text-Ranges gezeichnet (`xml-search-highlighter.js`). Das spart pro Treffer einen DOM-Knoten
+> und Session-Heap und vermeidet DOM-Mutationen über die Leitung – relevant bei großen Bäumen und
+> vielen gleichzeitigen Nutzern. Gestylt wird über `.xml-token::highlight(...)`; da `::highlight()`
+> nur begrenzte Eigenschaften erlaubt (u. a. `background-color`/`color`), gibt es hier keinen
+> `border-radius`. Benötigt einen Browser mit Custom-Highlight-Unterstützung (aktuelle Chromium-,
+> Firefox- und Safari-Versionen).
 
 **Abgrenzung zum Hintergrund** (Rahmen der Komponente): `--xmlviewer-border-color` (Standard
 `#cbd5e1`), `--xmlviewer-border-width` (`1px`), `--xmlviewer-border-radius` (`6px`),
