@@ -81,6 +81,17 @@ class SearchNavigatorTest {
         assertEquals("EUR", navigable.lastQuery);
     }
 
+    @Test
+    void leertSuchfeldUndZaehlerBeiInhaltswechsel() {
+        searchField().setValue("EUR");
+
+        navigable.fireReset(); // Quelle hat ihr Element gewechselt (z. B. setRoot)
+
+        assertEquals("", searchField().getValue(), "Suchfeld sollte beim Inhaltswechsel geleert werden");
+        assertEquals("0/0", label());
+        assertFalse(nextButton().isEnabled());
+    }
+
     // ---- Helfer -------------------------------------------------------------
 
     private TextField searchField() {
@@ -168,6 +179,12 @@ class SearchNavigatorTest {
             this.matchCount = count;
             this.currentMatchIndex = index;
             ComponentUtil.fireEvent(this, new MatchChangeEvent(this, count, index));
+        }
+
+        void fireReset() {
+            this.matchCount = 0;
+            this.currentMatchIndex = -1;
+            ComponentUtil.fireEvent(this, new MatchChangeEvent(this, 0, -1, true));
         }
     }
 }

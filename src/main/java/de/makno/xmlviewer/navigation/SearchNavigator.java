@@ -56,8 +56,20 @@ public class SearchNavigator extends Composite<Div> {
         getContent().addClassName(CSS_CLASS);
         getContent().add(buildLayout());
 
-        navigable.addMatchChangeListener(event -> update(event.getMatchCount(), event.getCurrentMatchIndex()));
+        navigable.addMatchChangeListener(this::onMatchChange);
         update(navigable.getMatchCount(), navigable.getCurrentMatchIndex());
+    }
+
+    /**
+     * Reagiert auf Treffer-Änderungen der Quelle. Wurde die Suche wegen eines Inhaltswechsels
+     * zurückgesetzt ({@link MatchChangeEvent#isReset()}), wird zusätzlich das Eingabefeld geleert; das
+     * dadurch ausgelöste leere {@code search("")} setzt Zähler und Buttons über das Folge-Event zurück.
+     */
+    private void onMatchChange(MatchChangeEvent event) {
+        if (event.isReset()) {
+            searchField.clear();
+        }
+        update(event.getMatchCount(), event.getCurrentMatchIndex());
     }
 
     /**

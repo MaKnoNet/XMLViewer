@@ -273,6 +273,10 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
         search.setTermSplitter(searchTermSplitter);
         // Etwaige Highlights eines vorherigen Baums im Frontend verwerfen (neuer Baum = neue Tokens).
         highlightRenderer.clear();
+        // Beobacht­er (z. B. SearchNavigator) informieren, dass die Suche durch den Inhaltswechsel
+        // zurückgesetzt wurde, damit sie ihr Eingabefeld/Anzeige leeren. Im Konstruktor noch ohne
+        // Wirkung (keine Listener registriert).
+        fireSearchReset();
     }
 
     /** Verbindet die vom Renderer erzeugten Aufklapp-Dreiecke mit der Klapp-Logik des Viewers. */
@@ -282,6 +286,11 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
 
     private void fireMatchChange() {
         fireEvent(new MatchChangeEvent(this, getMatchCount(), getCurrentMatchIndex()));
+    }
+
+    /** Signalisiert Beobachtern, dass die Suche wegen eines Inhaltswechsels zurückgesetzt wurde. */
+    private void fireSearchReset() {
+        fireEvent(new MatchChangeEvent(this, getMatchCount(), getCurrentMatchIndex(), true));
     }
 
     private void toggleCollapse(Element element) {

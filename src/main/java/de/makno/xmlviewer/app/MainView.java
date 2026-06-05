@@ -60,6 +60,11 @@ public class MainView extends VerticalLayout {
         Button clearAll = new Button("Alle Highlights löschen", event -> viewer.clearHighlight());
         Button expandAll = new Button("Alle aufklappen", event -> viewer.expandAll());
         Button collapseAll = new Button("Alle zuklappen", event -> viewer.collapseAll());
-        return new HorizontalLayout(highlight, highlightBook025, clearOne, clearAll, expandAll, collapseAll);
+        // Wurzelwechsel: zeigt nur das Buch b-025; dabei wird eine aktive Suche zurückgesetzt.
+        Element library = viewer.getRoot();
+        Button rootBook = new Button("Wurzel: Buch b-025", event -> viewer.setRoot(book025));
+        Button rootLibrary = new Button("Wurzel: Bibliothek", event -> viewer.setRoot(library));
+        return new HorizontalLayout(
+                highlight, highlightBook025, clearOne, clearAll, expandAll, collapseAll, rootBook, rootLibrary);
     }
 }

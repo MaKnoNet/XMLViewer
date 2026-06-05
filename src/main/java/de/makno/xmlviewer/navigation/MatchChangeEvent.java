@@ -17,16 +17,31 @@ public class MatchChangeEvent extends ComponentEvent<Component> {
 
     private final int matchCount;
     private final int currentMatchIndex;
+    private final boolean reset;
 
     /**
+     * Treffer-Änderung ohne Reset (laufende Suche/Navigation).
+     *
      * @param source die auslösende Komponente
      * @param matchCount Anzahl der aktuellen Suchtreffer
      * @param currentMatchIndex 0-basierter Index des aktuellen Treffers, oder {@code -1}
      */
     public MatchChangeEvent(Component source, int matchCount, int currentMatchIndex) {
+        this(source, matchCount, currentMatchIndex, false);
+    }
+
+    /**
+     * @param source die auslösende Komponente
+     * @param matchCount Anzahl der aktuellen Suchtreffer
+     * @param currentMatchIndex 0-basierter Index des aktuellen Treffers, oder {@code -1}
+     * @param reset {@code true}, wenn die Suche zurückgesetzt wurde, weil der dargestellte Inhalt
+     *     ersetzt wurde (z.&nbsp;B. {@code setRoot}); Anzeige-Komponenten leeren dann auch ihr Eingabefeld
+     */
+    public MatchChangeEvent(Component source, int matchCount, int currentMatchIndex, boolean reset) {
         super(source, false);
         this.matchCount = matchCount;
         this.currentMatchIndex = currentMatchIndex;
+        this.reset = reset;
     }
 
     /** Anzahl der Treffer der aktuellen Suche. */
@@ -37,5 +52,13 @@ public class MatchChangeEvent extends ComponentEvent<Component> {
     /** 0-basierter Index des aktuellen Treffers, oder {@code -1}, wenn keiner aktiv ist. */
     public int getCurrentMatchIndex() {
         return currentMatchIndex;
+    }
+
+    /**
+     * {@code true}, wenn die Suche zurückgesetzt wurde, weil der dargestellte Inhalt ersetzt wurde
+     * (z.&nbsp;B. durch {@code setRoot}) – nicht bloß, weil die aktuelle Eingabe keine Treffer hatte.
+     */
+    public boolean isReset() {
+        return reset;
     }
 }

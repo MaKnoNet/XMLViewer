@@ -219,6 +219,18 @@ class XmlViewerTest {
     }
 
     @Test
+    void elementwechselFeuertResetEvent() {
+        List<String> events = new ArrayList<>();
+        viewer.addMatchChangeListener(
+                e -> events.add(e.getMatchCount() + "/" + e.getCurrentMatchIndex() + "/" + e.isReset()));
+
+        viewer.setRoot(new Element("neu"));
+
+        // setRoot baut den Baum neu auf und meldet das Zurücksetzen der Suche (0 Treffer, reset=true).
+        assertTrue(events.contains("0/-1/true"), "Reset-Event beim Elementwechsel fehlt: " + events);
+    }
+
+    @Test
     void collapseUndExpandSchaltenSichtbarkeit() {
         assertTrue(viewer.isExpanded(root));
         viewer.collapseAll();
