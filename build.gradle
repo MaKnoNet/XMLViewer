@@ -13,7 +13,7 @@ plugins {
 }
 
 group = 'de.makno.xmlviewer'
-version = '1.0.0'
+version = '1.0.0-SNAPSHOT'
 
 ext {
     // Zentral gepflegte Vaadin-Version; das gleichnamige Gradle-Plugin (oben) und die vaadin-bom
