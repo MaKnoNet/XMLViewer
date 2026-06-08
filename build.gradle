@@ -7,6 +7,9 @@ plugins {
     id 'com.diffplug.spotless' version '6.25.0'
     // Test-Coverage (JaCoCo): Report unter build/reports/jacoco/test/html/index.html
     id 'jacoco'
+    // Bibliotheks-Publishing: stellt das schlanke Component-Jar als de.makno.xmlviewer:xmlviewer
+    // fuer Konsumenten (z. B. web-module-conversion) bereit (publishToMavenLocal / Nexus).
+    id 'maven-publish'
 }
 
 group = 'de.makno.xmlviewer'
@@ -123,5 +126,26 @@ def caBundle = caBundleCandidates.findResult { it ? (file(it).exists() ? file(it
 if (caBundle != null) {
     tasks.withType(JavaExec).configureEach {
         environment 'NODE_EXTRA_CA_CERTS', caBundle.absolutePath
+    }
+}
+
+// --- Bibliotheks-Publishing -------------------------------------------------------------------
+// Spring-Boot wuerde sonst das schlanke Bibliotheks-Jar mit dem Classifier 'plain' versehen und
+// die ausfuehrbare bootJar zum Hauptartefakt machen. Fuer die Verwendung als normale Abhaengigkeit
+// (de.makno.xmlviewer:xmlviewer:1.0.0, ohne Classifier) wird das jar zum Hauptartefakt gemacht und
+// bootJar deaktiviert (die Demo-App laesst sich weiterhin per ./gradlew bootRun starten).
+tasks.named('jar') {
+    enabled = true
+    archiveClassifier = ''
+}
+tasks.named('bootJar') {
+    enabled = false
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
     }
 }
