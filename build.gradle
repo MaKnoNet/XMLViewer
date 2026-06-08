@@ -137,6 +137,12 @@ if (caBundle != null) {
 tasks.named('jar') {
     enabled = true
     archiveClassifier = ''
+    // Demo-/Spring-Boot-App NICHT in das Bibliotheks-Jar packen: Application implementiert
+    // AppShellConfigurator und MainView ist eine @Route. Beides wuerde in Konsumenten-Apps
+    // (z. B. web-module-conversion) mit deren AppShell/Routes kollidieren
+    // ("Multiple classes implementing AppShellConfigurator"). Die wiederverwendbare Bibliothek
+    // besteht nur aus .component und .navigation.
+    exclude 'de/makno/xmlviewer/app/**'
 }
 tasks.named('bootJar') {
     enabled = false
