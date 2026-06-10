@@ -1,0 +1,47 @@
+// Eigenständige Spring-Boot-Demo, die die Bibliothek :web-common einbindet und live vorführt.
+// Hier läuft das Vaadin-Gradle-Plugin (Frontend-Build/-Bundling) und der eingebettete Server.
+// Dieses Modul wird NICHT publiziert – sein Code gehört nicht ins Bibliotheks-Artefakt.
+plugins {
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+    id 'com.vaadin'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
+    }
+}
+
+dependencies {
+    implementation project(':web-common')
+    // Vaadin Flow + eingebetteter Spring-Boot-Server (nur für die lauffähige Demo nötig).
+    implementation 'com.vaadin:vaadin-spring-boot-starter'
+}
+
+// TLS-Vertrauen für das von Vaadin gebündelte Node/npm (plattformübergreifend).
+//
+// Hintergrund: Ein TLS-inspizierender Proxy terminiert auch die Verbindungen von Node/npm zur
+// npm-Registry. Node bringt eine eigene CA-Liste mit und kennt das Proxy-Root-Zertifikat nicht ->
+// "UNABLE_TO_VERIFY_LEAF_SIGNATURE". Über NODE_EXTRA_CA_CERTS (Pfad auf ein CA-Bundle im PEM-Format)
+// vertraut Node dem Proxy.
+//
+// Reihenfolge der Quellen (erste existierende gewinnt):
+//   1. bereits gesetztes NODE_EXTRA_CA_CERTS aus der Umgebung (z. B. pro Maschine/CI),
+//   2. certs/windows-root-ca.pem im Repo-Root (Windows-Export, maschinenspezifisch, .gitignore),
+//   3. /etc/ssl/certs/ca-certificates.crt (System-Bundle unter Debian/Ubuntu – enthält nach
+//      `update-ca-certificates` auch die systemweit installierte Proxy-CA).
+// Der Cert-Pfad ist rootDir-relativ, damit er weiterhin auf certs/ im Repo-Root zeigt.
+def caBundleCandidates = [System.getenv('NODE_EXTRA_CA_CERTS'), "${rootDir}/certs/windows-root-ca.pem", '/etc/ssl/certs/ca-certificates.crt']
+def caBundle = caBundleCandidates.findResult { it ? (file(it).exists() ? file(it) : null) : null }
+if (caBundle != null) {
+    tasks.withType(JavaExec).configureEach {
+        environment 'NODE_EXTRA_CA_CERTS', caBundle.absolutePath
+    }
+}
+
+// vaadinPrepareFrontend schreibt generierte Dateien ins Projektverzeichnis, das Spotless ebenfalls
+// liest. Ohne deklarierte Reihenfolge meldet Gradle 8.9 einen Validierungsfehler (implicit dependency).
+tasks.named('spotlessJava').configure {
+    mustRunAfter tasks.named('vaadinPrepareFrontend')
+}

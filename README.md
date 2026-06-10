@@ -37,7 +37,7 @@ einbettende Anwendung selbst – siehe Demo).
 ## Schnellstart
 
 ```java
-import de.makno.xmlviewer.component.XmlViewer;
+import de.makno.web.common.component.xmlviewer.XmlViewer;
 import org.jdom2.Element;
 
 Element wurzel = ...; // z. B. aus org.jdom2.input.SAXBuilder
@@ -107,9 +107,11 @@ viewer.setSearchTermSplitter(List::of);
 
 ## Styling anpassen
 
-Im Java-Code werden **nur CSS-Klassen** gesetzt. Farben/Größen kommen aus
-`frontend/styles/xml-viewer.css` und sind über **CSS Custom Properties** anpassbar – ohne Java zu
-ändern. Property auf `.xmlviewer` (oder einem Vorfahren) überschreiben:
+Im Java-Code werden **nur CSS-Klassen** gesetzt. Farben/Größen kommen aus der mitgelieferten
+`xml-viewer.css` (im Artefakt unter
+`META-INF/resources/frontend/web/common/component/xmlviewer/styles/`) und sind über **CSS Custom
+Properties** anpassbar – ohne Java zu ändern. Property auf `.xmlviewer` (oder einem Vorfahren)
+überschreiben:
 
 ```css
 .xmlviewer {
@@ -185,9 +187,10 @@ Text-Fallback erhalten, wirken aber nicht auf die SVG-Bilder.
 ## Bauen & Starten
 
 ```bash
-./gradlew build          # kompiliert + JUnit-5-Tests (inkl. Format-Check)
-./gradlew bootRun        # Demo-App -> http://localhost:8080
-./gradlew test           # nur Tests
+./gradlew build                  # kompiliert beide Module + JUnit-5-Tests (inkl. Format-Check)
+./gradlew :demo-app:bootRun      # Demo-App -> http://localhost:8080
+./gradlew :web-common:test       # nur die Bibliotheks-Tests
+./gradlew :web-common:publishToMavenLocal   # Artefakt de.makno:web-common ins lokale ~/.m2
 ```
 
 ## Code-Formatierung
@@ -204,11 +207,32 @@ Die Demo (`de.makno.xmlviewer.app.MainView`) zeigt einen großen Beispielkatalog
 Kommentar, CDATA und XML-Sonderzeichen, baut die Such-UI selbst und demonstriert Hervorheben,
 Auf-/Zuklappen, Suche sowie horizontales und vertikales Scrollen.
 
+## Module & Artefakt
+
+Das Repository ist ein **Multi-Modul-Gradle-Build**, der die wiederverwendbare Bibliothek strikt von
+der Demo trennt:
+
+| Modul | Inhalt | Veröffentlichung |
+|---|---|---|
+| `web-common` | Bibliothek: Anzeige-Komponente (`de.makno.web.common.component.xmlviewer`) + Such-Navigation (`de.makno.web.common.component.navigation`) inkl. Frontend-Ressourcen | Maven-Artefakt **`de.makno:web-common:1.0.0-SNAPSHOT`** (mit `-sources`/`-javadoc`) |
+| `demo-app` | Eigenständige Spring-Boot-Demo (`de.makno.xmlviewer.app`) | **nicht** publiziert – kein App-Code im Artefakt |
+
+In einem anderen Projekt einbinden:
+
+```groovy
+implementation 'de.makno:web-common:1.0.0-SNAPSHOT'
+```
+
+Die Frontend-Dateien (CSS/JS) liegen im Artefakt unter
+`META-INF/resources/frontend/web/common/component/...` und werden von Vaadin beim Konsumenten
+automatisch aufgelöst – kein zusätzliches Setup nötig.
+
 ## Architektur (Kurzüberblick)
 
-Die Quellen sind in drei Packages getrennt: die wiederverwendbare Anzeige-Komponente in
-`de.makno.xmlviewer.component`, die Such-Navigations-Komponente in `de.makno.xmlviewer.navigation`
-und die Demo-App in `de.makno.xmlviewer.app`.
+Die Bibliotheks-Quellen sind nach Verantwortlichkeit getrennt: die wiederverwendbare
+Anzeige-Komponente in `de.makno.web.common.component.xmlviewer`, die Such-Navigations-Komponente in
+`de.makno.web.common.component.navigation`; die Demo-App liegt im Modul `demo-app`
+(`de.makno.xmlviewer.app`).
 
 | Klasse | Aufgabe |
 |---|---|
@@ -222,7 +246,7 @@ und die Demo-App in `de.makno.xmlviewer.app`.
 | `navigation.MatchChangeEvent` | Event bei Änderung der Treffer/-navigation |
 | `navigation.MatchLabelFormatter` | Funktionales Interface: Label-Format frei bestimmbar (Standard „12/66") |
 | `navigation.SearchNavigator` | Such-Pille: Eingabefeld + Treffer-Label + Vor/Zurück (Buttons nur bei Treffern aktiv); steuert ein `MatchNavigable` |
-| `frontend/styles/xml-viewer.css` | Farb-/Layout-Regeln + Custom Properties |
+| `…/frontend/web/common/component/xmlviewer/styles/xml-viewer.css` | Farb-/Layout-Regeln + Custom Properties (im Artefakt unter `META-INF/resources`) |
 | `app.Application` | Spring-Boot-Start der Demo |
 | `app.MainView` / `app.SampleXmlFactory` | Demo-View / großer Beispielbaum |
 

@@ -6,4 +6,9 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'xmlviewer'
+rootProject.name = 'web-common-build'
+
+// Wiederverwendbare Bibliothek (publizierbares Artefakt) + eigenständige Demo-App.
+// Die Demo ist bewusst ein separates Modul, damit ihr Code NICHT im Bibliotheks-Artefakt landet.
+include 'web-common'
+include 'demo-app'

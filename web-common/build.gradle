@@ -1,0 +1,63 @@
+// Wiederverwendbare Web-Komponenten-Bibliothek (Vaadin-Add-on).
+// Publiziert als de.makno:web-common:<version> (group/version stammen aus dem Root via allprojects).
+// KEIN Spring, KEIN Vaadin-Gradle-Plugin: das Add-on liefert nur Klassen + Frontend-Ressourcen im
+// Jar (META-INF/resources/frontend/...); das Frontend-Bundling übernimmt das konsumierende App-Modul.
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    // Test-Coverage (JaCoCo): Report unter build/reports/jacoco/test/html/index.html
+    id 'jacoco'
+}
+
+base {
+    archivesName = 'web-common'
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+dependencies {
+    // Öffentliche API der Komponenten exponiert Vaadin- (z. B. Composite, Registration, ComponentEvent)
+    // und JDOM2-Typen (org.jdom2.Element) -> 'api', damit Konsumenten sie transitiv sehen.
+    api platform("com.vaadin:vaadin-bom:${vaadinVersion}")
+    api 'com.vaadin:vaadin-core'
+    api 'org.jdom:jdom2:2.0.6.1'
+
+    // Ohne Spring-Dependency-Management hier die JUnit-Versionen über die JUnit-BOM verwalten.
+    testImplementation platform('org.junit:junit-bom:5.10.5')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+    // Coverage-Report nach jedem Testlauf automatisch erzeugen.
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = '0.8.12'
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.required = true
+        xml.required = true
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            // components.java enthält bei withSourcesJar()/withJavadocJar() auch die
+            // -sources- und -javadoc-Jars.
+            from components.java
+        }
+    }
+}

@@ -1,157 +1,52 @@
+// Root-Build des Multi-Modul-Projekts.
+//   :web-common  -> wiederverwendbare Bibliothek (publizierbares Maven-Artefakt)
+//   :demo-app    -> eigenständige Spring-Boot-Demo (NICHT im Artefakt)
+// Plugins werden hier nur mit Version deklariert (apply false) und in den Modulen bzw. im
+// subprojects-Block angewendet – so liegt die Versionshoheit zentral an einer Stelle.
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.3.5'
-    id 'io.spring.dependency-management' version '1.1.6'
-    id 'com.vaadin' version '24.5.3'
-    // Code-Formatierung: erzwingt palantir-java-format (siehe spotless-Block unten).
-    id 'com.diffplug.spotless' version '6.25.0'
-    // Test-Coverage (JaCoCo): Report unter build/reports/jacoco/test/html/index.html
-    id 'jacoco'
-    // Bibliotheks-Publishing: stellt das schlanke Component-Jar als de.makno.xmlviewer:xmlviewer
-    // fuer Konsumenten (z. B. web-module-conversion) bereit (publishToMavenLocal / Nexus).
-    id 'maven-publish'
+    id 'com.diffplug.spotless' version '6.25.0' apply false
+    id 'org.springframework.boot' version '3.3.5' apply false
+    id 'io.spring.dependency-management' version '1.1.6' apply false
+    id 'com.vaadin' version '24.5.3' apply false
 }
 
-group = 'de.makno.xmlviewer'
-version = '1.0.0-SNAPSHOT'
-
-ext {
-    // Zentral gepflegte Vaadin-Version; das gleichnamige Gradle-Plugin (oben) und die vaadin-bom
-    // müssen zueinander passen, sonst gibt es Frontend-/Flow-Versionskonflikte.
-    vaadinVersion = '24.5.3'
+allprojects {
+    group = 'de.makno'
+    version = '1.0.0-SNAPSHOT'
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'com.diffplug.spotless'
 
-// UTF-8 für die Kompilierung erzwingen: die Quellen enthalten Umlaute (ä/ö/ü) in Kommentaren und
-// String-Literalen; ohne diese Festlegung verwendet javac/Eclipse unter Windows Cp1252 und zerstört sie.
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
-tasks.withType(Javadoc).configureEach {
-    options.encoding = 'UTF-8'
-}
-
-repositories {
-    mavenCentral()
-    maven { url = 'https://maven.vaadin.com/vaadin-addons' }
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "com.vaadin:vaadin-bom:$vaadinVersion"
-    }
-}
-
-dependencies {
-    // Vaadin Flow + eingebetteter Spring-Boot-Server (nur für die lauffähige Demo nötig).
-    // Die Komponente de.makno.xmlviewer.XmlViewer selbst hat KEINE Spring-Abhängigkeit.
-    implementation 'com.vaadin:vaadin-spring-boot-starter'
-
-    // JDOM2: Eingabemodell der Komponente (org.jdom2.Element & Co.).
-    implementation 'org.jdom:jdom2:2.0.6.1'
-
-    // Tests: JUnit 5 (Version wird über die Spring-Boot-BOM verwaltet).
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events 'passed', 'skipped', 'failed'
-    }
-    // Coverage-Report nach jedem Testlauf automatisch erzeugen.
-    finalizedBy jacocoTestReport
-}
-
-// Test-Coverage mit JaCoCo.
-//   ./gradlew test            -> erzeugt zugleich den Coverage-Report
-//   Report: build/reports/jacoco/test/html/index.html
-jacoco {
-    toolVersion = '0.8.12'
-}
-
-jacocoTestReport {
-    dependsOn test
-    reports {
-        html.required = true
-        xml.required = true
-    }
-    // Demo-/Glue-Code (Spring-Boot-Start, Demo-View, Beispieldaten) nicht mitmessen –
-    // gemessen wird die wiederverwendbare Bibliothek (component + navigation).
-    afterEvaluate {
-        classDirectories.setFrom(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                'de/makno/xmlviewer/app/**'
-            ])
-        })
-    }
-}
-
-// Code-Formatierung mit palantir-java-format (verbindliche Projekt-Konvention, siehe CLAUDE.md).
-//   ./gradlew spotlessApply   -> formatiert den Java-Code
-//   ./gradlew spotlessCheck   -> prüft das Format (läuft als Teil von `check`/`build`)
-spotless {
     java {
-        target 'src/**/*.java'
-        palantirJavaFormat()
-        removeUnusedImports()
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
     }
-}
 
-// TLS-Vertrauen für das von Vaadin gebündelte Node/npm (plattformübergreifend).
-//
-// Hintergrund: Der TLS-inspizierende Proxy terminiert auch die Verbindungen von Node/npm zur
-// npm-Registry. Node bringt eine eigene CA-Liste mit und kennt das Proxy-Root-Zertifikat nicht ->
-// "UNABLE_TO_VERIFY_LEAF_SIGNATURE". Über NODE_EXTRA_CA_CERTS (Pfad auf ein CA-Bundle im PEM-Format)
-// vertraut Node dem Proxy.
-//
-// Reihenfolge der Quellen (erste existierende gewinnt):
-//   1. bereits gesetztes NODE_EXTRA_CA_CERTS aus der Umgebung (z. B. pro Maschine/CI),
-//   2. certs/windows-root-ca.pem (Windows-Export, maschinenspezifisch, via .gitignore ausgenommen),
-//   3. /etc/ssl/certs/ca-certificates.crt (System-Bundle unter Debian/Ubuntu – enthält nach
-//      `update-ca-certificates` auch die systemweit installierte Proxy-CA).
-//
-// Der Windows-Export wird einmalig erzeugt mit (PowerShell):
-//   Get-ChildItem Cert:\LocalMachine\Root, Cert:\CurrentUser\Root | Sort-Object Thumbprint -Unique |
-//     ForEach-Object { "-----BEGIN CERTIFICATE-----"; [Convert]::ToBase64String($_.RawData,'InsertLineBreaks'); "-----END CERTIFICATE-----" } |
-//     Set-Content certs\windows-root-ca.pem -Encoding ascii
-def caBundleCandidates = [System.getenv('NODE_EXTRA_CA_CERTS'), 'certs/windows-root-ca.pem', '/etc/ssl/certs/ca-certificates.crt']
-def caBundle = caBundleCandidates.findResult { it ? (file(it).exists() ? file(it) : null) : null }
-if (caBundle != null) {
-    tasks.withType(JavaExec).configureEach {
-        environment 'NODE_EXTRA_CA_CERTS', caBundle.absolutePath
+    // UTF-8 für Kompilierung/Javadoc erzwingen: die Quellen enthalten Umlaute (ä/ö/ü) in Kommentaren
+    // und String-Literalen; ohne diese Festlegung verwendet javac unter Windows Cp1252 und zerstört sie.
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
     }
-}
+    tasks.withType(Javadoc).configureEach {
+        options.encoding = 'UTF-8'
+    }
 
-// --- Bibliotheks-Publishing -------------------------------------------------------------------
-// Spring-Boot wuerde sonst das schlanke Bibliotheks-Jar mit dem Classifier 'plain' versehen und
-// die ausfuehrbare bootJar zum Hauptartefakt machen. Fuer die Verwendung als normale Abhaengigkeit
-// (de.makno.xmlviewer:xmlviewer:1.0.0, ohne Classifier) wird das jar zum Hauptartefakt gemacht und
-// bootJar deaktiviert (die Demo-App laesst sich weiterhin per ./gradlew bootRun starten).
-tasks.named('jar') {
-    enabled = true
-    archiveClassifier = ''
-    // Demo-/Spring-Boot-App NICHT in das Bibliotheks-Jar packen: Application implementiert
-    // AppShellConfigurator und MainView ist eine @Route. Beides wuerde in Konsumenten-Apps
-    // (z. B. web-module-conversion) mit deren AppShell/Routes kollidieren
-    // ("Multiple classes implementing AppShellConfigurator"). Die wiederverwendbare Bibliothek
-    // besteht nur aus .component und .navigation.
-    exclude 'de/makno/xmlviewer/app/**'
-}
-tasks.named('bootJar') {
-    enabled = false
-}
+    repositories {
+        mavenCentral()
+        maven { url = 'https://maven.vaadin.com/vaadin-addons' }
+    }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
+    // Code-Formatierung mit palantir-java-format (verbindliche Projekt-Konvention, siehe CLAUDE.md).
+    //   ./gradlew spotlessApply   -> formatiert den Java-Code
+    //   ./gradlew spotlessCheck   -> prüft das Format (läuft als Teil von `check`/`build`)
+    spotless {
+        java {
+            target 'src/**/*.java'
+            palantirJavaFormat()
+            removeUnusedImports()
         }
     }
 }
