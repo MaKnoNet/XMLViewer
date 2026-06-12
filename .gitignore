@@ -16,9 +16,9 @@ RemoteSystemsTempFiles/
 # Maschinenspezifischer TLS-Truststore (aus dem Windows-Zertifikatspeicher exportiert)
 certs/
 
-# Claude Code – persönliche Einstellungen (NIEMALS versionieren)
-.claude/
-CLAUDE.md
+# Claude Code – projektweite Konventionen/Skills GEHÖREN ins Repo (mit dem Team geteilt).
+# Nur die maschinenlokalen persönlichen Einstellungen bleiben außen vor.
+.claude/settings.local.json
 
 # Lokale statische Vorschau (kein Bestandteil des Projekts)
 preview/

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -164,17 +163,25 @@ final class XmlSearchController {
     /**
      * Findet alle Treffer-Intervalle aller Begriffe im Text, sortiert nach Start und mit
      * verschmolzenen Überlappungen (z.&nbsp;B. „EUR" und „EU"), sodass sich Bereiche nicht überlagern.
+     *
+     * <p>Der Abgleich erfolgt zeichenweise direkt auf dem unveränderten Originaltext
+     * ({@link String#regionMatches(boolean, int, String, int, int)}). Dadurch zeigen die gelieferten
+     * Offsets unabhängig von der Groß-/Kleinschreibung immer in den Token-Text – auch bei Zeichen,
+     * deren Lowercase-Form eine andere Länge hätte (z.&nbsp;B. {@code İ}); ein vorher lowercase
+     * normalisierter Vergleich hätte die Offsets in solchen Fällen verschoben.
      */
     private List<int[]> findMatchRanges(String text, List<String> terms) {
-        String haystack = normalize(text);
         List<int[]> ranges = new ArrayList<>();
         for (String term : terms) {
-            String needle = normalize(term);
-            if (needle.isEmpty()) {
+            int termLength = term.length();
+            if (termLength == 0) {
                 continue;
             }
-            for (int index = haystack.indexOf(needle); index >= 0; index = haystack.indexOf(needle, index + 1)) {
-                ranges.add(new int[] {index, index + term.length()});
+            int lastStart = text.length() - termLength;
+            for (int index = 0; index <= lastStart; index++) {
+                if (text.regionMatches(!caseSensitive, index, term, 0, termLength)) {
+                    ranges.add(new int[] {index, index + termLength});
+                }
             }
         }
         ranges.sort(Comparator.comparingInt(range -> range[0]));
@@ -197,10 +204,6 @@ final class XmlSearchController {
 
     private boolean hasActiveQuery() {
         return currentQuery != null && !currentQuery.isEmpty();
-    }
-
-    private String normalize(String value) {
-        return caseSensitive ? value : value.toLowerCase(Locale.ROOT);
     }
 
     private void notifyChange() {

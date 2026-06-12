@@ -63,10 +63,23 @@
         return { token: flat[base], start: flat[base + 1], end: flat[base + 2] };
     }
 
+    // Entfernt Einträge, deren Wurzel-Element nicht mehr im Dokument hängt (z. B. nach View-Wechsel/
+    // Detach der Komponente). Ohne diese Bereinigung hielten die Modul-Maps das detachte DOM-Subtree
+    // dauerhaft fest -> Speicher-Leak in langlebigen Single-Page-Apps mit vielen Viewer-Instanzen.
+    function pruneDetachedRoots() {
+        for (const root of Array.from(matchesByRoot.keys())) {
+            if (!root.isConnected) {
+                matchesByRoot.delete(root);
+                currentByRoot.delete(root);
+            }
+        }
+    }
+
     function rebuild() {
         if (!isSupported()) {
             return;
         }
+        pruneDetachedRoots();
         const matchHighlight = new Highlight();
         for (const [root, flat] of matchesByRoot) {
             for (let i = 0; i + VALUES_PER_MATCH <= flat.length; i += VALUES_PER_MATCH) {

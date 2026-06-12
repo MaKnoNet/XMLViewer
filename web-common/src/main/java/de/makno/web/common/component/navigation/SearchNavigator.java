@@ -43,7 +43,7 @@ public class SearchNavigator extends Composite<Div> {
     private static final MatchLabelFormatter DEFAULT_LABEL_FORMATTER =
             (matchCount, currentPosition) -> currentPosition + "/" + matchCount;
 
-    private final transient MatchNavigable navigable;
+    private final MatchNavigable navigable;
     private final TextField searchField = new TextField();
     private final Span positionLabel = new Span();
     private final Button previousButton = createIconButton(VaadinIcon.CHEVRON_LEFT, PREVIOUS_TOOLTIP);

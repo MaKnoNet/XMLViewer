@@ -251,6 +251,18 @@ class XmlViewerTest {
     }
 
     @Test
+    void setCollapsibleRendertNeuUndBleibtNutzbar() {
+        viewer.setCollapsible(false);
+
+        assertFalse(viewer.isCollapsible());
+        assertNotNull(viewer.headerOf(root), "Baum sollte nach setCollapsible neu gerendert sein");
+
+        // Suche funktioniert weiterhin auf dem neu gerenderten Baum.
+        viewer.search("findme");
+        assertEquals(2, viewer.getMatchCount());
+    }
+
+    @Test
     void nullWurzelLeertOhneFehler() {
         viewer.setRoot(null);
         assertEquals(0, viewer.getMatchCount());

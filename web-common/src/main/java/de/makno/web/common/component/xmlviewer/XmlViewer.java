@@ -15,8 +15,10 @@ import de.makno.web.common.component.navigation.MatchNavigable;
 import elemental.json.Json;
 import elemental.json.JsonArray;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import org.jdom2.Element;
 
@@ -70,7 +72,7 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
     private SearchTermSplitter searchTermSplitter = XmlSearchController.DEFAULT_TERM_SPLITTER;
 
     private RenderedTree tree;
-    private XmlSearchController search;
+    private XmlSearchController searchController;
 
     /** Zeichnet die Suchtreffer im Frontend (CSS Custom Highlight API); Element-Referenz ist stabil. */
     private final SearchHighlightRenderer highlightRenderer = new FrontendHighlightRenderer();
@@ -189,42 +191,42 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
      */
     @Override
     public void search(String query) {
-        search.search(query);
+        searchController.search(query);
     }
 
     /** Springt zum nächsten Suchtreffer (umlaufend). */
     @Override
     public void nextMatch() {
-        search.nextMatch();
+        searchController.nextMatch();
     }
 
     /** Springt zum vorherigen Suchtreffer (umlaufend). */
     @Override
     public void previousMatch() {
-        search.previousMatch();
+        searchController.previousMatch();
     }
 
     /** Entfernt alle Such-Markierungen. */
     public void clearSearch() {
-        search.clearSearch();
+        searchController.clearSearch();
     }
 
     /** Anzahl der aktuellen Suchtreffer. */
     @Override
     public int getMatchCount() {
-        return search.getMatchCount();
+        return searchController.getMatchCount();
     }
 
     /** 0-basierter Index des aktuellen Treffers, oder {@code -1}, wenn keiner aktiv ist. */
     @Override
     public int getCurrentMatchIndex() {
-        return search.getCurrentMatchIndex();
+        return searchController.getCurrentMatchIndex();
     }
 
     /** Schaltet Groß-/Kleinschreibungsabgleich der Suche um (Standard: aus). */
     public void setSearchCaseSensitive(boolean caseSensitive) {
         this.searchCaseSensitive = caseSensitive;
-        search.setCaseSensitive(caseSensitive);
+        searchController.setCaseSensitive(caseSensitive);
     }
 
     public boolean isSearchCaseSensitive() {
@@ -239,8 +241,8 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
      * @see SearchTermSplitter
      */
     public void setSearchTermSplitter(SearchTermSplitter splitter) {
-        this.searchTermSplitter = java.util.Objects.requireNonNull(splitter, "splitter");
-        search.setTermSplitter(splitter);
+        this.searchTermSplitter = Objects.requireNonNull(splitter, "splitter");
+        searchController.setTermSplitter(splitter);
     }
 
     /**
@@ -268,9 +270,10 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
             wireToggles();
             getContent().add(tree.root());
         }
-        search = new XmlSearchController(tree.tokens(), this::expandTo, highlightRenderer, this::fireMatchChange);
-        search.setCaseSensitive(searchCaseSensitive);
-        search.setTermSplitter(searchTermSplitter);
+        searchController =
+                new XmlSearchController(tree.tokens(), this::expandTo, highlightRenderer, this::fireMatchChange);
+        searchController.setCaseSensitive(searchCaseSensitive);
+        searchController.setTermSplitter(searchTermSplitter);
         // Etwaige Highlights eines vorherigen Baums im Frontend verwerfen (neuer Baum = neue Tokens).
         highlightRenderer.clear();
         // Beobacht­er (z. B. SearchNavigator) informieren, dass die Suche durch den Inhaltswechsel
@@ -414,12 +417,12 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
     }
 
     /** Liefert die CSS-Klasse(n) des Spans, dessen Token-Text exakt {@code text} ist (oder leer). */
-    java.util.Set<String> cssClassesOfTokenText(String text) {
+    Set<String> cssClassesOfTokenText(String text) {
         return tree.tokens().stream()
                 .filter(token -> text.equals(token.text()))
                 .findFirst()
-                .map(token -> new java.util.HashSet<>(token.span().getElement().getClassList()))
-                .map(set -> (java.util.Set<String>) set)
-                .orElse(java.util.Set.of());
+                .<Set<String>>map(
+                        token -> new HashSet<>(token.span().getElement().getClassList()))
+                .orElseGet(Set::of);
     }
 }

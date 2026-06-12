@@ -100,6 +100,31 @@ class XmlSearchControllerTest {
     }
 
     @Test
+    void caseInsensitiveTrefferOffsetsZeigenInDenOriginaltext() {
+        // Gross-/Kleinschreibung wird ignoriert, die gemeldeten Offsets adressieren aber den
+        // unveraenderten Token-Text (Treffer "BETA" an Position 2..6).
+        XmlSearchController controller = controllerFor("xxBETAxx");
+
+        controller.search("beta");
+
+        assertEquals(1, controller.getMatchCount());
+        assertEquals(new TokenMatch(0, 2, 6), renderer.lastMatches.get(0));
+    }
+
+    @Test
+    void caseInsensitiveTrefferBeiLaengenaendernderLowercaseForm() {
+        // 'İ' (U+0130) wird durch toLowerCase zu zwei Zeichen ("i̇"); ein zuvor lowercase
+        // normalisierter Vergleich haette den Treffer verfehlt und die Offsets verschoben. Der
+        // zeichenweise Abgleich findet ihn korrekt mit Offsets in den 8 Zeichen langen Originaltext.
+        XmlSearchController controller = controllerFor("İstanbul");
+
+        controller.search("istanbul");
+
+        assertEquals(1, controller.getMatchCount());
+        assertEquals(new TokenMatch(0, 0, 8), renderer.lastMatches.get(0));
+    }
+
+    @Test
     void navigationAktualisiertNurDenAktuellenIndex() {
         XmlSearchController controller = controllerFor("beta beta beta");
 

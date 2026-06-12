@@ -147,7 +147,7 @@ Weiter: `--xmlviewer-font-family`, `--xmlviewer-font-size`, `--xmlviewer-indent-
 
 **Abgrenzung zum Hintergrund** (Rahmen der Komponente): `--xmlviewer-border-color` (Standard
 `#cbd5e1`), `--xmlviewer-border-width` (`1px`), `--xmlviewer-border-radius` (`6px`),
-`--xmlviewer-background` (`#ffffff`).
+`--xmlviewer-background` (`#f8fafc`).
 
 ### Marker und Führungslinie anpassen
 

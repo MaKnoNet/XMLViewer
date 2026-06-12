@@ -2,6 +2,7 @@ package de.makno.web.common.component.navigation;
 
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.shared.Registration;
+import java.io.Serializable;
 
 /**
  * Abstraktion einer Quelle, deren Suchtreffer vorwärts/rückwärts durchlaufen werden können und die
@@ -10,8 +11,12 @@ import com.vaadin.flow.shared.Registration;
  * <p>Entkoppelt die Such-Navigations-UI (z.&nbsp;B. {@link SearchNavigator}) von der konkreten
  * Such-Implementierung (Dependency Inversion): Die UI kennt nur dieses Interface, nicht den
  * konkreten Komponententyp.
+ *
+ * <p>Erweitert {@link Serializable}, damit eine {@link SearchNavigator}-Instanz ihre Quelle mit der
+ * Vaadin-Session serialisieren kann (Session-Passivierung/Cluster); Implementierungen sind in der
+ * Praxis ohnehin Vaadin-Komponenten und damit serialisierbar.
  */
-public interface MatchNavigable {
+public interface MatchNavigable extends Serializable {
 
     /**
      * Sucht den angegebenen Text, markiert alle Treffer und springt zum ersten. Leerer/{@code null}
