@@ -142,6 +142,26 @@ class XmlSearchControllerTest {
     }
 
     @Test
+    void navigationKlapptDenZweigDesAktuellenTreffersWiederAuf() {
+        // Zwei Treffer in unterschiedlichen Elementen. Nach der Suche simulieren wir das Zuklappen
+        // durch den Nutzer (aufgezeichnete Expansionen leeren); die Navigation muss den Zweig des
+        // neuen aktuellen Treffers erneut aufklappen.
+        Element ownerA = new Element("a");
+        Element ownerB = new Element("b");
+        List<SearchableToken> tokens = List.of(
+                new SearchableToken(new Span("beta"), "beta", ownerA),
+                new SearchableToken(new Span("beta"), "beta", ownerB));
+        XmlSearchController controller = new XmlSearchController(tokens, expandedOwners::add, renderer, () -> {});
+
+        controller.search("beta"); // Treffer 0 -> ownerA, Treffer 1 -> ownerB
+        expandedOwners.clear(); // Nutzer klappt alles zu
+
+        controller.nextMatch(); // aktueller Treffer 1 -> ownerB
+
+        assertTrue(expandedOwners.contains(ownerB), "Zweig des aktuellen Treffers soll erneut aufgeklappt werden");
+    }
+
+    @Test
     void clearSearchLeertTrefferUndRuftRendererClear() {
         XmlSearchController controller = controllerFor("beta");
         controller.search("beta");

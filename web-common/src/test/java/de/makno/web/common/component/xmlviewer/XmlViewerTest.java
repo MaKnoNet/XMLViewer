@@ -175,6 +175,17 @@ class XmlViewerTest {
     }
 
     @Test
+    void navigationKlapptZugeklapptenTrefferZweigWiederAuf() {
+        viewer.search("findme"); // 2 Treffer im item-Zweig
+        viewer.collapseAll();
+        assertFalse(viewer.isExpanded(root));
+
+        viewer.nextMatch();
+
+        assertTrue(viewer.isExpanded(root), "Zweig des aktuellen Treffers soll bei Navigation wieder aufklappen");
+    }
+
+    @Test
     void clearSearchEntferntMarkierungen() {
         viewer.search("findme");
         assertEquals(2, viewer.getMatchCount());

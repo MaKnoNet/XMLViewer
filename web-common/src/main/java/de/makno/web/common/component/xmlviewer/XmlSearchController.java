@@ -147,8 +147,19 @@ final class XmlSearchController {
 
     private void moveCurrentTo(int newIndex) {
         currentMatchIndex = newIndex;
+        // Den Zweig des neuen aktuellen Treffers (wieder) aufklappen – sonst bleibt er unsichtbar,
+        // wenn der Nutzer nach der Suche zugeklappt hat, und der Frontend-Scroll liefe ins Leere.
+        expandOwnerOf(matches.get(newIndex));
         highlightRenderer.moveCurrent(currentMatchIndex);
         notifyChange();
+    }
+
+    /** Klappt den Zweig auf, der den Treffer enthält (Vorfahren des besitzenden Elements). */
+    private void expandOwnerOf(TokenMatch match) {
+        Element owner = tokens.get(match.tokenIndex()).owner();
+        if (owner != null) {
+            expandToElement.accept(owner);
+        }
     }
 
     /** Zerlegt die Eingabe über den (anpassbaren) {@link SearchTermSplitter}; leere Begriffe werden verworfen. */
