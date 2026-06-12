@@ -1,13 +1,13 @@
 // Root-Build des Multi-Modul-Projekts.
 //   :web-common  -> wiederverwendbare Bibliothek (publizierbares Maven-Artefakt)
 //   :demo-app    -> eigenständige Spring-Boot-Demo (NICHT im Artefakt)
-// Plugins werden hier nur mit Version deklariert (apply false) und in den Modulen bzw. im
-// subprojects-Block angewendet – so liegt die Versionshoheit zentral an einer Stelle.
+// Die Plugin-Versionen liegen zentral in settings.gradle (pluginManagement); die Vaadin-Version
+// kommt dort aus gradle.properties (vaadinVersion) und ist damit eine einzige Quelle für
+// Plugin UND vaadin-bom.
 plugins {
-    id 'com.diffplug.spotless' version '6.25.0' apply false
-    id 'org.springframework.boot' version '3.3.5' apply false
-    id 'io.spring.dependency-management' version '1.1.6' apply false
-    id 'com.vaadin' version '24.5.3' apply false
+    id 'com.diffplug.spotless' apply false
+    id 'org.springframework.boot' apply false
+    id 'com.vaadin' apply false
 }
 
 allprojects {
@@ -32,11 +32,22 @@ subprojects {
     }
     tasks.withType(Javadoc).configureEach {
         options.encoding = 'UTF-8'
+        // Kein "missing comment"-Rauschen für undokumentierte (v. a. private/interne) Member –
+        // alle übrigen doclint-Prüfungen (Syntax, Referenzen, HTML) bleiben aktiv.
+        options.addStringOption('Xdoclint:all,-missing', '-quiet')
     }
 
     repositories {
         mavenCentral()
-        maven { url = 'https://maven.vaadin.com/vaadin-addons' }
+    }
+
+    // JUnit-Platform für alle Module – verhindert, dass ein künftiger JUnit-5-Test vom
+    // JUnit-4-Default-Detector still übersprungen wird (Build grün, Test läuft nie).
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+        testLogging {
+            events 'passed', 'skipped', 'failed'
+        }
     }
 
     // Code-Formatierung mit palantir-java-format (verbindliche Projekt-Konvention, siehe CLAUDE.md).

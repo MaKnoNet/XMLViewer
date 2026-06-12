@@ -227,6 +227,18 @@ Die Frontend-Dateien (CSS/JS) liegen im Artefakt unter
 `META-INF/resources/frontend/web/common/component/...` und werden von Vaadin beim Konsumenten
 automatisch aufgelöst – kein zusätzliches Setup nötig.
 
+### Migration von `de.makno.xmlviewer:xmlviewer`
+
+Für Konsumenten der früheren Koordinaten (z. B. *web-module-conversion*) ändert sich dreierlei:
+
+1. **Koordinaten:** `de.makno.xmlviewer:xmlviewer` → `de.makno:web-common`.
+2. **Packages/Importe:** `de.makno.xmlviewer.component` → `de.makno.web.common.component.xmlviewer`,
+   `de.makno.xmlviewer.navigation` → `de.makno.web.common.component.navigation`.
+3. **Transitive Abhängigkeiten:** Das Artefakt liefert **nicht** mehr den
+   `vaadin-spring-boot-starter` mit (die Bibliothek ist Spring-frei und exponiert nur die genutzten
+   Flow-Module). Spring-Boot-Apps deklarieren den Starter selbst:
+   `implementation 'com.vaadin:vaadin-spring-boot-starter'`.
+
 ## Architektur (Kurzüberblick)
 
 Die Bibliotheks-Quellen sind nach Verantwortlichkeit getrennt: die wiederverwendbare

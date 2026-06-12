@@ -9,45 +9,45 @@ plugins {
     id 'jacoco'
 }
 
-base {
-    archivesName = 'web-common'
-}
-
 java {
     withSourcesJar()
     withJavadocJar()
 }
 
 dependencies {
-    // Öffentliche API der Komponenten exponiert Vaadin- (z. B. Composite, Registration, ComponentEvent)
-    // und JDOM2-Typen (org.jdom2.Element) -> 'api', damit Konsumenten sie transitiv sehen.
+    // Die öffentliche API der Komponenten exponiert Vaadin- (Composite, Registration,
+    // ComponentEvent, ...) und JDOM2-Typen (org.jdom2.Element) -> 'api', damit Konsumenten sie
+    // transitiv sehen. Bewusst NUR die tatsächlich genutzten Flow-Module statt des
+    // vaadin-core-Sammelartefakts (~45 Module: Grid, Login, Upload, Themes, ...) – das hält den
+    // Compile-Classpath der Konsumenten schlank. Alle Versionen kommen aus der vaadin-bom.
     api platform("com.vaadin:vaadin-bom:${vaadinVersion}")
-    api 'com.vaadin:vaadin-core'
+    api 'com.vaadin:flow-server' // Component/Composite/Events/@CssImport/@JsModule, elemental.json
+    api 'com.vaadin:flow-html-components' // Div, Span
+    api 'com.vaadin:flow-data' // ValueChangeMode
+    api 'com.vaadin:vaadin-button-flow'
+    api 'com.vaadin:vaadin-text-field-flow'
+    api 'com.vaadin:vaadin-icons-flow' // VaadinIcon + Icon
+    api 'com.vaadin:vaadin-ordered-layout-flow'
     api 'org.jdom:jdom2:2.0.6.1'
 
-    // Ohne Spring-Dependency-Management hier die JUnit-Versionen über die JUnit-BOM verwalten.
-    testImplementation platform('org.junit:junit-bom:5.10.5')
+    // JUnit-Version zentral aus gradle.properties (junitVersion) – web-common ist Spring-frei
+    // und hat keine Spring-Boot-BOM, die das übernehmen könnte.
+    testImplementation platform("org.junit:junit-bom:${junitVersion}")
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+// useJUnitPlatform/testLogging kommen zentral aus dem Root-Build (subprojects).
 test {
-    useJUnitPlatform()
-    testLogging {
-        events 'passed', 'skipped', 'failed'
-    }
     // Coverage-Report nach jedem Testlauf automatisch erzeugen.
     finalizedBy jacocoTestReport
 }
 
-jacoco {
-    toolVersion = '0.8.12'
-}
-
+// JaCoCo-Version und HTML-Report sind Gradle-Defaults; nur der XML-Report (für CI-Tooling)
+// ist eine bewusste Abweichung.
 jacocoTestReport {
     dependsOn test
     reports {
-        html.required = true
         xml.required = true
     }
 }

@@ -3,45 +3,78 @@
 // Dieses Modul wird NICHT publiziert – sein Code gehört nicht ins Bibliotheks-Artefakt.
 plugins {
     id 'org.springframework.boot'
-    id 'io.spring.dependency-management'
     id 'com.vaadin'
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
-    }
-}
-
 dependencies {
+    // Eine BOM, ein Mechanismus: native Gradle-Platform statt des Spring-Dependency-Management-
+    // Plugins (das mit anderer Semantik – Override statt Constraint – parallel liefe).
+    implementation platform("com.vaadin:vaadin-bom:${vaadinVersion}")
     implementation project(':web-common')
     // Vaadin Flow + eingebetteter Spring-Boot-Server (nur für die lauffähige Demo nötig).
     implementation 'com.vaadin:vaadin-spring-boot-starter'
+}
+
+// Die Demo wird ausschließlich per `bootRun` gestartet und nie distribuiert – weder das
+// plain-Jar noch das ~65-MB-Fat-Jar bei jedem `build` packen. bootRun ist davon unabhängig;
+// wird doch einmal ein Fat-Jar gebraucht: bootJar temporär aktivieren.
+tasks.named('jar') {
+    enabled = false
+}
+tasks.named('bootJar') {
+    enabled = false
 }
 
 // TLS-Vertrauen für das von Vaadin gebündelte Node/npm (plattformübergreifend).
 //
 // Hintergrund: Ein TLS-inspizierender Proxy terminiert auch die Verbindungen von Node/npm zur
 // npm-Registry. Node bringt eine eigene CA-Liste mit und kennt das Proxy-Root-Zertifikat nicht ->
-// "UNABLE_TO_VERIFY_LEAF_SIGNATURE". Über NODE_EXTRA_CA_CERTS (Pfad auf ein CA-Bundle im PEM-Format)
-// vertraut Node dem Proxy.
+// "UNABLE_TO_VERIFY_LEAF_SIGNATURE". Über NODE_EXTRA_CA_CERTS (Pfad auf ein CA-Bundle im
+// PEM-Format) vertraut Node dem Proxy.
 //
 // Reihenfolge der Quellen (erste existierende gewinnt):
-//   1. bereits gesetztes NODE_EXTRA_CA_CERTS aus der Umgebung (z. B. pro Maschine/CI),
+//   1. bereits gesetztes NODE_EXTRA_CA_CERTS aus der Umgebung (z. B. pro Maschine/CI);
+//      relative Pfade werden gegen das Repo-Root aufgelöst (Verhalten des alten Einzel-Modul-Builds),
 //   2. certs/windows-root-ca.pem im Repo-Root (Windows-Export, maschinenspezifisch, .gitignore),
 //   3. /etc/ssl/certs/ca-certificates.crt (System-Bundle unter Debian/Ubuntu – enthält nach
 //      `update-ca-certificates` auch die systemweit installierte Proxy-CA).
-// Der Cert-Pfad ist rootDir-relativ, damit er weiterhin auf certs/ im Repo-Root zeigt.
-def caBundleCandidates = [System.getenv('NODE_EXTRA_CA_CERTS'), "${rootDir}/certs/windows-root-ca.pem", '/etc/ssl/certs/ca-certificates.crt']
-def caBundle = caBundleCandidates.findResult { it ? (file(it).exists() ? file(it) : null) : null }
+def caBundleCandidates = [System.getenv('NODE_EXTRA_CA_CERTS'), 'certs/windows-root-ca.pem', '/etc/ssl/certs/ca-certificates.crt']
+def caBundle = caBundleCandidates.findResult { candidate ->
+    if (!candidate) {
+        return null
+    }
+    def file = new File(candidate.toString())
+    if (!file.absolute) {
+        file = new File(rootDir, candidate.toString())
+    }
+    file.exists() ? file : null
+}
 if (caBundle != null) {
+    // Deckt Dev-Mode ab: bootRun (JavaExec) vererbt die Variable an die im App-Prozess
+    // gestarteten Node-/npm-Kindprozesse.
     tasks.withType(JavaExec).configureEach {
         environment 'NODE_EXTRA_CA_CERTS', caBundle.absolutePath
     }
+    // Deckt die Vaadin-Plugin-Tasks ab (vaadinPrepareFrontend/vaadinBuildFrontend): die spawnen
+    // npm direkt aus dem Gradle-Daemon – keine JavaExec-Tasks, die Umgebungsvariable greift dort
+    // nicht. npm liest die CA-Datei stattdessen aus der Projekt-.npmrc (cafile=...); die Datei
+    // ist generiert und via .gitignore ausgenommen.
+    def npmrc = file('.npmrc')
+    def cafileLine = "cafile=${caBundle.absolutePath.replace('\\', '/')}"
+    tasks.matching { it.name.startsWith('vaadin') }.configureEach {
+        doFirst {
+            if (!npmrc.exists() || npmrc.text.trim() != cafileLine) {
+                npmrc.text = cafileLine + System.lineSeparator()
+            }
+        }
+    }
 }
 
-// vaadinPrepareFrontend schreibt generierte Dateien ins Projektverzeichnis, das Spotless ebenfalls
-// liest. Ohne deklarierte Reihenfolge meldet Gradle 8.9 einen Validierungsfehler (implicit dependency).
-tasks.named('spotlessJava').configure {
-    mustRunAfter tasks.named('vaadinPrepareFrontend')
+// Vaadin-Tasks schreiben generierte Dateien ins Projektverzeichnis (src/main/frontend/generated,
+// src/main/bundles, package.json), das Spotless als Input-Baum liest. Ohne deklarierte Reihenfolge
+// meldet Gradle einen Validierungsfehler (implicit dependency) – daher ALLE Spotless-Tasks nach
+// ALLEN Vaadin-Tasks ordnen (nicht nur das eine Paar, das zuerst auffiel: auch vaadinBuildFrontend
+// im Production-Build löst sonst denselben Fehler aus).
+tasks.matching { it.name.startsWith('spotless') }.configureEach {
+    mustRunAfter tasks.matching { it.name.startsWith('vaadin') }
 }

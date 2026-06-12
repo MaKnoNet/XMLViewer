@@ -23,20 +23,23 @@ CLAUDE.md
 # Lokale statische Vorschau (kein Bestandteil des Projekts)
 preview/
 
-# Vaadin / Frontend (in beliebigen Modulen, daher mit **/ )
+# Vaadin / Frontend (in beliebigen Modulen, daher mit **/ ; deckt auch src/main/frontend/generated ab)
 node_modules/
 **/frontend/generated/
-**/src/main/frontend/generated/
 package-lock.json
 pnpm-lock.yaml
 vite.config.ts
 vite.generated.ts
 tsconfig.json
 types.d.ts
+# Auto-generierter Vaadin-Einstiegspunkt – erst versionieren, wenn er bewusst angepasst wird
+**/src/main/frontend/index.html
+# Generierte npm-Konfiguration (cafile-Pfad ist maschinenspezifisch, siehe demo-app/build.gradle)
+.npmrc
 
-# Vaadin Frontend-Development-Bundle: 2+ MB Binaerdatei, bei jedem Frontend-Build neu erzeugt.
-# Nicht mergebar -> Konflikte bei Pull/Merge. Wird bei Bedarf lokal regeneriert.
-**/src/main/bundles/dev.bundle
+# Vaadin Frontend-Development-Bundle (2+ MB Binaerdatei) samt auto-generierter Begleit-README:
+# bei jedem Frontend-Build neu erzeugt, nicht mergebar. Wird bei Bedarf lokal regeneriert.
+**/src/main/bundles/
 
 # Betriebssystem
 Thumbs.db

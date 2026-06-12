@@ -4,6 +4,14 @@ pluginManagement {
         mavenCentral()
         maven { url = 'https://maven.vaadin.com/vaadin-prereleases' }
     }
+    // Zentrale Versionspflege ALLER Plugins. Das Vaadin-Plugin liest seine Version aus
+    // gradle.properties (vaadinVersion) – damit können Plugin und vaadin-bom nicht
+    // auseinanderdriften (beide haben dieselbe Quelle).
+    plugins {
+        id 'com.diffplug.spotless' version '6.25.0'
+        id 'org.springframework.boot' version '3.3.5'
+        id 'com.vaadin' version "${vaadinVersion}"
+    }
 }
 
 rootProject.name = 'web-common-build'

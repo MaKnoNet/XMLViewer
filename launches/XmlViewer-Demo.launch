@@ -3,7 +3,7 @@
 
     <!-- Verknüpft die Run-Config mit der Main-Klasse im Projekt-Explorer -->
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/xmlviewer/src/main/java/de/makno/xmlviewer/app/Application.java"/>
+        <listEntry value="/demo-app/src/main/java/de/makno/xmlviewer/app/Application.java"/>
     </listAttribute>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="1"/>
@@ -15,8 +15,8 @@
     <!-- Einstiegsklasse -->
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="de.makno.xmlviewer.app.Application"/>
 
-    <!-- Projektname muss mit dem rootProject.name in settings.gradle übereinstimmen -->
-    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="xmlviewer"/>
+    <!-- Buildship-Projektname des Demo-Moduls (= include-Name in settings.gradle) -->
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="demo-app"/>
 
     <!--
         VM-Argumente:
@@ -26,9 +26,9 @@
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS"
         value="-Djavax.net.ssl.trustStoreType=Windows-ROOT -Dfile.encoding=UTF-8"/>
 
-    <!-- Arbeitsverzeichnis = Projektwurzel (damit Gradle-Properties etc. gefunden werden) -->
+    <!-- Arbeitsverzeichnis = Modulwurzel der Demo (dort liegen package.json/Frontend) -->
     <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY"
-        value="${workspace_loc:xmlviewer}"/>
+        value="${workspace_loc:demo-app}"/>
 
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER"
         value="org.eclipse.jdt.launching.sourceLookup.javaSourcePathProvider"/>
