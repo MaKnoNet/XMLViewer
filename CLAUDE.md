@@ -15,3 +15,108 @@
 
 - **Java-Quellcode wird IMMER mit `palantir-java-format` formatiert.**
   Vor dem Commit/Abschluss einer Änderung muss der geänderte Java-Code in diesem Format vorliegen.
+
+---
+
+# Architektur- & Entwicklungsregeln (Vaadin/Java)
+
+Verbindliche Konventionen für dieses Vaadin-Flow-/Java-Projekt. Ergänzen die globalen
+Konventionen (`~/.claude/CLAUDE.md`) und die obigen Abschnitte; bei Widerspruch gewinnt die
+speziellere Regel.
+
+## Think Before You Code (Pflicht-Reasoning vor jeder Code-Änderung)
+
+Vor dem Generieren, Refactoren oder Ändern von Code MUSS ein expliziter Denkschritt erfolgen, der
+den Ansatz gegen diese vier Achsen prüft:
+
+1. **Concurrency-Check:** Ist der Code sicher für eine multithreaded, multiuser Server-Umgebung?
+   (Geteilter Zustand? Fehlende `ui.access`-Aufrufe? Unsichere Thread-Variablen?)
+2. **Performance-Check:** Drohen Memory-Leaks oder hohe server-seitige Ressourcenlast?
+   (Werden Komponenten lazy geladen? Ist der Layout-Baum flach? Sind DataProvider dynamisch?)
+3. **Design-Pattern-Anwendung:** Welches Entwurfsmuster löst das Problem am saubersten?
+4. **Testability-Check:** Lässt sich UI-/Business-Logik leicht unit-/headless-testen, ohne vollen
+   Server?
+
+## Projektkontext & Befehle
+
+- **Tech-Stack:** Java (aktuelle LTS), Vaadin Flow, Spring Boot / Jakarta EE.
+- **Build:** Gradle (Groovy `build.gradle` oder Kotlin DSL); Wrapper `gradlew`/`gradlew.bat`.
+- **Architektur:** Server-seitiges State-Management, Multiuser, Multithreaded, High Performance.
+
+| Zweck | Befehl |
+|---|---|
+| Build & Dev vorbereiten | `./gradlew clean vaadinPrepareFrontend` |
+| Lokal starten (Dev) | `./gradlew bootRun` (hier: `:demo-app:bootRun`) |
+| Tests & Coverage | `./gradlew test jacocoTestReport` |
+| Production-Build | `./gradlew clean build -Pvaadin.productionMode=true` |
+| Formatieren | `./gradlew spotlessApply` |
+
+## Architektur & Entwurfsmuster
+
+- **Composite Pattern:** Komplexe Views in kleine, wiederverwendbare Bausteine zerlegen
+  (`Composite<T>`). Keine Monolith-Views.
+- **Observer / Event-Listener:** Vaadins Event-Bus bzw. Spring `@EventListener` zum Entkoppeln von
+  Views und async Hintergrundprozessen. Listener beim Detach immer aufräumen.
+- **Presenter / Mediator:** Bei komplexer UI-Logik View (Layout) von Navigations-/Business-Flow
+  trennen. Die View emittiert nur Events; ein Presenter/Coordinator steuert den Workflow.
+- **Builder:** Für komplexe Domain-Entities, DTOs oder Vaadin-Komponenten (z. B. Dialog-Builder) –
+  Lesbarkeit + Immutability.
+- **Strategy:** Austauschbare Algorithmen (Export-Formate, Berechnungen, Payment) statt langer
+  `if-else`/`switch`-Ketten.
+- **Factory:** Wenn die Komponentenerzeugung von Benutzerrolle, Mandant oder Laufzeitkonfiguration
+  abhängt.
+
+## Multiuser & Multithreading (kritisch)
+
+- **Keine stateful Singletons/Beans:** `@Component`/`@Service`/Singletons speichern NIE benutzer-
+  oder UI-spezifischen Zustand in Feldern.
+- **Thread-Safety:** Thread-sichere Collections (`ConcurrentHashMap`)/Locks nur, wenn Cross-Session-
+  Synchronisation zwingend nötig ist.
+- **`ui.access(() -> { ... })`** beim UI-Update aus einem Hintergrund-Thread – für korrektes Locking
+  der `VaadinSession`.
+- **ThreadLocals** meiden, außer sauber aufgeräumt (Requests laufen auf wiederverwendeten Web-Server-
+  Threads).
+
+## Vaadin-State & UI-Management
+
+- **Scoping:** UI-Komponenten/Views korrekt scopen (`@Route`-Views je Session/Navigation).
+- **Memory-Leaks:** Listener/Observer/`Registration` im `onDetach` mit `Registration.remove()` lösen.
+- **Backend-Trennung:** Business-Logik strikt von UI trennen; **stateless** Services in Views
+  injizieren.
+- **Serializable:** Alle in Vaadin-Komponenten gehaltenen Objekte implementieren `Serializable`
+  (Session-Clustering).
+
+## Performance & Memory
+
+- **Lazy Komponenten:** Tabs/Dialoge/Detail-Layouts erst instanziieren, wenn sichtbar.
+- **Flacher Komponentenbaum:** Tiefe Layout-Verschachtelung vermeiden; CSS/Flexbox bevorzugen.
+- **Keine großen Read-Only-Daten in der UI:** nur IDs/minimale UI-DTOs halten.
+- **Lazy DataProvider:** `Grid` lazy via `DataProvider.fromCallbacks` (offset/limit); kein
+  `grid.setItems(collection)` für große Datenmengen.
+- **Leichte Renderer:** `LitRenderer`/Text statt interaktiver Komponenten pro Zelle.
+- **Eager Detach:** Große Datasets/Komponenten beim Verbergen/Detach freigeben (`null`/clear).
+
+## Clean Code
+
+- **Sprechende Namen:** Vaadin-Komponenten nach Zweck benennen (`saveButton`, `customerGrid`).
+- **Klein & fokussiert (SRP):** Methoden tun genau eine Sache (Richtwert < 20 Zeilen); komplexe
+  Formulare in eigene Komponenten extrahieren.
+- **Wenige Argumente & Constructor Injection:** ≤ 3 Argumente (Records für Parameter); Constructor
+  Injection statt `@Autowired`.
+
+## Fehlerbehandlung & Resilienz
+
+- **Keine verschluckten Exceptions:** nie leerer catch-Block oder `printStackTrace()`; SLF4J
+  (`log.error("Kontext", e)`).
+- **Null-Safety & User-Feedback:** kein `null` zurückgeben (`Optional<T>`); Business-Fehler als
+  saubere `Notification` zeigen; **nie** rohe Stacktraces in die UI leaken.
+- **Globaler `ErrorHandler`:** an der `VaadinSession` registrieren, um unerwartete Hintergrund-
+  Thread-Fehler abzufangen, ohne die UI einzufrieren.
+
+## Tests & Coverage
+
+- **Hohe Abdeckung** über Business-Logik, Validatoren und Kern-UI-Interaktionen.
+- **Frameworks:** Business-Logik mit JUnit 5 + Mockito; Vaadin-Views/Übergänge headless mit
+  **Karibu-Testing** oder **Vaadin TestBench**.
+- **Concurrent- & Negativtests:** Integrationstests, die nebenläufige Aktionen/Hintergrund-Threads
+  simulieren, um `ui.access`-Locks und Randbedingungen abzusichern.
