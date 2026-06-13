@@ -1,5 +1,7 @@
 package de.makno.web.common.component.xmlviewer;
 
+import java.io.Serializable;
+
 /**
  * Ein einzelner Suchtreffer, beschrieben als Zeichen-Bereich innerhalb eines durchsuchbaren Tokens.
  *
@@ -12,4 +14,7 @@ package de.makno.web.common.component.xmlviewer;
  * @param start 0-basierter Start-Offset des Treffers im Token-Text (inklusive)
  * @param end End-Offset des Treffers im Token-Text (exklusive)
  */
-record TokenMatch(int tokenIndex, int start, int end) {}
+record TokenMatch(int tokenIndex, int start, int end) implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+}

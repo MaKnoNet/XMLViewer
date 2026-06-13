@@ -1,5 +1,8 @@
 package de.makno.web.common.component.xmlviewer;
 
+import com.vaadin.flow.function.SerializableConsumer;
+import com.vaadin.flow.function.SerializableRunnable;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -7,7 +10,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Consumer;
 import org.jdom2.Element;
 
 /**
@@ -23,7 +25,9 @@ import org.jdom2.Element;
  * <p>Nicht thread-safe: hält veränderlichen Such-Zustand und gehört zu genau einem {@link XmlViewer}
  * (also zu einer UI/Session); Zugriff nur aus dem Session-Thread.
  */
-final class XmlSearchController {
+final class XmlSearchController implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** Standard-Aufteilung: an Whitespace trennen, leere Begriffe verwerfen. */
     static final SearchTermSplitter DEFAULT_TERM_SPLITTER = query -> {
@@ -36,9 +40,9 @@ final class XmlSearchController {
     };
 
     private final List<SearchableToken> tokens;
-    private final Consumer<Element> expandToElement;
+    private final SerializableConsumer<Element> expandToElement;
     private final SearchHighlightRenderer highlightRenderer;
-    private final Runnable onMatchChange;
+    private final SerializableRunnable onMatchChange;
 
     private List<TokenMatch> matches = List.of();
     private int currentMatchIndex = -1;
@@ -48,9 +52,9 @@ final class XmlSearchController {
 
     XmlSearchController(
             List<SearchableToken> tokens,
-            Consumer<Element> expandToElement,
+            SerializableConsumer<Element> expandToElement,
             SearchHighlightRenderer highlightRenderer,
-            Runnable onMatchChange) {
+            SerializableRunnable onMatchChange) {
         this.tokens = tokens;
         this.expandToElement = expandToElement;
         this.highlightRenderer = highlightRenderer;
@@ -214,7 +218,7 @@ final class XmlSearchController {
     }
 
     private boolean hasActiveQuery() {
-        return currentQuery != null && !currentQuery.isEmpty();
+        return currentQuery != null && !currentQuery.isBlank();
     }
 
     private void notifyChange() {

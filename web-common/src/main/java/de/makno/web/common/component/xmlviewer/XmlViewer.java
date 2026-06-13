@@ -339,6 +339,8 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
      */
     private final class FrontendHighlightRenderer implements SearchHighlightRenderer {
 
+        private static final long serialVersionUID = 1L;
+
         @Override
         public void render(List<TokenMatch> matches, int currentIndex) {
             if (getUI().isEmpty()) {

@@ -7,6 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.vaadin.flow.component.Component;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -340,6 +344,32 @@ class XmlViewerTest {
         // Kinder-Container, Text steht in der Start-Tag-Zeile.
         assertTrue(viewer.searchableTexts().contains("Nur Text"));
         assertTrue(viewer.isExpanded(title), "Inline-Text-Element hat keinen Kinder-Container");
+    }
+
+    @Test
+    void istVollstaendigSerialisierbarUndBleibtFunktionsfaehig() throws Exception {
+        // Vaadin-Session-Passivierung/Cluster serialisiert den kompletten Komponentenbaum. Der Viewer
+        // muss daher mit allen internen Mitspielern (Baum, Such-Controller, Highlight-Renderer, Tokens)
+        // serialisierbar sein – sonst bricht die Passivierung mit NotSerializableException.
+        XmlViewer restored = deserialize(serialize(viewer));
+
+        restored.search("findme");
+        assertEquals(2, restored.getMatchCount(), "Suche muss nach Deserialisierung weiter funktionieren");
+        assertNotNull(restored.headerOf(restored.getRoot()), "Baum muss nach Deserialisierung vorhanden sein");
+    }
+
+    private static byte[] serialize(Object object) throws Exception {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try (ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+            oos.writeObject(object);
+        }
+        return bos.toByteArray();
+    }
+
+    private static XmlViewer deserialize(byte[] bytes) throws Exception {
+        try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
+            return (XmlViewer) ois.readObject();
+        }
     }
 
     /** Sammelt eine Komponente und alle ihre Nachfahren. */

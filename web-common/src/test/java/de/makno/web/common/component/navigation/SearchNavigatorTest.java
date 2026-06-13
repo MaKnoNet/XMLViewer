@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.textfield.TextField;
@@ -90,6 +92,26 @@ class SearchNavigatorTest {
         assertEquals("", searchField().getValue(), "Suchfeld sollte beim Inhaltswechsel geleert werden");
         assertEquals("0/0", label());
         assertFalse(nextButton().isEnabled());
+    }
+
+    @Test
+    void entferntListenerBeimDetachUndReagiertDanachNichtMehr() {
+        navigable.fire(10, 0);
+        assertEquals("1/10", label());
+
+        navigator.onDetach(new DetachEvent(navigator)); // löst die Treffer-Registrierung
+        navigable.fire(20, 5); // darf den detachten Navigator nicht mehr aktualisieren
+
+        assertEquals("1/10", label(), "Nach Detach darf kein Treffer-Event mehr ankommen (kein Leak)");
+    }
+
+    @Test
+    void registriertNachWiederanbindungErneut() {
+        navigator.onDetach(new DetachEvent(navigator)); // Registrierung gelöst
+        navigator.onAttach(new AttachEvent(navigator, false)); // onAttach -> erneute Registrierung
+
+        navigable.fire(8, 3);
+        assertEquals("4/8", label(), "Nach Re-Attach muss die Leiste wieder synchronisieren");
     }
 
     // ---- Helfer -------------------------------------------------------------

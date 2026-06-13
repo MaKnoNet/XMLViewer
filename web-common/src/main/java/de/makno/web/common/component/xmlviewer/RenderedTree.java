@@ -2,6 +2,7 @@ package de.makno.web.common.component.xmlviewer;
 
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import org.jdom2.Element;
@@ -22,4 +23,8 @@ record RenderedTree(
         Map<Element, Div> childContainers,
         Map<Element, Div> endTags,
         Map<Element, Span> toggles,
-        List<SearchableToken> tokens) {}
+        List<SearchableToken> tokens)
+        implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+}

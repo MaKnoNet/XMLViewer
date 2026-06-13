@@ -1,6 +1,7 @@
 package de.makno.web.common.component.xmlviewer;
 
 import com.vaadin.flow.component.html.Span;
+import java.io.Serializable;
 import org.jdom2.Element;
 
 /**
@@ -10,4 +11,7 @@ import org.jdom2.Element;
  * <p>Der Klartext wird getrennt vom Span gehalten, weil die Suche den Span-Inhalt temporär in
  * mehrere Treffer-/Nicht-Treffer-Spans zerlegt und danach wieder aus {@code text} herstellt.
  */
-record SearchableToken(Span span, String text, Element owner) {}
+record SearchableToken(Span span, String text, Element owner) implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+}

@@ -1,6 +1,8 @@
 package de.makno.web.common.component.navigation;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -11,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.shared.Registration;
 import java.util.Objects;
 
 /**
@@ -51,13 +54,47 @@ public class SearchNavigator extends Composite<Div> {
 
     private MatchLabelFormatter labelFormatter = DEFAULT_LABEL_FORMATTER;
 
+    /** Bindung an die Treffer-Events der Quelle; im {@code onDetach} gelöst, um Leaks zu vermeiden. */
+    private Registration matchChangeRegistration;
+
     public SearchNavigator(MatchNavigable navigable) {
         this.navigable = Objects.requireNonNull(navigable, "navigable");
         getContent().addClassName(CSS_CLASS);
         getContent().add(buildLayout());
 
-        navigable.addMatchChangeListener(this::onMatchChange);
+        registerMatchChangeListener();
         update(navigable.getMatchCount(), navigable.getCurrentMatchIndex());
+    }
+
+    /**
+     * Bindet den Treffer-Listener erneut, falls er beim vorherigen {@link #onDetach} gelöst wurde. Die
+     * Quelle ({@link MatchNavigable}) lebt typischerweise länger als diese Leiste; ohne erneute Bindung
+     * bliebe die Anzeige nach einer Wiederanbindung stehen.
+     */
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+        if (matchChangeRegistration == null) {
+            registerMatchChangeListener();
+            update(navigable.getMatchCount(), navigable.getCurrentMatchIndex());
+        }
+    }
+
+    /**
+     * Löst die Treffer-Registrierung beim Abhängen, damit die langlebige Quelle keine Referenz auf die
+     * detachte Leiste behält – verhindert ein Session-Memory-Leak über den Komponenten-Lebenszyklus.
+     */
+    @Override
+    protected void onDetach(DetachEvent detachEvent) {
+        if (matchChangeRegistration != null) {
+            matchChangeRegistration.remove();
+            matchChangeRegistration = null;
+        }
+        super.onDetach(detachEvent);
+    }
+
+    private void registerMatchChangeListener() {
+        matchChangeRegistration = navigable.addMatchChangeListener(this::onMatchChange);
     }
 
     /**

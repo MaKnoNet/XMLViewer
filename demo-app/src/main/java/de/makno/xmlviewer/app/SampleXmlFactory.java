@@ -37,9 +37,9 @@ final class SampleXmlFactory {
         return library;
     }
 
-    /** Liefert ein tief liegendes Element für die Highlight-Demo (erstes Kapitel des 25. Buchs). */
+    /** Liefert ein tief liegendes Element für die Highlight-Demo (erstes Kapitel des Buchs {@code b-025}). */
     static Element findHighlightTarget(Element library) {
-        Element book = library.getChildren("book", LIB).get(24);
+        Element book = findBookById(library, "b-025");
         return book.getChild("chapters", LIB).getChildren("chapter", LIB).get(0);
     }
 

@@ -35,6 +35,13 @@ dependencies {
     testImplementation platform("org.junit:junit-bom:${junitVersion}")
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Vaadin-Komponenten sind nur dann vollständig serialisierbar, wenn die Servlet-API auf dem
+    // Classpath liegt (Vaadin-Klassen referenzieren jakarta.servlet-Typen). In Produktion liefert sie
+    // der Servlet-Container; hier ausschließlich für die Tests (Session-Serialisierung im XmlViewerTest).
+    // NUR Testscope -> bleibt aus dem publizierten Artefakt heraus. Servlet 6.0 passt zu Vaadin 24
+    // (Jakarta EE 10); die vaadin-bom verwaltet diese Koordinate nicht, daher hier explizit gepinnt.
+    testImplementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 }
 
 // useJUnitPlatform/testLogging kommen zentral aus dem Root-Build (subprojects).

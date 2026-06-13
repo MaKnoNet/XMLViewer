@@ -1,5 +1,6 @@
 package de.makno.web.common.component.xmlviewer;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  * <p>Durch diese Entkopplung (Dependency Inversion) bleibt der {@link XmlSearchController} rein
  * server-seitig testbar: Tests übergeben einen aufzeichnenden Renderer statt eines echten Clients.
  */
-interface SearchHighlightRenderer {
+interface SearchHighlightRenderer extends Serializable {
 
     /**
      * Zeichnet alle Treffer und hebt den Treffer an {@code currentIndex} hervor. Eine leere Liste
