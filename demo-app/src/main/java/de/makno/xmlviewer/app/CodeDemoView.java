@@ -59,8 +59,9 @@ public class CodeDemoView extends VerticalLayout {
         select.setValue(CodeLanguage.JAVA);
         select.addValueChangeListener(event -> {
             CodeLanguage language = event.getValue();
-            viewer.setText(SampleCodeFactory.sampleFor(language));
+            // Erst die Sprache, dann den Text setzen – sonst rendert setText kurz mit der alten Sprache.
             viewer.setLanguage(language);
+            viewer.setText(SampleCodeFactory.sampleFor(language));
         });
         return select;
     }

@@ -38,7 +38,6 @@ import java.io.Serializable;
 @NpmPackage(value = "@codemirror/state", version = "6.4.1")
 @NpmPackage(value = "@codemirror/view", version = "6.26.3")
 @NpmPackage(value = "@codemirror/language", version = "6.10.2")
-@NpmPackage(value = "@codemirror/commands", version = "6.6.0")
 @NpmPackage(value = "@codemirror/search", version = "6.5.6")
 @NpmPackage(value = "@codemirror/theme-one-dark", version = "6.1.2")
 @NpmPackage(value = "@codemirror/legacy-modes", version = "6.4.0")
@@ -63,6 +62,7 @@ public class CodeViewer extends Div implements MatchNavigable {
     private boolean wrap = false;
     private boolean showLineNumbers = true;
     private boolean searchCaseSensitive = false;
+    private String lastQuery = "";
 
     // Vom Client (CodeMirror) gespiegelter Treffer-Stand – Single Source of Truth für die Getter.
     private int matchCount = 0;
@@ -109,6 +109,7 @@ public class CodeViewer extends Div implements MatchNavigable {
         this.text = text == null ? "" : text;
         matchCount = 0;
         currentMatchIndex = -1;
+        lastQuery = "";
         callJs("setDoc", this.text, effectiveLanguageId());
         fireSearchReset();
     }
@@ -193,7 +194,8 @@ public class CodeViewer extends Div implements MatchNavigable {
      */
     @Override
     public void search(String query) {
-        callJs("search", query == null ? "" : query, searchCaseSensitive);
+        lastQuery = query == null ? "" : query;
+        callJs("search", lastQuery, searchCaseSensitive);
     }
 
     /** Springt zum nächsten Suchtreffer (umlaufend). */
@@ -210,6 +212,7 @@ public class CodeViewer extends Div implements MatchNavigable {
 
     /** Entfernt alle Such-Markierungen. */
     public void clearSearch() {
+        lastQuery = "";
         callJs("clearSearch");
     }
 
@@ -225,9 +228,12 @@ public class CodeViewer extends Div implements MatchNavigable {
         return currentMatchIndex;
     }
 
-    /** Schaltet Groß-/Kleinschreibungsabgleich der Suche um (gilt ab der nächsten Suche; Standard: aus). */
+    /** Schaltet Groß-/Kleinschreibungsabgleich der Suche um; eine aktive Suche wird neu ausgeführt (Standard: aus). */
     public void setSearchCaseSensitive(boolean caseSensitive) {
         this.searchCaseSensitive = caseSensitive;
+        if (!lastQuery.isBlank()) {
+            search(lastQuery);
+        }
     }
 
     public boolean isSearchCaseSensitive() {

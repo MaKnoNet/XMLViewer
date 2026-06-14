@@ -19,9 +19,11 @@
     overflow: hidden;
 }
 
-/* CodeMirror füllt den Host und scrollt intern. */
+/* CodeMirror füllt den Host und scrollt intern. Flex-Füllung (statt height:100%) ist im
+   Flex-Column-Host zuverlässig; min-height:0 erlaubt das interne Scrollen. */
 .codeviewer .cm-editor {
-    height: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
 .codeviewer .cm-scroller {
