@@ -8,6 +8,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import de.makno.web.common.component.navigation.SearchNavigator;
 import de.makno.web.common.component.xmlviewer.XmlViewer;
 import org.jdom2.Element;
@@ -39,6 +40,7 @@ public class MainView extends VerticalLayout {
                 new H3("XmlViewer – Demo"),
                 new Paragraph("Such-UI und Buttons liegen in der Demo-App; die Komponente bietet nur die API. "
                         + "Großer Baum zum Testen von vertikalem und horizontalem Scrollen."),
+                new RouterLink("→ Zur TextViewer-Demo", TextDemoView.class),
                 createToolbar(highlightTarget, book025),
                 viewer);
         setFlexGrow(1, viewer);
