@@ -36,6 +36,7 @@ import { xml } from "@codemirror/lang-xml";
 import { yaml } from "@codemirror/lang-yaml";
 import { sql } from "@codemirror/lang-sql";
 import { csharp } from "@codemirror/legacy-modes/mode/clike";
+import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 
 // Host-Element -> { root, view, Compartments, matches, current, caseSensitive }
 const editors = new Map();
@@ -64,13 +65,52 @@ const searchField = StateField.define({
     provide: (f) => EditorView.decorations.from(f),
 });
 
-// Host-Theme: füllt den Host, setzt Monospace und die Trefferfarben (Custom Properties vom Host geerbt).
+// Falt-Marker im XmlViewer-Look: +/- Quadrat als SVG (stub-frei, viewBox 24x24), je eigene Variante
+// für hell (weiße Füllung) und dunkel (ohne Füllung, hellerer Strich) – umgeschaltet über CM6 &light/&dark.
+const FOLD_OPEN_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='3' fill='%23ffffff'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3C/svg%3E")`;
+const FOLD_CLOSED_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='3'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3Cline x1='12' y1='8' x2='12' y2='16'/%3E%3C/svg%3E")`;
+const FOLD_OPEN_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='3'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3C/svg%3E")`;
+const FOLD_CLOSED_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='3'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3Cline x1='12' y1='8' x2='12' y2='16'/%3E%3C/svg%3E")`;
+
+// Einrückungs-Führungslinien (Baum-Optik wie beim XmlViewer); Farben adaptieren mit dem Theme.
+const INDENT_GUIDES = indentationMarkers({
+    thickness: 1,
+    colors: { light: "#cbd5e1", activeLight: "#94a3b8", dark: "#3a414d", activeDark: "#5b6472" },
+});
+
+// Eigenes Falt-Marker-Element für den Gutter (CM6 hängt den Klick-Handler an die Gutter-Zelle).
+function foldMarker(open) {
+    const marker = document.createElement("span");
+    marker.className = "cm-fold-marker " + (open ? "cm-fold-open" : "cm-fold-closed");
+    return marker;
+}
+
+// Host-Theme: füllt den Host, setzt Monospace, Trefferfarben und die XmlViewer-artigen Falt-Marker.
 // Wird per style-mod in den Shadow-Root injiziert.
 const hostTheme = EditorView.theme({
     "&": { flex: "1 1 auto", minHeight: "0" },
     ".cm-scroller": { fontFamily: "ui-monospace, 'Cascadia Code', 'Consolas', monospace" },
     ".cm-search-match": { backgroundColor: "var(--codeviewer-search-match-bg, #ffd9a3)" },
     ".cm-search-current": { backgroundColor: "var(--codeviewer-search-current-bg, #ff9d4d)" },
+    ".cm-fold-marker": {
+        display: "inline-block",
+        width: "1em",
+        height: "1em",
+        cursor: "pointer",
+        verticalAlign: "middle",
+        backgroundPosition: "center",
+        backgroundSize: "contain",
+        backgroundRepeat: "no-repeat",
+    },
+});
+
+// Theme-abhängige Marker-Bilder. Die Selektoren &light/&dark sind nur in baseTheme erlaubt
+// (nicht in EditorView.theme); sie schalten automatisch mit dem aktiven Editor-Theme um.
+const markerBaseTheme = EditorView.baseTheme({
+    "&light .cm-fold-open": { backgroundImage: FOLD_OPEN_LIGHT },
+    "&light .cm-fold-closed": { backgroundImage: FOLD_CLOSED_LIGHT },
+    "&dark .cm-fold-open": { backgroundImage: FOLD_OPEN_DARK },
+    "&dark .cm-fold-closed": { backgroundImage: FOLD_CLOSED_DARK },
 });
 
 function languageExtension(id) {
@@ -105,11 +145,13 @@ function buildExtensions(entry, langId, dark, wrap, lineNumbersOn) {
         EditorState.readOnly.of(true),
         EditorView.editable.of(false),
         codeFolding(),
-        foldGutter(),
+        foldGutter({ markerDOM: foldMarker }),
         bracketMatching(),
         syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+        INDENT_GUIDES,
         searchField,
         hostTheme,
+        markerBaseTheme,
         entry.lineNumbersConf.of(lineNumbersOn ? lineNumbers() : []),
         entry.languageConf.of(languageExtension(langId)),
         entry.themeConf.of(dark ? oneDark : []),
