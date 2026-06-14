@@ -1,36 +1,36 @@
-package de.makno.web.common.component.xmlviewer;
+package de.makno.web.common.component.search;
 
-import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.function.SerializableRunnable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import org.jdom2.Element;
 
 /**
- * Ermittelt die Textsuche über die durchsuchbaren Tokens eines gerenderten Baums: findet und zählt
- * Treffer, navigiert zwischen ihnen und meldet jede Änderung an die einbettende {@link XmlViewer}.
+ * Ermittelt die Textsuche über die durchsuchbaren {@link SearchToken}s einer Komponente: findet und
+ * zählt Treffer, navigiert zwischen ihnen und meldet jede Änderung an die einbettende Komponente.
  *
  * <p>Das <em>Zeichnen</em> der Treffer ist bewusst ausgelagert: Der Controller erzeugt nur
  * {@link TokenMatch}-Deskriptoren (Token-Index + Zeichen-Offsets) und übergibt sie an einen
- * {@link SearchHighlightRenderer}. Die Standard-Implementierung highlightet im Frontend (CSS Custom
- * Highlight API), sodass server-seitig <strong>keine</strong> Spans zerlegt werden und pro Treffer
- * kein zusätzlicher DOM-Knoten/Heap entsteht. Die Token-Spans bleiben unverändert.
+ * {@link SearchHighlightRenderer}. Ebenso ist das <em>Sichtbarmachen</em> eines Treffers entkoppelt:
+ * Jedes {@link SearchToken} trägt seine eigene {@link SearchToken#onReveal()}-Aktion (z.&nbsp;B. den
+ * Element-Zweig aufklappen); für reinen Text ist sie ein No-Op. Dadurch ist der Controller von der
+ * konkreten Komponente unabhängig (Dependency Inversion) und rein server-seitig testbar.
  *
- * <p>Nicht thread-safe: hält veränderlichen Such-Zustand und gehört zu genau einem {@link XmlViewer}
- * (also zu einer UI/Session); Zugriff nur aus dem Session-Thread.
+ * <p>Nicht thread-safe: hält veränderlichen Such-Zustand und gehört zu genau einer Komponente (also
+ * zu einer UI/Session); Zugriff nur aus dem Session-Thread.
  */
-final class XmlSearchController implements Serializable {
+public final class SearchController implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /** Standard-Aufteilung: an Whitespace trennen, leere Begriffe verwerfen. */
-    static final SearchTermSplitter DEFAULT_TERM_SPLITTER = query -> {
+    public static final SearchTermSplitter DEFAULT_TERM_SPLITTER = query -> {
         if (query == null || query.isBlank()) {
             return List.of();
         }
@@ -39,8 +39,7 @@ final class XmlSearchController implements Serializable {
                 .toList();
     };
 
-    private final List<SearchableToken> tokens;
-    private final SerializableConsumer<Element> expandToElement;
+    private final List<SearchToken> tokens;
     private final SearchHighlightRenderer highlightRenderer;
     private final SerializableRunnable onMatchChange;
 
@@ -50,26 +49,22 @@ final class XmlSearchController implements Serializable {
     private boolean caseSensitive;
     private SearchTermSplitter termSplitter = DEFAULT_TERM_SPLITTER;
 
-    XmlSearchController(
-            List<SearchableToken> tokens,
-            SerializableConsumer<Element> expandToElement,
-            SearchHighlightRenderer highlightRenderer,
-            SerializableRunnable onMatchChange) {
+    public SearchController(
+            List<SearchToken> tokens, SearchHighlightRenderer highlightRenderer, SerializableRunnable onMatchChange) {
         this.tokens = tokens;
-        this.expandToElement = expandToElement;
         this.highlightRenderer = highlightRenderer;
         this.onMatchChange = onMatchChange;
     }
 
-    int getMatchCount() {
+    public int getMatchCount() {
         return matches.size();
     }
 
-    int getCurrentMatchIndex() {
+    public int getCurrentMatchIndex() {
         return currentMatchIndex;
     }
 
-    void setCaseSensitive(boolean caseSensitive) {
+    public void setCaseSensitive(boolean caseSensitive) {
         if (this.caseSensitive == caseSensitive) {
             return;
         }
@@ -80,7 +75,7 @@ final class XmlSearchController implements Serializable {
     }
 
     /** Setzt die Begriff-Aufteilung; eine aktive Suche wird mit dem neuen Splitter neu ausgeführt. */
-    void setTermSplitter(SearchTermSplitter termSplitter) {
+    public void setTermSplitter(SearchTermSplitter termSplitter) {
         this.termSplitter = Objects.requireNonNull(termSplitter, "termSplitter");
         if (hasActiveQuery()) {
             search(currentQuery);
@@ -88,36 +83,36 @@ final class XmlSearchController implements Serializable {
     }
 
     /**
-     * Sucht alle Treffer von {@code query}, klappt deren Elemente auf, lässt sie zeichnen und springt
+     * Sucht alle Treffer von {@code query}, macht deren Tokens sichtbar, lässt sie zeichnen und springt
      * zum ersten. Mehrere durch Whitespace getrennte Begriffe werden einzeln gesucht (ODER-Verknüpfung).
      * Leer/{@code null} löscht die Suche.
      */
-    void search(String query) {
+    public void search(String query) {
         currentQuery = query;
         List<String> terms = splitTerms(query);
         matches = terms.isEmpty() ? List.of() : collectMatches(terms);
         currentMatchIndex = matches.isEmpty() ? -1 : 0;
-        expandOwnersOfMatches();
+        revealMatches();
         highlightRenderer.render(matches, currentMatchIndex);
         notifyChange();
     }
 
     /** Springt umlaufend zum nächsten Treffer. */
-    void nextMatch() {
+    public void nextMatch() {
         if (!matches.isEmpty()) {
             moveCurrentTo((currentMatchIndex + 1) % matches.size());
         }
     }
 
     /** Springt umlaufend zum vorherigen Treffer. */
-    void previousMatch() {
+    public void previousMatch() {
         if (!matches.isEmpty()) {
             moveCurrentTo((currentMatchIndex - 1 + matches.size()) % matches.size());
         }
     }
 
     /** Entfernt alle Such-Markierungen. */
-    void clearSearch() {
+    public void clearSearch() {
         currentQuery = null;
         matches = List.of();
         currentMatchIndex = -1;
@@ -137,33 +132,31 @@ final class XmlSearchController implements Serializable {
         return found;
     }
 
-    /** Klappt jedes Element auf, das mindestens einen Treffer enthält (damit dieser sichtbar wird). */
-    private void expandOwnersOfMatches() {
-        Set<Element> owners = new LinkedHashSet<>();
+    /**
+     * Führt die Reveal-Aktion jedes Tokens aus, das mindestens einen Treffer enthält. Tokens, die sich
+     * dieselbe {@link SearchToken#onReveal()}-Instanz teilen (z.&nbsp;B. mehrere Tokens desselben
+     * XML-Elements), werden über Identität dedupliziert – so klappt ein Element nur einmal auf.
+     */
+    private void revealMatches() {
+        Set<SerializableRunnable> reveals = Collections.newSetFromMap(new IdentityHashMap<>());
         for (TokenMatch match : matches) {
-            Element owner = tokens.get(match.tokenIndex()).owner();
-            if (owner != null) {
-                owners.add(owner);
-            }
+            reveals.add(tokens.get(match.tokenIndex()).onReveal());
         }
-        owners.forEach(expandToElement);
+        reveals.forEach(Runnable::run);
     }
 
     private void moveCurrentTo(int newIndex) {
         currentMatchIndex = newIndex;
-        // Den Zweig des neuen aktuellen Treffers (wieder) aufklappen – sonst bleibt er unsichtbar,
-        // wenn der Nutzer nach der Suche zugeklappt hat, und der Frontend-Scroll liefe ins Leere.
-        expandOwnerOf(matches.get(newIndex));
+        // Den aktuellen Treffer (wieder) sichtbar machen – sonst bliebe er bei zugeklappten Bereichen
+        // unsichtbar und der Frontend-Scroll liefe ins Leere.
+        revealOf(matches.get(newIndex));
         highlightRenderer.moveCurrent(currentMatchIndex);
         notifyChange();
     }
 
-    /** Klappt den Zweig auf, der den Treffer enthält (Vorfahren des besitzenden Elements). */
-    private void expandOwnerOf(TokenMatch match) {
-        Element owner = tokens.get(match.tokenIndex()).owner();
-        if (owner != null) {
-            expandToElement.accept(owner);
-        }
+    /** Führt die Reveal-Aktion des Tokens aus, das den Treffer enthält. */
+    private void revealOf(TokenMatch match) {
+        tokens.get(match.tokenIndex()).onReveal().run();
     }
 
     /** Zerlegt die Eingabe über den (anpassbaren) {@link SearchTermSplitter}; leere Begriffe werden verworfen. */

@@ -4,21 +4,21 @@
  * Statt server-seitig den Komponentenbaum in Treffer-/Nicht-Treffer-Spans zu zerlegen (1 DOM-Knoten
  * + Heap pro Treffer, plus DOM-Mutationen über die Leitung), markiert dieses Modul Treffer als reine
  * Text-Ranges: kein zusätzlicher DOM-Knoten, kein Session-Heap pro Treffer. Gezeichnet wird über die
- * registrierten Highlights `xml-search-match` (alle Treffer) und `xml-search-current` (aktueller
- * Treffer); ihr Aussehen kommt aus den `::highlight(...)`-Regeln in styles/xml-viewer.css.
+ * registrierten Highlights `search-match` (alle Treffer) und `search-current` (aktueller Treffer);
+ * ihr Aussehen kommt aus den `::highlight(...)`-Regeln in styles/search.css.
  *
  * Der Server übergibt Treffer als flaches Zahlen-Array [tokenIndex, start, end, tokenIndex, …]. Über
- * die Klasse `.xml-token` (Dokumentreihenfolge == Token-Reihenfolge) wird der Treffer-Knoten
+ * die Klasse `.search-token` (Dokumentreihenfolge == Token-Reihenfolge) wird der Treffer-Knoten
  * positionsbasiert gefunden.
  *
- * Mehrere XmlViewer-Instanzen je Seite werden unterstützt: Die Highlight-Registry ist global pro
- * Name, daher hält dieses Modul die Ranges je Wurzel-Element und baut die globalen Highlights jeweils
- * aus allen Wurzeln zusammen.
+ * Geteilt von allen Viewer-Komponenten (XmlViewer, TextViewer, …). Mehrere Instanzen je Seite werden
+ * unterstützt: Die Highlight-Registry ist global pro Name, daher hält dieses Modul die Ranges je
+ * Wurzel-Element und baut die globalen Highlights jeweils aus allen Wurzeln zusammen.
  */
 (function () {
-    const MATCH_HIGHLIGHT = "xml-search-match";
-    const CURRENT_HIGHLIGHT = "xml-search-current";
-    const TOKEN_SELECTOR = ".xml-token";
+    const MATCH_HIGHLIGHT = "search-match";
+    const CURRENT_HIGHLIGHT = "search-current";
+    const TOKEN_SELECTOR = ".search-token";
     const VALUES_PER_MATCH = 3;
 
     // Wurzel-Element -> flaches Treffer-Array [tokenIndex, start, end, …]
@@ -114,7 +114,7 @@
         }
     }
 
-    window.XmlSearchHighlighter = {
+    window.SearchHighlighter = {
         apply(root, flat, currentIndex) {
             const numbers = Array.from(flat || []);
             matchesByRoot.set(root, numbers);

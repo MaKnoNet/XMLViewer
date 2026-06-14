@@ -1,21 +1,20 @@
-package de.makno.web.common.component.xmlviewer;
+package de.makno.web.common.component.search;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.function.SerializableRunnable;
 import java.util.ArrayList;
 import java.util.List;
-import org.jdom2.Element;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit-Tests für {@link XmlSearchController}: prüfen die server-seitige Treffer-Ermittlung
- * (Offsets, Mehrfach-/Überlappungstreffer, Navigation, Owner-Aufklappen) anhand eines aufzeichnenden
+ * Unit-Tests für {@link SearchController}: prüfen die server-seitige Treffer-Ermittlung (Offsets,
+ * Mehrfach-/Überlappungstreffer, Navigation, Reveal) anhand eines aufzeichnenden
  * {@link SearchHighlightRenderer} – ohne Browser. Genau diese {@link TokenMatch}-Offsets nutzt das
  * Frontend, um die Ranges zu zeichnen.
  */
-class XmlSearchControllerTest {
+class SearchControllerTest {
 
     /** Zeichnet nicht, sondern merkt sich die übergebenen Treffer für die Prüfung. */
     private static final class RecordingRenderer implements SearchHighlightRenderer {
@@ -44,21 +43,19 @@ class XmlSearchControllerTest {
         }
     }
 
-    private final List<Element> expandedOwners = new ArrayList<>();
     private final RecordingRenderer renderer = new RecordingRenderer();
 
-    private XmlSearchController controllerFor(String... tokenTexts) {
-        List<SearchableToken> tokens = new ArrayList<>();
-        Element owner = new Element("owner");
+    private SearchController controllerFor(String... tokenTexts) {
+        List<SearchToken> tokens = new ArrayList<>();
         for (String text : tokenTexts) {
-            tokens.add(new SearchableToken(new Span(text), text, owner));
+            tokens.add(SearchToken.of(text));
         }
-        return new XmlSearchController(tokens, expandedOwners::add, renderer, () -> {});
+        return new SearchController(tokens, renderer, () -> {});
     }
 
     @Test
     void liefertTrefferAlsTokenRangesInDokumentreihenfolge() {
-        XmlSearchController controller = controllerFor("alpha beta", "gamma beta");
+        SearchController controller = controllerFor("alpha beta", "gamma beta");
 
         controller.search("beta");
 
@@ -70,7 +67,7 @@ class XmlSearchControllerTest {
 
     @Test
     void mehrereVorkommenImSelbenTokenWerdenEinzelnGemeldet() {
-        XmlSearchController controller = controllerFor("aXaXa");
+        SearchController controller = controllerFor("aXaXa");
 
         controller.search("X");
 
@@ -81,7 +78,7 @@ class XmlSearchControllerTest {
 
     @Test
     void ueberlappendeBegriffeErgebenEinenZusammengefuehrtenRange() {
-        XmlSearchController controller = controllerFor("findme");
+        SearchController controller = controllerFor("findme");
 
         controller.search("findme find");
 
@@ -91,7 +88,7 @@ class XmlSearchControllerTest {
 
     @Test
     void sucheIstStandardmaessigCaseInsensitive() {
-        XmlSearchController controller = controllerFor("Beta");
+        SearchController controller = controllerFor("Beta");
 
         controller.search("beta");
 
@@ -103,7 +100,7 @@ class XmlSearchControllerTest {
     void caseInsensitiveTrefferOffsetsZeigenInDenOriginaltext() {
         // Gross-/Kleinschreibung wird ignoriert, die gemeldeten Offsets adressieren aber den
         // unveraenderten Token-Text (Treffer "BETA" an Position 2..6).
-        XmlSearchController controller = controllerFor("xxBETAxx");
+        SearchController controller = controllerFor("xxBETAxx");
 
         controller.search("beta");
 
@@ -116,7 +113,7 @@ class XmlSearchControllerTest {
         // 'İ' (U+0130) wird durch toLowerCase zu zwei Zeichen ("i̇"); ein zuvor lowercase
         // normalisierter Vergleich haette den Treffer verfehlt und die Offsets verschoben. Der
         // zeichenweise Abgleich findet ihn korrekt mit Offsets in den 8 Zeichen langen Originaltext.
-        XmlSearchController controller = controllerFor("İstanbul");
+        SearchController controller = controllerFor("İstanbul");
 
         controller.search("istanbul");
 
@@ -126,7 +123,7 @@ class XmlSearchControllerTest {
 
     @Test
     void navigationAktualisiertNurDenAktuellenIndex() {
-        XmlSearchController controller = controllerFor("beta beta beta");
+        SearchController controller = controllerFor("beta beta beta");
 
         controller.search("beta"); // drei Treffer im selben Token
         assertEquals(0, controller.getCurrentMatchIndex());
@@ -142,28 +139,39 @@ class XmlSearchControllerTest {
     }
 
     @Test
-    void navigationKlapptDenZweigDesAktuellenTreffersWiederAuf() {
-        // Zwei Treffer in unterschiedlichen Elementen. Nach der Suche simulieren wir das Zuklappen
-        // durch den Nutzer (aufgezeichnete Expansionen leeren); die Navigation muss den Zweig des
-        // neuen aktuellen Treffers erneut aufklappen.
-        Element ownerA = new Element("a");
-        Element ownerB = new Element("b");
-        List<SearchableToken> tokens = List.of(
-                new SearchableToken(new Span("beta"), "beta", ownerA),
-                new SearchableToken(new Span("beta"), "beta", ownerB));
-        XmlSearchController controller = new XmlSearchController(tokens, expandedOwners::add, renderer, () -> {});
+    void machtTrefferTokensEinmalProRevealSichtbar() {
+        // Zwei Tokens teilen sich DIESELBE Reveal-Aktion (z. B. zwei Tokens desselben XML-Elements):
+        // bei einer Suche mit Treffern in beiden Tokens darf die Aktion nur EINMAL laufen (Dedup).
+        int[] reveals = {0};
+        SerializableRunnable shared = () -> reveals[0]++;
+        List<SearchToken> tokens = List.of(new SearchToken("beta", shared), new SearchToken("beta", shared));
+        SearchController controller = new SearchController(tokens, renderer, () -> {});
 
-        controller.search("beta"); // Treffer 0 -> ownerA, Treffer 1 -> ownerB
-        expandedOwners.clear(); // Nutzer klappt alles zu
+        controller.search("beta");
 
-        controller.nextMatch(); // aktueller Treffer 1 -> ownerB
+        assertEquals(1, reveals[0], "Geteilte Reveal-Aktion soll nur einmal je Suche laufen");
+    }
 
-        assertTrue(expandedOwners.contains(ownerB), "Zweig des aktuellen Treffers soll erneut aufgeklappt werden");
+    @Test
+    void navigationMachtDenAktuellenTrefferWiederSichtbar() {
+        // Zwei Treffer in Tokens mit unterschiedlichen Reveal-Aktionen. Nach der Suche „vergessen" wir
+        // die bisherigen Reveals; die Navigation muss die Aktion des neuen aktuellen Treffers ausfuehren.
+        List<String> revealed = new ArrayList<>();
+        List<SearchToken> tokens = List.of(
+                new SearchToken("beta", () -> revealed.add("a")), new SearchToken("beta", () -> revealed.add("b")));
+        SearchController controller = new SearchController(tokens, renderer, () -> {});
+
+        controller.search("beta"); // Treffer 0 -> "a", Treffer 1 -> "b"
+        revealed.clear();
+
+        controller.nextMatch(); // aktueller Treffer 1 -> "b"
+
+        assertTrue(revealed.contains("b"), "Reveal-Aktion des aktuellen Treffers soll erneut laufen");
     }
 
     @Test
     void clearSearchLeertTrefferUndRuftRendererClear() {
-        XmlSearchController controller = controllerFor("beta");
+        SearchController controller = controllerFor("beta");
         controller.search("beta");
 
         controller.clearSearch();
@@ -171,15 +179,5 @@ class XmlSearchControllerTest {
         assertEquals(0, controller.getMatchCount());
         assertEquals(-1, controller.getCurrentMatchIndex());
         assertTrue(renderer.clearCalls >= 1);
-    }
-
-    @Test
-    void klapptElementeMitTreffernAuf() {
-        // Beide Tokens gehören demselben Element -> es wird genau einmal aufgeklappt.
-        XmlSearchController controller = controllerFor("beta", "beta");
-
-        controller.search("beta");
-
-        assertEquals(1, expandedOwners.size());
     }
 }
