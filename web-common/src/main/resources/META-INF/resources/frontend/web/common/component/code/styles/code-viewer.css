@@ -1,12 +1,11 @@
 /*
- * Styling des CodeViewer-Host-Elements. Das eigentliche Editor-Aussehen (Farben, Gutter, Falt-Marker,
- * Theme) liefert CodeMirror selbst per JS-injiziertem StyleModule; hier nur Rahmen/Größe des Hosts und
- * die Farben der selbst gesteuerten Suchtreffer-Markierungen (anpassbar über Custom Properties).
+ * Styling des CodeViewer-Host-Elements. Der Editor selbst lebt in einem Shadow-Root und wird von
+ * CodeMirror (+ dem injizierten Host-Theme aus code-viewer.js) gestylt; document-CSS erreicht den
+ * Shadow-Root nicht. Hier daher nur Rahmen/Größe des Hosts und die Trefferfarben-Custom-Properties,
+ * die durch die Shadow-Grenze in den Editor vererbt werden.
  */
 
 .codeviewer {
-    --codeviewer-border-color: #cbd5e1;
-    --codeviewer-border-radius: 6px;
     --codeviewer-search-match-bg: #ffd9a3; /* alle Treffer       – Hellorange */
     --codeviewer-search-current-bg: #ff9d4d; /* aktueller Treffer – Orange     */
 
@@ -14,27 +13,7 @@
     flex-direction: column;
     min-height: 0;
     box-sizing: border-box;
-    border: 1px solid var(--codeviewer-border-color);
-    border-radius: var(--codeviewer-border-radius);
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
     overflow: hidden;
-}
-
-/* CodeMirror füllt den Host und scrollt intern. Flex-Füllung (statt height:100%) ist im
-   Flex-Column-Host zuverlässig; min-height:0 erlaubt das interne Scrollen. */
-.codeviewer .cm-editor {
-    flex: 1 1 auto;
-    min-height: 0;
-}
-
-.codeviewer .cm-scroller {
-    overflow: auto;
-}
-
-/* Selbst gesteuerte Suchtreffer-Markierungen (Decorations aus code-viewer.js). */
-.cm-search-match {
-    background-color: var(--codeviewer-search-match-bg);
-}
-
-.cm-search-current {
-    background-color: var(--codeviewer-search-current-bg);
 }

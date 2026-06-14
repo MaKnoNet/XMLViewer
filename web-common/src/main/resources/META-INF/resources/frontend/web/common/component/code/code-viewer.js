@@ -1,6 +1,11 @@
 /*
  * Frontend-Glue für den CodeViewer: kapselt einen read-only CodeMirror-6-Editor pro Host-Element.
  *
+ * Der Editor wird in einem Shadow-Root der Host-Komponente gemountet. Das isoliert CodeMirrors per
+ * style-mod injizierte Styles vom Style-Management der einbettenden Vaadin-App (im Light-DOM gehen die
+ * CM6-Basis-Styles sonst verloren -> kaputtes Layout). CSS Custom Properties vererben durch die
+ * Shadow-Grenze, daher bleiben die Trefferfarben über --codeviewer-search-*-bg von außen anpassbar.
+ *
  * Die Java-Komponente steuert den Editor über window.MaknoCodeViewer.<fn>(this, …); der EditorView
  * lebt ausschließlich hier (clientseitig). Die Suche wird selbst gesteuert (kein CM6-Suchpanel),
  * damit die externe SearchNavigator-UI sie über MatchNavigable bedienen kann: Treffer werden via
@@ -32,7 +37,7 @@ import { yaml } from "@codemirror/lang-yaml";
 import { sql } from "@codemirror/lang-sql";
 import { csharp } from "@codemirror/legacy-modes/mode/clike";
 
-// Host-Element -> { view, Compartments, matches, current, caseSensitive }
+// Host-Element -> { root, view, Compartments, matches, current, caseSensitive }
 const editors = new Map();
 
 // Suchtreffer-Decorations: alle Treffer + der aktuelle (eigene Marker, da wir die Suche selbst führen).
@@ -57,6 +62,15 @@ const searchField = StateField.define({
         return deco;
     },
     provide: (f) => EditorView.decorations.from(f),
+});
+
+// Host-Theme: füllt den Host, setzt Monospace und die Trefferfarben (Custom Properties vom Host geerbt).
+// Wird per style-mod in den Shadow-Root injiziert.
+const hostTheme = EditorView.theme({
+    "&": { flex: "1 1 auto", minHeight: "0" },
+    ".cm-scroller": { fontFamily: "ui-monospace, 'Cascadia Code', 'Consolas', monospace" },
+    ".cm-search-match": { backgroundColor: "var(--codeviewer-search-match-bg, #ffd9a3)" },
+    ".cm-search-current": { backgroundColor: "var(--codeviewer-search-current-bg, #ff9d4d)" },
 });
 
 function languageExtension(id) {
@@ -95,6 +109,7 @@ function buildExtensions(entry, langId, dark, wrap, lineNumbersOn) {
         bracketMatching(),
         syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
         searchField,
+        hostTheme,
         entry.lineNumbersConf.of(lineNumbersOn ? lineNumbers() : []),
         entry.languageConf.of(languageExtension(langId)),
         entry.themeConf.of(dark ? oneDark : []),
@@ -156,7 +171,10 @@ window.MaknoCodeViewer = {
     create(host, text, langId, dark, wrap, lineNumbersOn) {
         prune();
         destroyEntry(host);
+        // Shadow-Root isoliert die CodeMirror-Styles von Vaadins Style-Verwaltung.
+        const root = host.shadowRoot || host.attachShadow({ mode: "open" });
         const entry = {
+            root,
             languageConf: new Compartment(),
             themeConf: new Compartment(),
             wrapConf: new Compartment(),
@@ -169,7 +187,7 @@ window.MaknoCodeViewer = {
             doc: text || "",
             extensions: buildExtensions(entry, langId, dark, wrap, lineNumbersOn),
         });
-        entry.view = new EditorView({ state, parent: host });
+        entry.view = new EditorView({ state, parent: root, root });
         editors.set(host, entry);
     },
 
