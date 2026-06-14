@@ -29,6 +29,10 @@ einbettende Anwendung selbst – siehe Demo).
 - **Schwester-Komponente `TextViewer`** – read-only Klartext-Anzeige (Zeilennummern, Zeilen-Highlight,
   umschaltbarer Umbruch) mit derselben Suche/Navigation und demselben `SearchNavigator`; die Such-Engine
   liegt im geteilten Package `de.makno.web.common.component.search`.
+- **Schwester-Komponente `CodeViewer`** – read-only Quelltext-Ansicht für viele Sprachen (Java, C#,
+  Python, JSON, YAML, HTML, CSS, JS, XML, SQL …) mit Syntax-Highlighting, **sprachgenauem Falten**,
+  hell/dunkel-Theme, Zeilennummern und Umbruch – ein dünner Wrapper um **CodeMirror 6**, ebenfalls über
+  `MatchNavigable` mit dem `SearchNavigator` koppelbar.
 
 ## Voraussetzungen
 
@@ -36,6 +40,9 @@ einbettende Anwendung selbst – siehe Demo).
 - **Vaadin 24** (`vaadin-spring-boot-starter` – nur für die Demo), **JDOM2** (`org.jdom:jdom2`)
 - Tests: **JUnit 5**
 - Erster Build lädt automatisch **Node.js** herunter und baut das Vaadin-Frontend (Internet nötig).
+- Die **CodeViewer-Demo (`/code`)** zieht dabei zusätzlich **CodeMirror 6** per npm (`@codemirror/*`);
+  das Vaadin-Plugin der Demo löst das auf (Node/Netzzugang nötig). Die Bibliothek `web-common` selbst
+  bleibt npm-frei und kompiliert/testet ohne Node.
 
 ## Schnellstart
 
@@ -258,6 +265,8 @@ Modul `demo-app` (`de.makno.xmlviewer.app`).
 | `xmlviewer.CssClasses` | Zentrale CSS-Klassennamen (keine Magic-Strings) |
 | `xmlviewer.RenderedTree` / `SearchableToken` | Records: Render-Ergebnis bzw. durchsuchbares XML-Token |
 | `text.TextViewer` | Schwester-Komponente: read-only Klartext-Anzeige (Zeilennummern, Zeilen-Highlight, Umbruch) mit Suche/Navigation |
+| `code.CodeViewer` | Schwester-Komponente: read-only Quelltext-Ansicht (Syntax-Highlighting, Falten, Theme) – Wrapper um CodeMirror 6, via `MatchNavigable` |
+| `code.CodeLanguage` / `CodeLanguageDetector` | Unterstützte Sprachen (CM6-Id + Endungen) und best-effort-Erkennung (Endung/Inhalt) |
 | `search.SearchController` | Geteilte Textsuche: Treffer finden/zählen, navigieren, Reveal + Änderungen melden |
 | `search.SearchToken` / `TokenMatch` | Records: durchsuchbares Token (Text + Reveal-Aktion) bzw. Treffer-Offset |
 | `search.SearchHighlightRenderer` / `FrontendSearchHighlighter` | Treffer-Zeichnen entkoppelt; Standard lagert es ins Frontend aus |
@@ -268,9 +277,11 @@ Modul `demo-app` (`de.makno.xmlviewer.app`).
 | `navigation.SearchNavigator` | Such-Pille: Eingabefeld + Treffer-Label + Vor/Zurück (Buttons nur bei Treffern aktiv); steuert ein `MatchNavigable` |
 | `…/frontend/web/common/component/search/search-highlighter.js` + `styles/search.css` | Geteiltes Frontend-Highlighting (CSS Custom Highlight API) |
 | `…/frontend/web/common/component/{xmlviewer,text}/styles/*.css` | Farb-/Layout-Regeln + Custom Properties je Komponente (unter `META-INF/resources`) |
+| `…/frontend/web/common/component/code/code-viewer.js` + `styles/code-viewer.css` | CodeMirror-6-Glue (Editor + selbst gesteuerte Suche) |
 | `app.Application` | Spring-Boot-Start der Demo |
 | `app.MainView` / `app.SampleXmlFactory` | XmlViewer-Demo (`/`) / großer Beispielbaum |
 | `app.TextDemoView` / `app.SampleTextFactory` | TextViewer-Demo (`/text`) / großer Beispieltext |
+| `app.CodeDemoView` / `app.SampleCodeFactory` | CodeViewer-Demo (`/code`) / Beispiel-Snippets je Sprache |
 
 `XmlViewer` implementiert `MatchNavigable`, daher genügt zum Anbinden der Navigation:
 
