@@ -1,19 +1,19 @@
-package de.makno.web.common.component.xmlviewer;
+package de.makno.web.common.component.search;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * Schlanke Abstraktion für das <em>Zeichnen</em> der Suchtreffer – getrennt von deren Ermittlung im
- * {@link XmlSearchController}. Die Standard-Implementierung lagert das Highlighting ins Frontend aus
- * (CSS Custom Highlight API): Treffer werden als Text-Ranges markiert, statt server-seitig den
- * Komponentenbaum in Treffer-/Nicht-Treffer-Spans zu zerlegen. Dadurch entsteht pro Treffer
- * <strong>kein</strong> zusätzlicher DOM-Knoten und kein zusätzlicher Session-Heap.
+ * {@link SearchController}. Die Standard-Implementierung {@link FrontendSearchHighlighter} lagert das
+ * Highlighting ins Frontend aus (CSS Custom Highlight API): Treffer werden als Text-Ranges markiert,
+ * statt server-seitig den Komponentenbaum in Treffer-/Nicht-Treffer-Spans zu zerlegen. Dadurch
+ * entsteht pro Treffer <strong>kein</strong> zusätzlicher DOM-Knoten und kein zusätzlicher Session-Heap.
  *
- * <p>Durch diese Entkopplung (Dependency Inversion) bleibt der {@link XmlSearchController} rein
+ * <p>Durch diese Entkopplung (Dependency Inversion) bleibt der {@link SearchController} rein
  * server-seitig testbar: Tests übergeben einen aufzeichnenden Renderer statt eines echten Clients.
  */
-interface SearchHighlightRenderer extends Serializable {
+public interface SearchHighlightRenderer extends Serializable {
 
     /**
      * Zeichnet alle Treffer und hebt den Treffer an {@code currentIndex} hervor. Eine leere Liste

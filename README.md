@@ -23,9 +23,12 @@ einbettende Anwendung selbst – siehe Demo).
   (`<`, `&`, `"`) werden korrekt escaped, kein innerHTML/XSS.
 - **Scrollbar** – lange Zeilen brechen nicht um (`white-space: pre`), der Baum scrollt **horizontal
   und vertikal** innerhalb seiner Größe (`setSizeFull()` / Flex-Höhe).
-- **Sauberer Aufbau** – getrennte Verantwortlichkeiten: `XmlTreeRenderer` (Rendering),
-  `XmlSearchController` (Suche), `CssClasses` (Klassennamen), schlankes `XmlViewer` (API).
+- **Sauberer Aufbau** – getrennte Verantwortlichkeiten: `XmlTreeRenderer` (Rendering), die geteilte
+  `search`-Engine (`SearchController` & Co.), `CssClasses` (Klassennamen), schlankes `XmlViewer` (API).
 - **Keine Spring-Abhängigkeit in der Komponente** – nur die Demo-App nutzt Spring Boot.
+- **Schwester-Komponente `TextViewer`** – read-only Klartext-Anzeige (Zeilennummern, Zeilen-Highlight,
+  umschaltbarer Umbruch) mit derselben Suche/Navigation und demselben `SearchNavigator`; die Such-Engine
+  liegt im geteilten Package `de.makno.web.common.component.search`.
 
 ## Voraussetzungen
 
@@ -131,19 +134,21 @@ Properties** anpassbar – ohne Java zu ändern. Property auf `.xmlviewer` (oder
 | `xml-punct` | `--xmlviewer-punct-color` | `< > / = "` |
 | `xml-children` / `xml-endtag` | `--xmlviewer-guide-color` | durchgehende Führungslinie vom öffnenden bis zum schließenden Tag |
 | `xml-highlight` | `--xmlviewer-highlight-bg` | per `highlight(...)` markiertes Element |
-| `::highlight(xml-search-match)` | `--xmlviewer-search-match-bg` | Suchtreffer |
-| `::highlight(xml-search-current)` | `--xmlviewer-search-current-bg` | aktueller Suchtreffer |
+| `.search-token::highlight(search-match)` | `--xmlviewer-search-match-bg` | Suchtreffer |
+| `.search-token::highlight(search-current)` | `--xmlviewer-search-current-bg` | aktueller Suchtreffer |
 
 Weiter: `--xmlviewer-font-family`, `--xmlviewer-font-size`, `--xmlviewer-indent-width`.
 
 > **Suchtreffer-Highlighting (Frontend):** Treffer werden nicht server-seitig in Spans zerlegt,
 > sondern über die [CSS Custom Highlight API](https://developer.mozilla.org/docs/Web/API/CSS_Custom_Highlight_API)
-> als Text-Ranges gezeichnet (`xml-search-highlighter.js`). Das spart pro Treffer einen DOM-Knoten
-> und Session-Heap und vermeidet DOM-Mutationen über die Leitung – relevant bei großen Bäumen und
-> vielen gleichzeitigen Nutzern. Gestylt wird über `.xml-token::highlight(...)`; da `::highlight()`
-> nur begrenzte Eigenschaften erlaubt (u. a. `background-color`/`color`), gibt es hier keinen
-> `border-radius`. Benötigt einen Browser mit Custom-Highlight-Unterstützung (aktuelle Chromium-,
-> Firefox- und Safari-Versionen).
+> als Text-Ranges gezeichnet – durch das geteilte Modul `search/search-highlighter.js` (genutzt von
+> `XmlViewer` **und** `TextViewer`). Das spart pro Treffer einen DOM-Knoten und Session-Heap und
+> vermeidet DOM-Mutationen über die Leitung – relevant bei großen Bäumen und vielen gleichzeitigen
+> Nutzern. Gestylt wird über `.search-token::highlight(...)` (in `search/styles/search.css`); die
+> Trefferfarben speisen die `--xmlviewer-search-*-bg`-Properties über eine Brücke auf die geteilten
+> `--search-match-bg`/`--search-current-bg`. Da `::highlight()` nur begrenzte Eigenschaften erlaubt
+> (u. a. `background-color`/`color`), gibt es hier keinen `border-radius`. Benötigt einen Browser mit
+> Custom-Highlight-Unterstützung (aktuelle Chromium-, Firefox- und Safari-Versionen).
 
 **Abgrenzung zum Hintergrund** (Rahmen der Komponente): `--xmlviewer-border-color` (Standard
 `#cbd5e1`), `--xmlviewer-border-width` (`1px`), `--xmlviewer-border-radius` (`6px`),
@@ -241,26 +246,31 @@ Für Konsumenten der früheren Koordinaten (z. B. *web-module-conversion*) ände
 
 ## Architektur (Kurzüberblick)
 
-Die Bibliotheks-Quellen sind nach Verantwortlichkeit getrennt: die wiederverwendbare
-Anzeige-Komponente in `de.makno.web.common.component.xmlviewer`, die Such-Navigations-Komponente in
-`de.makno.web.common.component.navigation`; die Demo-App liegt im Modul `demo-app`
-(`de.makno.xmlviewer.app`).
+Die Bibliotheks-Quellen sind nach Verantwortlichkeit getrennt: die Anzeige-Komponenten in
+`de.makno.web.common.component.xmlviewer` und `…component.text`, die geteilte Such-Engine in
+`…component.search`, die Such-Navigations-Komponente in `…component.navigation`; die Demo-App liegt im
+Modul `demo-app` (`de.makno.xmlviewer.app`).
 
 | Klasse | Aufgabe |
 |---|---|
-| `component.XmlViewer` | Öffentliche API + Highlight/Collapse/Scroll; orchestriert Renderer & Suche (kein Spring) |
-| `component.XmlTreeRenderer` | Rekursives Rendern eines `Element`-Baums in `Div`/`Span` |
-| `component.XmlSearchController` | Textsuche: Treffer markieren, navigieren, Änderungen melden |
-| `component.SearchTermSplitter` | Funktionales Interface: zerlegt den Suchtext in Begriffe (Trennzeichen frei wählbar) |
-| `component.CssClasses` | Zentrale CSS-Klassennamen (keine Magic-Strings) |
-| `component.RenderedTree` / `SearchableToken` | Records: Render-Ergebnis bzw. durchsuchbares Token |
+| `xmlviewer.XmlViewer` | Öffentliche API + Highlight/Collapse/Scroll; orchestriert Renderer & Suche (kein Spring) |
+| `xmlviewer.XmlTreeRenderer` | Rekursives Rendern eines `Element`-Baums in `Div`/`Span` |
+| `xmlviewer.CssClasses` | Zentrale CSS-Klassennamen (keine Magic-Strings) |
+| `xmlviewer.RenderedTree` / `SearchableToken` | Records: Render-Ergebnis bzw. durchsuchbares XML-Token |
+| `text.TextViewer` | Schwester-Komponente: read-only Klartext-Anzeige (Zeilennummern, Zeilen-Highlight, Umbruch) mit Suche/Navigation |
+| `search.SearchController` | Geteilte Textsuche: Treffer finden/zählen, navigieren, Reveal + Änderungen melden |
+| `search.SearchToken` / `TokenMatch` | Records: durchsuchbares Token (Text + Reveal-Aktion) bzw. Treffer-Offset |
+| `search.SearchHighlightRenderer` / `FrontendSearchHighlighter` | Treffer-Zeichnen entkoppelt; Standard lagert es ins Frontend aus |
+| `search.SearchTermSplitter` | Funktionales Interface: zerlegt den Suchtext in Begriffe (Trennzeichen frei wählbar) |
 | `navigation.MatchNavigable` | Interface: suchen + Treffer durchlaufen + Stand abfragen (entkoppelt die UI) |
 | `navigation.MatchChangeEvent` | Event bei Änderung der Treffer/-navigation |
 | `navigation.MatchLabelFormatter` | Funktionales Interface: Label-Format frei bestimmbar (Standard „12/66") |
 | `navigation.SearchNavigator` | Such-Pille: Eingabefeld + Treffer-Label + Vor/Zurück (Buttons nur bei Treffern aktiv); steuert ein `MatchNavigable` |
-| `…/frontend/web/common/component/xmlviewer/styles/xml-viewer.css` | Farb-/Layout-Regeln + Custom Properties (im Artefakt unter `META-INF/resources`) |
+| `…/frontend/web/common/component/search/search-highlighter.js` + `styles/search.css` | Geteiltes Frontend-Highlighting (CSS Custom Highlight API) |
+| `…/frontend/web/common/component/{xmlviewer,text}/styles/*.css` | Farb-/Layout-Regeln + Custom Properties je Komponente (unter `META-INF/resources`) |
 | `app.Application` | Spring-Boot-Start der Demo |
-| `app.MainView` / `app.SampleXmlFactory` | Demo-View / großer Beispielbaum |
+| `app.MainView` / `app.SampleXmlFactory` | XmlViewer-Demo (`/`) / großer Beispielbaum |
+| `app.TextDemoView` / `app.SampleTextFactory` | TextViewer-Demo (`/text`) / großer Beispieltext |
 
 `XmlViewer` implementiert `MatchNavigable`, daher genügt zum Anbinden der Navigation:
 

@@ -47,12 +47,14 @@ final class CssClasses {
     static final String HIGHLIGHT = "xml-highlight";
 
     /**
-     * Markiert einen durchsuchbaren Token-Span. Über diese Klasse findet das Frontend-Highlighting die
-     * Treffer-Knoten positionsbasiert ({@code querySelectorAll('.xml-token')[tokenIndex]}); zugleich
-     * begrenzt sie die {@code ::highlight()}-Stilregeln auf Token-Texte. Die Reihenfolge dieser Spans
-     * im DOM entspricht exakt der Token-Liste (Dokumentreihenfolge).
+     * Markiert einen durchsuchbaren Token-Span. Über diese (geteilte) Klasse findet das
+     * Frontend-Highlighting die Treffer-Knoten positionsbasiert
+     * ({@code querySelectorAll('.search-token')[tokenIndex]}); zugleich begrenzt sie die
+     * {@code ::highlight()}-Stilregeln auf Token-Texte. Die Reihenfolge dieser Spans im DOM entspricht
+     * exakt der Token-Liste (Dokumentreihenfolge). Muss exakt dem {@code TOKEN_SELECTOR} in
+     * {@code search/search-highlighter.js} entsprechen.
      */
-    static final String SEARCH_TOKEN = "xml-token";
+    static final String SEARCH_TOKEN = "search-token";
 
     private CssClasses() {}
 }

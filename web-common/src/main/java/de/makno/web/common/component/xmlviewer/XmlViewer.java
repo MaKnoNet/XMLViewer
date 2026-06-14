@@ -9,15 +9,21 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.shared.Registration;
 import de.makno.web.common.component.navigation.MatchChangeEvent;
 import de.makno.web.common.component.navigation.MatchNavigable;
-import elemental.json.Json;
-import elemental.json.JsonArray;
+import de.makno.web.common.component.search.FrontendSearchHighlighter;
+import de.makno.web.common.component.search.SearchController;
+import de.makno.web.common.component.search.SearchHighlightRenderer;
+import de.makno.web.common.component.search.SearchTermSplitter;
+import de.makno.web.common.component.search.SearchToken;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import org.jdom2.Element;
@@ -54,28 +60,24 @@ import org.jdom2.Element;
  * (z.&nbsp;B. {@code --xmlviewer-tag-color}) von außen ohne Java-Änderung override-bar.
  */
 @CssImport("./web/common/component/xmlviewer/styles/xml-viewer.css")
-@JsModule("./web/common/component/xmlviewer/xml-search-highlighter.js")
+@CssImport("./web/common/component/search/styles/search.css")
+@JsModule("./web/common/component/search/search-highlighter.js")
 public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, MatchNavigable {
 
     private static final long serialVersionUID = 1L;
 
     private static final String EMPTY_TEXT = "Kein XML-Element gesetzt.";
 
-    // JS-Aufrufe an das Frontend-Highlighting-Modul; {@code this} ist das Wurzel-Element des Viewers.
-    private static final String JS_APPLY = "window.XmlSearchHighlighter.apply(this, $0, $1)";
-    private static final String JS_MOVE_CURRENT = "window.XmlSearchHighlighter.moveCurrent(this, $0)";
-    private static final String JS_CLEAR = "window.XmlSearchHighlighter.clear(this)";
-
     private Element root;
     private boolean collapsible = true;
     private boolean searchCaseSensitive = false;
-    private SearchTermSplitter searchTermSplitter = XmlSearchController.DEFAULT_TERM_SPLITTER;
+    private SearchTermSplitter searchTermSplitter = SearchController.DEFAULT_TERM_SPLITTER;
 
     private RenderedTree tree;
-    private XmlSearchController searchController;
+    private SearchController searchController;
 
     /** Zeichnet die Suchtreffer im Frontend (CSS Custom Highlight API); Element-Referenz ist stabil. */
-    private final SearchHighlightRenderer highlightRenderer = new FrontendHighlightRenderer();
+    private final SearchHighlightRenderer highlightRenderer = new FrontendSearchHighlighter(this);
 
     /**
      * Identitätsbasierte Menge aller aktuell hervorgehobenen Elemente. {@link IdentityHashMap} als
@@ -271,7 +273,7 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
             getContent().add(tree.root());
         }
         searchController =
-                new XmlSearchController(tree.tokens(), this::expandTo, highlightRenderer, this::fireMatchChange);
+                new SearchController(toSearchTokens(tree.tokens()), highlightRenderer, this::fireMatchChange);
         searchController.setCaseSensitive(searchCaseSensitive);
         searchController.setTermSplitter(searchTermSplitter);
         // Etwaige Highlights eines vorherigen Baums im Frontend verwerfen (neuer Baum = neue Tokens).
@@ -280,6 +282,22 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
         // zurückgesetzt wurde, damit sie ihr Eingabefeld/Anzeige leeren. Im Konstruktor noch ohne
         // Wirkung (keine Listener registriert).
         fireSearchReset();
+    }
+
+    /**
+     * Bildet die gerenderten Tokens auf die generischen {@link SearchToken}s ab. Jeder Treffer soll
+     * seinen Element-Zweig aufklappen; damit der {@link SearchController} je Element nur EINMAL
+     * aufklappt, teilen sich alle Tokens desselben Owners dieselbe Reveal-Aktion (identitätsbasierter
+     * Cache). Die Reihenfolge bleibt erhalten – Token-Index == Position im Frontend-DOM.
+     */
+    private List<SearchToken> toSearchTokens(List<SearchableToken> rendered) {
+        Map<Element, SerializableRunnable> revealByOwner = new IdentityHashMap<>();
+        List<SearchToken> searchTokens = new ArrayList<>(rendered.size());
+        for (SearchableToken token : rendered) {
+            SerializableRunnable reveal = revealByOwner.computeIfAbsent(token.owner(), owner -> () -> expandTo(owner));
+            searchTokens.add(new SearchToken(token.text(), reveal));
+        }
+        return searchTokens;
     }
 
     /** Verbindet die vom Renderer erzeugten Aufklapp-Dreiecke mit der Klapp-Logik des Viewers. */
@@ -330,52 +348,6 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
     private void scrollTo(Component target) {
         // Nur scrollen, wenn die Komponente an eine UI gebunden ist (im Unit-Test gibt es keinen Client).
         target.getUI().ifPresent(ui -> target.getElement().executeJs("this.scrollIntoView({block:'center'})"));
-    }
-
-    /**
-     * Überträgt die Suchtreffer als Offset-Deskriptoren an das Frontend-Modul, das sie via CSS Custom
-     * Highlight API zeichnet (kein server-seitiger DOM-/Heap-Aufwand pro Treffer). Ohne gebundene UI
-     * (z.&nbsp;B. im Unit-Test) sind die Aufrufe wirkungslose No-ops.
-     */
-    private final class FrontendHighlightRenderer implements SearchHighlightRenderer {
-
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public void render(List<TokenMatch> matches, int currentIndex) {
-            if (getUI().isEmpty()) {
-                return;
-            }
-            getElement().executeJs(JS_APPLY, toFlatArray(matches), currentIndex);
-        }
-
-        @Override
-        public void moveCurrent(int currentIndex) {
-            if (getUI().isEmpty()) {
-                return;
-            }
-            getElement().executeJs(JS_MOVE_CURRENT, currentIndex);
-        }
-
-        @Override
-        public void clear() {
-            if (getUI().isEmpty()) {
-                return;
-            }
-            getElement().executeJs(JS_CLEAR);
-        }
-
-        /** Flaches Zahlen-Array [tokenIndex, start, end, …] für eine kompakte Übertragung. */
-        private JsonArray toFlatArray(List<TokenMatch> matches) {
-            JsonArray array = Json.createArray();
-            int position = 0;
-            for (TokenMatch match : matches) {
-                array.set(position++, match.tokenIndex());
-                array.set(position++, match.start());
-                array.set(position++, match.end());
-            }
-            return array;
-        }
     }
 
     private Div newEmptyPlaceholder() {

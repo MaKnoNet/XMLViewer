@@ -1,0 +1,19 @@
+/*
+ * Geteiltes Styling der Suchtreffer-Hervorhebung (CSS Custom Highlight API) für alle Viewer-
+ * Komponenten, die durchsuchbare `.search-token`-Spans rendern (XmlViewer, TextViewer, …).
+ *
+ * Treffer werden über die global registrierten Highlights `search-match` (alle Treffer) und
+ * `search-current` (aktueller Treffer) als Text-Ranges gezeichnet – kein zusätzlicher DOM-Knoten/Heap
+ * pro Treffer. Die Farben kommen aus Custom Properties, die jede Komponente auf ihrem Wurzel-Element
+ * setzen kann. Da `::highlight()` pro getroffenem `.search-token`-Element aufgelöst wird, kann jeder
+ * Viewer eigene Trefferfarben haben, obwohl die Highlight-Namen global geteilt sind. `::highlight()`
+ * unterstützt nur eine begrenzte Menge an Eigenschaften (u. a. color/background-color), daher kein
+ * border-radius.
+ */
+.search-token::highlight(search-match) {
+    background-color: var(--search-match-bg, #ffd9a3);
+}
+
+.search-token::highlight(search-current) {
+    background-color: var(--search-current-bg, #ff9d4d);
+}
