@@ -1,0 +1,100 @@
+/*
+ * Styling der TextViewer-Komponente.
+ *
+ * Alle Farben/Stile sind hier zentral als CSS Custom Properties definiert. Anwender überschreiben das
+ * Aussehen, indem sie die Properties (oder die Klassen-Regeln) in ihrem eigenen Theme/CSS neu setzen –
+ * ohne Java-Änderung. Die Suchtreffer-Farben liegen im geteilten search.css und werden über die
+ * Brücken-Properties --search-match-bg/--search-current-bg unten gespeist.
+ *
+ *     .textviewer { --textviewer-text-color: #1e293b; }
+ */
+
+.textviewer {
+    /* ---- Anpassbare Stellschrauben (Defaults) ---- */
+    --textviewer-font-family: ui-monospace, "Cascadia Code", "Consolas", "Courier New", monospace;
+    --textviewer-font-size: 13px;
+
+    --textviewer-text-color: #334155;        /* Textinhalt          – Dunkel */
+    --textviewer-gutter-color: #94a3b8;      /* Zeilennummern       – Grau   */
+    --textviewer-gutter-bg: #f1f5f9;         /* Zeilennummern-Spalte – Hellgrau */
+
+    --textviewer-highlight-bg: #fff3a3;      /* highlight(int)      – Gelb   */
+    --textviewer-search-match-bg: #ffd9a3;   /* Suchtreffer         – Hellorange */
+    --textviewer-search-current-bg: #ff9d4d; /* aktueller Treffer   – Orange */
+
+    /* ---- Abgrenzung der Komponente zum Hintergrund ---- */
+    --textviewer-border-color: #cbd5e1;
+    --textviewer-border-width: 1px;
+    --textviewer-border-radius: 6px;
+    --textviewer-background: #f8fafc;
+
+    /* Brücke auf die geteilten Treffer-Properties (search.css): die Suchtreffer-Farben sind so über
+       die --textviewer-search-*-bg-Theming-API anpassbar, speisen aber den geteilten Highlighter. */
+    --search-match-bg: var(--textviewer-search-match-bg);
+    --search-current-bg: var(--textviewer-search-current-bg);
+
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+
+    border: var(--textviewer-border-width) solid var(--textviewer-border-color);
+    border-radius: var(--textviewer-border-radius);
+    background: var(--textviewer-background);
+    box-sizing: border-box;
+
+    color: var(--textviewer-text-color);
+    font-family: var(--textviewer-font-family);
+    font-size: var(--textviewer-font-size);
+}
+
+.textviewer-content {
+    /* füllt den Flex-Container und scrollt bei Überlauf in beide Richtungen */
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 0.5em 0;
+    line-height: 1.5;
+}
+
+.textviewer-empty {
+    color: var(--textviewer-gutter-color);
+    font-style: italic;
+    padding: 0 0.5em;
+}
+
+/* Eine Zeile: optionaler Gutter + Inhalt nebeneinander. */
+.text-line {
+    display: flex;
+}
+
+/* Zeilennummern-Spalte: rechtsbündig, nicht selektierbar; klebt links beim horizontalen Scrollen. */
+.text-gutter {
+    flex: 0 0 auto;
+    min-width: 3ch;
+    padding: 0 0.75em 0 0.5em;
+    text-align: right;
+    color: var(--textviewer-gutter-color);
+    background: var(--textviewer-gutter-bg);
+    user-select: none;
+    position: sticky;
+    left: 0;
+}
+
+/* Zeilentext: white-space: pre verhindert den Umbruch -> lange Zeilen erzeugen horizontales Scrollen.
+   min-width:0 wäre falsch (würde schrumpfen); der Inhalt soll seine volle Breite behalten. */
+.text-line-content {
+    flex: 1 0 auto;
+    white-space: pre;
+    padding: 0 0.5em;
+}
+
+/* Umbruch-Modus: lange Zeilen umbrechen statt horizontal scrollen. */
+.textviewer--wrap .text-line-content {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Per highlight(int) markierte Zeile. */
+.text-highlight {
+    background: var(--textviewer-highlight-bg);
+}
