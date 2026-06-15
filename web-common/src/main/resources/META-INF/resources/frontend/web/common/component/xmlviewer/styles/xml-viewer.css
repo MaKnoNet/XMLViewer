@@ -38,13 +38,15 @@
        (nicht als Maske), damit die weiße Innenfläche des Quadrats erhalten bleibt.
        Marker-SVGs nutzen viewBox 24×36 (Seitenverhältnis 2:3 = 1.25em-Box × 1.5em-Zeilenhöhe), damit
        der Stummel die volle Zeilenhöhe ausfüllt und lückenlos in die Kinder-Linie übergeht. Das
-       Linien-SVG ist 24×24 mit preserveAspectRatio='none' (auf volle Container-Höhe gestreckt).
+       Linien-SVG ist 24×24 mit preserveAspectRatio='none' (auf volle Container-Höhe gestreckt) und
+       wird – wie die Marker – anti-aliased gezeichnet (kein shape-rendering='crispEdges'), damit die
+       Linie dieselbe Strichstärke/Anmutung hat wie Stummel und Elbow (alle 2·(1em/24)=2·(1.5em/36)).
        Die Strichfarbe ist im SVG fest eingebacken (stroke=%2364748b). Zum Umfärben den Hex-Wert in
        der jeweiligen Property ändern – `--xmlviewer-marker-color` wirkt hier NICHT (nur Text-Fallback). */
     --xmlviewer-marker-expanded: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='27' x2='12' y2='36'/%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2' fill='%23ffffff'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E");
     --xmlviewer-marker-collapsed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='12' y1='14' x2='12' y2='22'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E");
     --xmlviewer-marker-endtag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 18 L24 18'/%3E%3C/svg%3E");
-    --xmlviewer-marker-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' shape-rendering='crispEdges' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cline x1='12' y1='0' x2='12' y2='24'/%3E%3C/svg%3E");
+    --xmlviewer-marker-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cline x1='12' y1='0' x2='12' y2='24'/%3E%3C/svg%3E");
     --xmlviewer-marker-color: var(--xmlviewer-punct-color); /* Text-Fallback-Farbe (SVGs s. oben) */
 
     /* ---- Führungslinie: Variablen bleiben für Text-Fallback erhalten (wirken nicht auf das SVG-Bild). */
