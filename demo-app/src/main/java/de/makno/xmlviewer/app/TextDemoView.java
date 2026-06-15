@@ -38,6 +38,7 @@ public class TextDemoView extends VerticalLayout {
                 new Paragraph("Such-UI und Buttons liegen in der Demo-App; die Komponente bietet nur die API. "
                         + "Großer Klartext zum Testen von vertikalem und horizontalem Scrollen."),
                 new RouterLink("← Zur XmlViewer-Demo", MainView.class),
+                new RouterLink("→ Zur CodeViewer-Demo", CodeDemoView.class),
                 createToolbar(),
                 viewer);
         setFlexGrow(1, viewer);

@@ -41,6 +41,7 @@ public class MainView extends VerticalLayout {
                 new Paragraph("Such-UI und Buttons liegen in der Demo-App; die Komponente bietet nur die API. "
                         + "Großer Baum zum Testen von vertikalem und horizontalem Scrollen."),
                 new RouterLink("→ Zur TextViewer-Demo", TextDemoView.class),
+                new RouterLink("→ Zur CodeViewer-Demo", CodeDemoView.class),
                 createToolbar(highlightTarget, book025),
                 viewer);
         setFlexGrow(1, viewer);

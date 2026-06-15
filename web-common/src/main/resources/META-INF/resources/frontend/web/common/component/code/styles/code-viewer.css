@@ -1,0 +1,19 @@
+/*
+ * Styling des CodeViewer-Host-Elements. Der Editor selbst lebt in einem Shadow-Root und wird von
+ * CodeMirror (+ dem injizierten Host-Theme aus code-viewer.js) gestylt; document-CSS erreicht den
+ * Shadow-Root nicht. Hier daher nur Rahmen/Größe des Hosts und die Trefferfarben-Custom-Properties,
+ * die durch die Shadow-Grenze in den Editor vererbt werden.
+ */
+
+.codeviewer {
+    --codeviewer-search-match-bg: #ffd9a3; /* alle Treffer       – Hellorange */
+    --codeviewer-search-current-bg: #ff9d4d; /* aktueller Treffer – Orange     */
+
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    box-sizing: border-box;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    overflow: hidden;
+}
