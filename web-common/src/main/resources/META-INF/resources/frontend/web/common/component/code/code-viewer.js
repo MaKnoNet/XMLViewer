@@ -12,8 +12,8 @@
  * SearchCursor gezählt, als Decorations markiert und der Stand per host.$server.onMatchChange(count,
  * index) an den Server zurückgemeldet.
  */
-import { Compartment, EditorState, StateEffect, StateField } from "@codemirror/state";
-import { Decoration, EditorView, GutterMarker, gutter, lineNumbers } from "@codemirror/view";
+import { Compartment, EditorState, RangeSetBuilder, StateEffect, StateField } from "@codemirror/state";
+import { Decoration, EditorView, ViewPlugin, WidgetType, lineNumbers } from "@codemirror/view";
 import {
     StreamLanguage,
     bracketMatching,
@@ -82,57 +82,64 @@ const SVG_LINE_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2
 const SVG_END_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 18 L24 18'/%3E%3C/svg%3E")`;
 const SVG_END_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 18 L24 18'/%3E%3C/svg%3E")`;
 
-// Ein Falt-Gutter-Eintrag pro Zeile: Kopf-offen/zu, durchgehende Linie, End-Elbow oder leer. Das
-// konkrete Bild liefert markerBaseTheme über den Klassennamen (theme-abhängig hell/dunkel).
-class FoldTreeMarker extends GutterMarker {
-    constructor(kind) {
-        super();
-        this.kind = kind;
+// Führende Whitespace-Breite einer Zeile in Spalten (Tabs auf die Tab-Weite aufgerundet) – bestimmt,
+// an welcher Einrückungs-Spalte die Baum-Linie der Region läuft.
+function leadingColumns(text, tabSize) {
+    let col = 0;
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (ch === " ") {
+            col += 1;
+        } else if (ch === "\t") {
+            col += tabSize - (col % tabSize);
+        } else {
+            break;
+        }
     }
-    eq(other) {
-        return other.kind === this.kind;
-    }
-    toDOM() {
-        const span = document.createElement("span");
-        span.className = "cm-foldtree cm-foldtree-" + this.kind;
-        return span;
-    }
+    return col;
 }
-const MARKER_OPEN = new FoldTreeMarker("open");
-const MARKER_CLOSED = new FoldTreeMarker("closed");
-const MARKER_LINE = new FoldTreeMarker("line");
-const MARKER_END = new FoldTreeMarker("end");
 
-// Ermittelt je Dokument-Stand die Faltstruktur: pro Zeile den faltbaren Kopf-Bereich (heads) bzw. die
-// innerste umschließende Region (inner: "line"/"end"). Einspaltig – bei Verschachtelung gewinnt die
-// innere Region, weil sie wegen aufsteigender Zeilen-Iteration zuletzt geschrieben wird.
-function computeFoldStructure(state) {
+// Faltbare, mehrzeilige Regionen je Dokument-Stand: Kopfzeile, letzte Zeile, Einrückungs-Spalte und
+// Falt-Range. Zusätzlich pro Zeile die Liste aller umschließenden Regionen – daraus entstehen die
+// parallel nebeneinander laufenden Ebenen-Linien (eingerückter Baum wie beim XmlViewer).
+function computeFoldRegions(state) {
     const doc = state.doc;
-    const heads = new Map();
-    const inner = new Map();
+    const tabSize = state.tabSize;
+    const regions = [];
     for (let n = 1; n <= doc.lines; n++) {
         const line = doc.line(n);
         const range = foldable(state, line.from, line.to);
         if (!range) {
             continue;
         }
-        heads.set(n, range);
         const lastLine = doc.lineAt(range.to).number;
-        for (let m = n + 1; m <= lastLine; m++) {
-            inner.set(m, m === lastLine ? "end" : "line");
+        if (lastLine <= n) {
+            continue; // einzeilige Faltung – kein Baum zu zeichnen
+        }
+        regions.push({ headLine: n, lastLine, indent: leadingColumns(line.text, tabSize), range });
+    }
+    const coverers = new Map();
+    for (const region of regions) {
+        for (let m = region.headLine; m <= region.lastLine; m++) {
+            let list = coverers.get(m);
+            if (!list) {
+                list = [];
+                coverers.set(m, list);
+            }
+            list.push(region);
         }
     }
-    return { heads, inner };
+    return { coverers };
 }
 
-// Memoisiert die Faltstruktur am State, damit pro Render-Zyklus nur einmal über das Dokument gescannt
-// wird (Scrollen ändert den State nicht → Cache bleibt gültig).
-function foldStructureFor(entry, state) {
-    if (entry.foldStructState !== state) {
-        entry.foldStructState = state;
-        entry.foldStruct = computeFoldStructure(state);
+// Memoisiert die Regionen am State, damit pro Render-Zyklus nur einmal über das Dokument gescannt wird
+// (Scrollen ändert den State nicht → Cache bleibt gültig).
+function foldRegionsFor(entry, state) {
+    if (entry.foldRegionsState !== state) {
+        entry.foldRegionsState = state;
+        entry.foldRegions = computeFoldRegions(state);
     }
-    return entry.foldStruct;
+    return entry.foldRegions;
 }
 
 function isFolded(state, range) {
@@ -145,88 +152,149 @@ function isFolded(state, range) {
     return folded;
 }
 
-function foldLineMarker(view, blockInfo, entry) {
-    const state = view.state;
-    const lineNo = state.doc.lineAt(blockInfo.from).number;
-    const struct = foldStructureFor(entry, state);
-    const head = struct.heads.get(lineNo);
-    if (head) {
-        return isFolded(state, head) ? MARKER_CLOSED : MARKER_OPEN;
-    }
-    const kind = struct.inner.get(lineNo);
-    if (kind === "end") {
-        return MARKER_END;
-    }
-    if (kind === "line") {
-        return MARKER_LINE;
-    }
-    return null;
+function toggleRegion(view, range) {
+    view.dispatch({ effects: (isFolded(view.state, range) ? unfoldEffect : foldEffect).of(range) });
 }
 
-// Klick auf einen faltbaren Kopf togglet genau dessen Region; Klicks auf Linie/Elbow sind wirkungslos.
-function toggleFoldAt(view, blockInfo, entry) {
-    const state = view.state;
-    const lineNo = state.doc.lineAt(blockInfo.from).number;
-    const head = foldStructureFor(entry, state).heads.get(lineNo);
-    if (!head) {
-        return false;
+// Inline-Widget am Zeilenanfang: zeichnet pro umschließender Region eine absolut positionierte Zelle
+// (Marker/Linie/Elbow) an deren Einrückungs-Spalte. Mehrere Ebenen → mehrere Zellen nebeneinander =
+// der eingerückte „Connected-Tree". Das Bild je Zelle liefert markerBaseTheme über den Klassennamen.
+class FoldTreeWidget extends WidgetType {
+    constructor(cells) {
+        super();
+        this.cells = cells; // [{ kind, indent, range }]
     }
-    view.dispatch({ effects: (isFolded(state, head) ? unfoldEffect : foldEffect).of(head) });
-    return true;
+    eq(other) {
+        return (
+            other.cells.length === this.cells.length &&
+            this.cells.every((c, i) => c.kind === other.cells[i].kind && c.indent === other.cells[i].indent)
+        );
+    }
+    toDOM(view) {
+        const wrap = document.createElement("span");
+        wrap.className = "cm-ftree";
+        wrap.setAttribute("aria-hidden", "true");
+        for (const cell of this.cells) {
+            const el = document.createElement("span");
+            el.className = "cm-ftree-cell cm-ftree-" + cell.kind;
+            el.style.left = `calc(${cell.indent}ch - var(--ftree-back))`;
+            if (cell.kind === "open" || cell.kind === "closed") {
+                el.addEventListener("mousedown", (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    toggleRegion(view, cell.range);
+                });
+            }
+            wrap.appendChild(el);
+        }
+        return wrap;
+    }
+    ignoreEvent() {
+        return true; // Marker-Klicks behandeln wir selbst; CM soll daraus keine Cursor-Bewegung machen.
+    }
 }
 
-// Eigener, falt-bewusster Gutter: zeichnet Marker + Linie + Elbow als zusammenhängende Spalte
-// (XmlViewer-„Connected-Tree"-Optik). Pro Editor instanziiert, da die Struktur am entry memoisiert wird.
-function foldTreeGutter(entry) {
-    return gutter({
-        class: "cm-foldtree-gutter",
-        lineMarker: (view, blockInfo) => foldLineMarker(view, blockInfo, entry),
-        lineMarkerChange: (update) =>
-            update.docChanged ||
-            update.viewportChanged ||
-            foldedRanges(update.startState) !== foldedRanges(update.state),
-        initialSpacer: () => MARKER_OPEN,
-        domEventHandlers: {
-            click: (view, blockInfo) => toggleFoldAt(view, blockInfo, entry),
+// Baut die Baum-Dekorationen nur für die sichtbaren Zeilen (out-of-core bei großen Dateien).
+function buildFoldTreeDeco(view, entry) {
+    const { coverers } = foldRegionsFor(entry, view.state);
+    const doc = view.state.doc;
+    const builder = new RangeSetBuilder();
+    for (const { from, to } of view.visibleRanges) {
+        for (let pos = from; pos <= to; ) {
+            const line = doc.lineAt(pos);
+            const regions = coverers.get(line.number);
+            if (regions && regions.length) {
+                const cells = regions.map((region) => ({
+                    kind:
+                        line.number === region.headLine
+                            ? isFolded(view.state, region.range)
+                                ? "closed"
+                                : "open"
+                            : line.number === region.lastLine
+                              ? "end"
+                              : "line",
+                    indent: region.indent,
+                    range: region.range,
+                }));
+                builder.add(line.from, line.from, Decoration.widget({ widget: new FoldTreeWidget(cells), side: -1 }));
+            }
+            pos = line.to + 1;
+        }
+    }
+    return builder.finish();
+}
+
+// ViewPlugin, das den eingerückten Falt-Baum als Inhalts-Overlay hält. Pro Editor instanziiert, da die
+// Regionen am entry memoisiert werden. Neu aufgebaut bei Doc-, Viewport- oder Faltzustands-Änderung.
+function foldTreePlugin(entry) {
+    return ViewPlugin.fromClass(
+        class {
+            constructor(view) {
+                this.decorations = buildFoldTreeDeco(view, entry);
+            }
+            update(update) {
+                if (
+                    update.docChanged ||
+                    update.viewportChanged ||
+                    foldedRanges(update.startState) !== foldedRanges(update.state)
+                ) {
+                    this.decorations = buildFoldTreeDeco(update.view, entry);
+                }
+            }
         },
-    });
+        { decorations: (plugin) => plugin.decorations },
+    );
 }
 
-// Host-Theme: füllt den Host, setzt Monospace, Trefferfarben und die Geometrie des Falt-Tree-Gutters.
-// Wird per style-mod in den Shadow-Root injiziert.
+// Host-Theme: füllt den Host, setzt Monospace, Trefferfarben und die Geometrie des eingerückten
+// Falt-Baums (Inhalts-Overlay). Wird per style-mod in den Shadow-Root injiziert.
+//   --ftree-back: wie weit links der Textspalte die Ebenen-Linie/der Marker sitzt (in der Einrückung).
+//   --ftree-cellw: Breite der Marker-/Linien-/Elbow-Zelle (an der Zeilenhöhe orientiert).
+//   --ftree-pad:  linker Inhalts-Innenabstand, damit die äußerste Ebene (Einrückung 0) Platz hat.
 const hostTheme = EditorView.theme({
-    "&": { flex: "1 1 auto", minHeight: "0" },
+    "&": {
+        flex: "1 1 auto",
+        minHeight: "0",
+        "--ftree-back": "0.55ch",
+        "--ftree-cellw": "1.1em",
+        "--ftree-pad": "1.5ch",
+    },
     ".cm-scroller": { fontFamily: "ui-monospace, 'Cascadia Code', 'Consolas', monospace" },
     ".cm-search-match": { backgroundColor: "var(--codeviewer-search-match-bg, #ffd9a3)" },
     ".cm-search-current": { backgroundColor: "var(--codeviewer-search-current-bg, #ff9d4d)" },
-    // Volle Zellenhöhe ohne Innenabstand → Marker/Linie/Elbow gehen nahtlos in die Nachbarzeilen über.
-    ".cm-foldtree-gutter .cm-gutterElement": { padding: "0" },
-    ".cm-foldtree": {
-        display: "block",
-        boxSizing: "border-box",
-        width: "1.1em",
+    // Platz links für die Marker der äußersten Ebene; der Baum selbst läuft im Inhalt (eingerückt).
+    ".cm-content": { paddingLeft: "var(--ftree-pad)" },
+    ".cm-line": { position: "relative" },
+    // Nullbreite-Anker am Zeilenanfang über die volle Zeilenhöhe; trägt die absolut gesetzten Zellen.
+    ".cm-ftree": { position: "absolute", left: "0", top: "0", height: "100%", width: "0" },
+    ".cm-ftree-cell": {
+        position: "absolute",
+        top: "0",
         height: "100%",
+        width: "var(--ftree-cellw)",
+        transform: "translateX(-50%)",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
+        pointerEvents: "none",
     },
     // Linie über die ganze Zelle strecken (durchgehend); Marker/Elbow seitenverhältnistreu, mittig.
-    ".cm-foldtree-line": { backgroundSize: "100% 100%" },
-    ".cm-foldtree-open": { backgroundSize: "auto 100%", cursor: "pointer" },
-    ".cm-foldtree-closed": { backgroundSize: "auto 100%", cursor: "pointer" },
-    ".cm-foldtree-end": { backgroundSize: "auto 100%" },
+    ".cm-ftree-line": { backgroundSize: "100% 100%" },
+    ".cm-ftree-open": { backgroundSize: "auto 100%", cursor: "pointer", pointerEvents: "auto" },
+    ".cm-ftree-closed": { backgroundSize: "auto 100%", cursor: "pointer", pointerEvents: "auto" },
+    ".cm-ftree-end": { backgroundSize: "auto 100%" },
 });
 
 // Theme-abhängige Marker-Bilder. Die Selektoren &light/&dark sind nur in baseTheme erlaubt
 // (nicht in EditorView.theme); sie schalten automatisch mit dem aktiven Editor-Theme um.
 const markerBaseTheme = EditorView.baseTheme({
-    "&light .cm-foldtree-open": { backgroundImage: SVG_OPEN_LIGHT },
-    "&light .cm-foldtree-closed": { backgroundImage: SVG_CLOSED_LIGHT },
-    "&light .cm-foldtree-line": { backgroundImage: SVG_LINE_LIGHT },
-    "&light .cm-foldtree-end": { backgroundImage: SVG_END_LIGHT },
-    "&dark .cm-foldtree-open": { backgroundImage: SVG_OPEN_DARK },
-    "&dark .cm-foldtree-closed": { backgroundImage: SVG_CLOSED_DARK },
-    "&dark .cm-foldtree-line": { backgroundImage: SVG_LINE_DARK },
-    "&dark .cm-foldtree-end": { backgroundImage: SVG_END_DARK },
+    "&light .cm-ftree-open": { backgroundImage: SVG_OPEN_LIGHT },
+    "&light .cm-ftree-closed": { backgroundImage: SVG_CLOSED_LIGHT },
+    "&light .cm-ftree-line": { backgroundImage: SVG_LINE_LIGHT },
+    "&light .cm-ftree-end": { backgroundImage: SVG_END_LIGHT },
+    "&dark .cm-ftree-open": { backgroundImage: SVG_OPEN_DARK },
+    "&dark .cm-ftree-closed": { backgroundImage: SVG_CLOSED_DARK },
+    "&dark .cm-ftree-line": { backgroundImage: SVG_LINE_DARK },
+    "&dark .cm-ftree-end": { backgroundImage: SVG_END_DARK },
 });
 
 function languageExtension(id) {
@@ -261,10 +329,10 @@ function buildExtensions(entry, langId, dark, wrap, lineNumbersOn) {
         EditorState.readOnly.of(true),
         EditorView.editable.of(false),
         codeFolding(),
-        // Reihenfolge der Gutter folgt der Extension-Reihenfolge (links→rechts): erst die
-        // Zeilennummern, dann der Falt-Tree-Gutter → „Zahl, dann Aufklappsymbol".
+        // Zeilennummern-Gutter bleibt links; der Falt-Baum läuft als eingerücktes Inhalts-Overlay mit
+        // der Code-Einrückung mit (Marker/Linie/Elbow pro Ebene) – Reihenfolge bleibt „Zahl, dann Baum".
         entry.lineNumbersConf.of(lineNumbersOn ? lineNumbers() : []),
-        foldTreeGutter(entry),
+        foldTreePlugin(entry),
         bracketMatching(),
         syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
         searchField,
