@@ -13,16 +13,19 @@
  * index) an den Server zurückgemeldet.
  */
 import { Compartment, EditorState, StateEffect, StateField } from "@codemirror/state";
-import { Decoration, EditorView, lineNumbers } from "@codemirror/view";
+import { Decoration, EditorView, GutterMarker, gutter, lineNumbers } from "@codemirror/view";
 import {
     StreamLanguage,
     bracketMatching,
     codeFolding,
     defaultHighlightStyle,
     foldAll as cmFoldAll,
-    foldGutter,
+    foldEffect,
+    foldable,
+    foldedRanges,
     syntaxHighlighting,
     unfoldAll as cmUnfoldAll,
+    unfoldEffect,
 } from "@codemirror/language";
 import { SearchCursor } from "@codemirror/search";
 import { oneDark } from "@codemirror/theme-one-dark";
@@ -36,7 +39,6 @@ import { xml } from "@codemirror/lang-xml";
 import { yaml } from "@codemirror/lang-yaml";
 import { sql } from "@codemirror/lang-sql";
 import { csharp } from "@codemirror/legacy-modes/mode/clike";
-import { indentationMarkers } from "@replit/codemirror-indentation-markers";
 
 // Host-Element -> { root, view, Compartments, matches, current, caseSensitive }
 const editors = new Map();
@@ -65,52 +67,166 @@ const searchField = StateField.define({
     provide: (f) => EditorView.decorations.from(f),
 });
 
-// Falt-Marker im XmlViewer-Look: +/- Quadrat als SVG (stub-frei, viewBox 24x24), je eigene Variante
-// für hell (weiße Füllung) und dunkel (ohne Füllung, hellerer Strich) – umgeschaltet über CM6 &light/&dark.
-const FOLD_OPEN_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='3' fill='%23ffffff'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3C/svg%3E")`;
-const FOLD_CLOSED_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='3'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3Cline x1='12' y1='8' x2='12' y2='16'/%3E%3C/svg%3E")`;
-const FOLD_OPEN_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='3'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3C/svg%3E")`;
-const FOLD_CLOSED_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='3'/%3E%3Cline x1='8' y1='12' x2='16' y2='12'/%3E%3Cline x1='12' y1='8' x2='12' y2='16'/%3E%3C/svg%3E")`;
+// Falt-„Connected-Tree" im XmlViewer-Look (vier SVGs als Bild): Kopf-offen (Quadrat-Minus mit
+// Linien-Stummel nach unten), Kopf-zu (Quadrat-Plus), durchgehende Linie und End-Elbow „└". Je eine
+// Variante für hell (Strich #64748b, weiße Quadrat-Füllung) und dunkel (Strich #94a3b8, ohne Füllung);
+// umgeschaltet über die CM6-Selektoren &light/&dark. Marker nutzen viewBox 24×36 (füllt die volle
+// Zeilenhöhe, damit der Stummel lückenlos in die darunterliegende Linie übergeht), die Linie 24×24 mit
+// preserveAspectRatio='none' (über die ganze Zellenhöhe gestreckt → durchgehend über Zeilen hinweg).
+const SVG_OPEN_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='27' x2='12' y2='36'/%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2' fill='%23ffffff'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E")`;
+const SVG_OPEN_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='27' x2='12' y2='36'/%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E")`;
+const SVG_CLOSED_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='12' y1='14' x2='12' y2='22'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E")`;
+const SVG_CLOSED_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='12' y1='14' x2='12' y2='22'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E")`;
+const SVG_LINE_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' shape-rendering='crispEdges' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cline x1='12' y1='0' x2='12' y2='24'/%3E%3C/svg%3E")`;
+const SVG_LINE_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' shape-rendering='crispEdges' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cline x1='12' y1='0' x2='12' y2='24'/%3E%3C/svg%3E")`;
+const SVG_END_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 18 L24 18'/%3E%3C/svg%3E")`;
+const SVG_END_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 18 L24 18'/%3E%3C/svg%3E")`;
 
-// Einrückungs-Führungslinien (Baum-Optik wie beim XmlViewer); Farben adaptieren mit dem Theme.
-const INDENT_GUIDES = indentationMarkers({
-    thickness: 1,
-    colors: { light: "#cbd5e1", activeLight: "#94a3b8", dark: "#3a414d", activeDark: "#5b6472" },
-});
+// Ein Falt-Gutter-Eintrag pro Zeile: Kopf-offen/zu, durchgehende Linie, End-Elbow oder leer. Das
+// konkrete Bild liefert markerBaseTheme über den Klassennamen (theme-abhängig hell/dunkel).
+class FoldTreeMarker extends GutterMarker {
+    constructor(kind) {
+        super();
+        this.kind = kind;
+    }
+    eq(other) {
+        return other.kind === this.kind;
+    }
+    toDOM() {
+        const span = document.createElement("span");
+        span.className = "cm-foldtree cm-foldtree-" + this.kind;
+        return span;
+    }
+}
+const MARKER_OPEN = new FoldTreeMarker("open");
+const MARKER_CLOSED = new FoldTreeMarker("closed");
+const MARKER_LINE = new FoldTreeMarker("line");
+const MARKER_END = new FoldTreeMarker("end");
 
-// Eigenes Falt-Marker-Element für den Gutter (CM6 hängt den Klick-Handler an die Gutter-Zelle).
-function foldMarker(open) {
-    const marker = document.createElement("span");
-    marker.className = "cm-fold-marker " + (open ? "cm-fold-open" : "cm-fold-closed");
-    return marker;
+// Ermittelt je Dokument-Stand die Faltstruktur: pro Zeile den faltbaren Kopf-Bereich (heads) bzw. die
+// innerste umschließende Region (inner: "line"/"end"). Einspaltig – bei Verschachtelung gewinnt die
+// innere Region, weil sie wegen aufsteigender Zeilen-Iteration zuletzt geschrieben wird.
+function computeFoldStructure(state) {
+    const doc = state.doc;
+    const heads = new Map();
+    const inner = new Map();
+    for (let n = 1; n <= doc.lines; n++) {
+        const line = doc.line(n);
+        const range = foldable(state, line.from, line.to);
+        if (!range) {
+            continue;
+        }
+        heads.set(n, range);
+        const lastLine = doc.lineAt(range.to).number;
+        for (let m = n + 1; m <= lastLine; m++) {
+            inner.set(m, m === lastLine ? "end" : "line");
+        }
+    }
+    return { heads, inner };
 }
 
-// Host-Theme: füllt den Host, setzt Monospace, Trefferfarben und die XmlViewer-artigen Falt-Marker.
+// Memoisiert die Faltstruktur am State, damit pro Render-Zyklus nur einmal über das Dokument gescannt
+// wird (Scrollen ändert den State nicht → Cache bleibt gültig).
+function foldStructureFor(entry, state) {
+    if (entry.foldStructState !== state) {
+        entry.foldStructState = state;
+        entry.foldStruct = computeFoldStructure(state);
+    }
+    return entry.foldStruct;
+}
+
+function isFolded(state, range) {
+    let folded = false;
+    foldedRanges(state).between(range.from, range.from, (a, b) => {
+        if (a === range.from && b === range.to) {
+            folded = true;
+        }
+    });
+    return folded;
+}
+
+function foldLineMarker(view, blockInfo, entry) {
+    const state = view.state;
+    const lineNo = state.doc.lineAt(blockInfo.from).number;
+    const struct = foldStructureFor(entry, state);
+    const head = struct.heads.get(lineNo);
+    if (head) {
+        return isFolded(state, head) ? MARKER_CLOSED : MARKER_OPEN;
+    }
+    const kind = struct.inner.get(lineNo);
+    if (kind === "end") {
+        return MARKER_END;
+    }
+    if (kind === "line") {
+        return MARKER_LINE;
+    }
+    return null;
+}
+
+// Klick auf einen faltbaren Kopf togglet genau dessen Region; Klicks auf Linie/Elbow sind wirkungslos.
+function toggleFoldAt(view, blockInfo, entry) {
+    const state = view.state;
+    const lineNo = state.doc.lineAt(blockInfo.from).number;
+    const head = foldStructureFor(entry, state).heads.get(lineNo);
+    if (!head) {
+        return false;
+    }
+    view.dispatch({ effects: (isFolded(state, head) ? unfoldEffect : foldEffect).of(head) });
+    return true;
+}
+
+// Eigener, falt-bewusster Gutter: zeichnet Marker + Linie + Elbow als zusammenhängende Spalte
+// (XmlViewer-„Connected-Tree"-Optik). Pro Editor instanziiert, da die Struktur am entry memoisiert wird.
+function foldTreeGutter(entry) {
+    return gutter({
+        class: "cm-foldtree-gutter",
+        lineMarker: (view, blockInfo) => foldLineMarker(view, blockInfo, entry),
+        lineMarkerChange: (update) =>
+            update.docChanged ||
+            update.viewportChanged ||
+            foldedRanges(update.startState) !== foldedRanges(update.state),
+        initialSpacer: () => MARKER_OPEN,
+        domEventHandlers: {
+            click: (view, blockInfo) => toggleFoldAt(view, blockInfo, entry),
+        },
+    });
+}
+
+// Host-Theme: füllt den Host, setzt Monospace, Trefferfarben und die Geometrie des Falt-Tree-Gutters.
 // Wird per style-mod in den Shadow-Root injiziert.
 const hostTheme = EditorView.theme({
     "&": { flex: "1 1 auto", minHeight: "0" },
     ".cm-scroller": { fontFamily: "ui-monospace, 'Cascadia Code', 'Consolas', monospace" },
     ".cm-search-match": { backgroundColor: "var(--codeviewer-search-match-bg, #ffd9a3)" },
     ".cm-search-current": { backgroundColor: "var(--codeviewer-search-current-bg, #ff9d4d)" },
-    ".cm-fold-marker": {
-        display: "inline-block",
-        width: "1em",
-        height: "1em",
-        cursor: "pointer",
-        verticalAlign: "middle",
+    // Volle Zellenhöhe ohne Innenabstand → Marker/Linie/Elbow gehen nahtlos in die Nachbarzeilen über.
+    ".cm-foldtree-gutter .cm-gutterElement": { padding: "0" },
+    ".cm-foldtree": {
+        display: "block",
+        boxSizing: "border-box",
+        width: "1.1em",
+        height: "100%",
         backgroundPosition: "center",
-        backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
     },
+    // Linie über die ganze Zelle strecken (durchgehend); Marker/Elbow seitenverhältnistreu, mittig.
+    ".cm-foldtree-line": { backgroundSize: "100% 100%" },
+    ".cm-foldtree-open": { backgroundSize: "auto 100%", cursor: "pointer" },
+    ".cm-foldtree-closed": { backgroundSize: "auto 100%", cursor: "pointer" },
+    ".cm-foldtree-end": { backgroundSize: "auto 100%" },
 });
 
 // Theme-abhängige Marker-Bilder. Die Selektoren &light/&dark sind nur in baseTheme erlaubt
 // (nicht in EditorView.theme); sie schalten automatisch mit dem aktiven Editor-Theme um.
 const markerBaseTheme = EditorView.baseTheme({
-    "&light .cm-fold-open": { backgroundImage: FOLD_OPEN_LIGHT },
-    "&light .cm-fold-closed": { backgroundImage: FOLD_CLOSED_LIGHT },
-    "&dark .cm-fold-open": { backgroundImage: FOLD_OPEN_DARK },
-    "&dark .cm-fold-closed": { backgroundImage: FOLD_CLOSED_DARK },
+    "&light .cm-foldtree-open": { backgroundImage: SVG_OPEN_LIGHT },
+    "&light .cm-foldtree-closed": { backgroundImage: SVG_CLOSED_LIGHT },
+    "&light .cm-foldtree-line": { backgroundImage: SVG_LINE_LIGHT },
+    "&light .cm-foldtree-end": { backgroundImage: SVG_END_LIGHT },
+    "&dark .cm-foldtree-open": { backgroundImage: SVG_OPEN_DARK },
+    "&dark .cm-foldtree-closed": { backgroundImage: SVG_CLOSED_DARK },
+    "&dark .cm-foldtree-line": { backgroundImage: SVG_LINE_DARK },
+    "&dark .cm-foldtree-end": { backgroundImage: SVG_END_DARK },
 });
 
 function languageExtension(id) {
@@ -145,14 +261,15 @@ function buildExtensions(entry, langId, dark, wrap, lineNumbersOn) {
         EditorState.readOnly.of(true),
         EditorView.editable.of(false),
         codeFolding(),
-        foldGutter({ markerDOM: foldMarker }),
+        // Reihenfolge der Gutter folgt der Extension-Reihenfolge (links→rechts): erst die
+        // Zeilennummern, dann der Falt-Tree-Gutter → „Zahl, dann Aufklappsymbol".
+        entry.lineNumbersConf.of(lineNumbersOn ? lineNumbers() : []),
+        foldTreeGutter(entry),
         bracketMatching(),
         syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-        INDENT_GUIDES,
         searchField,
         hostTheme,
         markerBaseTheme,
-        entry.lineNumbersConf.of(lineNumbersOn ? lineNumbers() : []),
         entry.languageConf.of(languageExtension(langId)),
         entry.themeConf.of(dark ? oneDark : []),
         entry.wrapConf.of(wrap ? EditorView.lineWrapping : []),

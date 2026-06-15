@@ -50,7 +50,6 @@ import java.io.Serializable;
 @NpmPackage(value = "@codemirror/lang-xml", version = "6.1.0")
 @NpmPackage(value = "@codemirror/lang-yaml", version = "6.1.1")
 @NpmPackage(value = "@codemirror/lang-sql", version = "6.7.0")
-@NpmPackage(value = "@replit/codemirror-indentation-markers", version = "6.5.3")
 @JsModule("./web/common/component/code/code-viewer.js")
 @CssImport("./web/common/component/code/styles/code-viewer.css")
 public class CodeViewer extends Div implements MatchNavigable {

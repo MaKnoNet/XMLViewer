@@ -19,7 +19,6 @@
     "@codemirror/theme-one-dark": "6.1.2",
     "@codemirror/view": "6.26.3",
     "@polymer/polymer": "3.5.2",
-    "@replit/codemirror-indentation-markers": "6.5.3",
     "@vaadin/bundles": "24.5.2",
     "@vaadin/common-frontend": "0.0.19",
     "@vaadin/polymer-legacy-adapter": "24.5.2",
@@ -76,7 +75,6 @@
       "@codemirror/theme-one-dark": "6.1.2",
       "@codemirror/view": "6.26.3",
       "@polymer/polymer": "3.5.2",
-      "@replit/codemirror-indentation-markers": "6.5.3",
       "@vaadin/bundles": "24.5.2",
       "@vaadin/common-frontend": "0.0.19",
       "@vaadin/polymer-legacy-adapter": "24.5.2",
@@ -115,7 +113,7 @@
       "workbox-core": "7.3.0",
       "workbox-precaching": "7.3.0"
     },
-    "hash": "f1f065a33c2ca49bf065cb499995e49201d57162147870a7eec9ca092795a8c3"
+    "hash": "6de2704a94e05d5320ea9e868a36fe57e5ae9171361f997cf87e05d750fdbb72"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -149,7 +147,6 @@
     "@codemirror/lang-html": "$@codemirror/lang-html",
     "@codemirror/lang-javascript": "$@codemirror/lang-javascript",
     "@codemirror/lang-yaml": "$@codemirror/lang-yaml",
-    "@codemirror/lang-css": "$@codemirror/lang-css",
-    "@replit/codemirror-indentation-markers": "$@replit/codemirror-indentation-markers"
+    "@codemirror/lang-css": "$@codemirror/lang-css"
   }
 }
