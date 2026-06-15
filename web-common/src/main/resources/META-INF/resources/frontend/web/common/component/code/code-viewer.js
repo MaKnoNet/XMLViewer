@@ -204,19 +204,28 @@ function buildFoldTreeDeco(view, entry) {
             const line = doc.lineAt(pos);
             const regions = coverers.get(line.number);
             if (regions && regions.length) {
-                const cells = regions.map((region) => ({
-                    kind:
-                        line.number === region.headLine
-                            ? isFolded(view.state, region.range)
-                                ? "closed"
-                                : "open"
-                            : line.number === region.lastLine
-                              ? "end"
-                              : "line",
-                    indent: region.indent,
-                    range: region.range,
-                }));
-                builder.add(line.from, line.from, Decoration.widget({ widget: new FoldTreeWidget(cells), side: -1 }));
+                const cells = [];
+                for (const region of regions) {
+                    if (line.number === region.headLine) {
+                        cells.push({
+                            kind: isFolded(view.state, region.range) ? "closed" : "open",
+                            indent: region.indent,
+                            range: region.range,
+                        });
+                    } else if (!isFolded(view.state, region.range)) {
+                        // Eine gefaltete Region zeigt nur ihren Kopf-Marker. Ihre noch sichtbare
+                        // schließende Zeile bekäme sonst ein „schwebendes" Elbow ohne Linie darüber
+                        // (die ist ja eingeklappt) – also Linie/Elbow gefalteter Regionen weglassen.
+                        cells.push({
+                            kind: line.number === region.lastLine ? "end" : "line",
+                            indent: region.indent,
+                            range: region.range,
+                        });
+                    }
+                }
+                if (cells.length) {
+                    builder.add(line.from, line.from, Decoration.widget({ widget: new FoldTreeWidget(cells), side: -1 }));
+                }
             }
             pos = line.to + 1;
         }
