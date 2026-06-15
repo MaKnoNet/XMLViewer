@@ -21,6 +21,7 @@ import {
     defaultHighlightStyle,
     foldAll as cmFoldAll,
     foldEffect,
+    foldService,
     foldable,
     foldedRanges,
     syntaxHighlighting,
@@ -112,9 +113,15 @@ function computeFoldRegions(state) {
         if (!range) {
             continue;
         }
-        const lastLine = doc.lineAt(range.to).number;
+        let lastLine = doc.lineAt(range.to).number;
+        // Einrückungsbasierte Fold-Bereiche (z. B. Python) enden oft auf einer Leerzeile; das Elbow
+        // soll aber auf der letzten Inhaltszeile sitzen, nicht im Leeren → nachlaufende Leerzeilen
+        // abschneiden.
+        while (lastLine > n && doc.line(lastLine).text.trim() === "") {
+            lastLine--;
+        }
         if (lastLine <= n) {
-            continue; // einzeilige Faltung – kein Baum zu zeichnen
+            continue; // einzeilige (oder leer-getrimmte) Faltung – kein Baum zu zeichnen
         }
         regions.push({ headLine: n, lastLine, indent: leadingColumns(line.text, tabSize), range });
     }
@@ -306,6 +313,33 @@ const markerBaseTheme = EditorView.baseTheme({
     "&dark .cm-ftree-end": { backgroundImage: SVG_END_DARK },
 });
 
+// Klammer-basierte Faltung für StreamLanguage-Modi (C#), die keinen Lezer-Faltbaum mitbringen: faltet
+// vom letzten '{' einer Zeile bis zur passenden '}'. Best-effort – ohne String-/Kommentar-Analyse,
+// für die Quelltext-Vorschau ausreichend. Nur dort aktiv, wo unten ausdrücklich eingehängt.
+const MAX_BRACE_SCAN = 100000; // Schutz gegen Worst-Case-Vorwärtssuche bei sehr großen Dateien
+const braceFoldService = foldService.of((state, lineStart, lineEnd) => {
+    const lineText = state.doc.sliceString(lineStart, lineEnd);
+    const open = lineText.lastIndexOf("{");
+    if (open < 0) {
+        return null;
+    }
+    const from = lineStart + open + 1;
+    const text = state.doc.sliceString(from, Math.min(state.doc.length, from + MAX_BRACE_SCAN));
+    let depth = 1;
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (ch === "{") {
+            depth += 1;
+        } else if (ch === "}") {
+            depth -= 1;
+            if (depth === 0) {
+                return i > 0 ? { from, to: from + i } : null;
+            }
+        }
+    }
+    return null;
+});
+
 function languageExtension(id) {
     switch (id) {
         case "java":
@@ -327,7 +361,8 @@ function languageExtension(id) {
         case "sql":
             return sql();
         case "csharp":
-            return StreamLanguage.define(csharp);
+            // Legacy-Modus ohne Lezer-Faltbaum → Klammer-Faltung ergänzen.
+            return [StreamLanguage.define(csharp), braceFoldService];
         default:
             return [];
     }
