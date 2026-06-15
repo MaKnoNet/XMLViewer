@@ -71,15 +71,16 @@ const searchField = StateField.define({
 // Falt-„Connected-Tree" im XmlViewer-Look (vier SVGs als Bild): Kopf-offen (Quadrat-Minus mit
 // Linien-Stummel nach unten), Kopf-zu (Quadrat-Plus), durchgehende Linie und End-Elbow „└". Je eine
 // Variante für hell (Strich #64748b, weiße Quadrat-Füllung) und dunkel (Strich #94a3b8, ohne Füllung);
-// umgeschaltet über die CM6-Selektoren &light/&dark. Marker nutzen viewBox 24×36 (füllt die volle
-// Zeilenhöhe, damit der Stummel lückenlos in die darunterliegende Linie übergeht), die Linie 24×24 mit
-// preserveAspectRatio='none' (über die ganze Zellenhöhe gestreckt → durchgehend über Zeilen hinweg).
+// umgeschaltet über die CM6-Selektoren &light/&dark. Alle vier nutzen viewBox 24×36, stroke-width 2
+// und werden mit background-size: auto 100% gerendert → gleiche Strichstärke und gleiche Farbe für
+// Marker, Stummel, Elbow und Linie; die Linie (y=0..36) füllt die volle Zellhöhe und läuft so
+// lückenlos über die Zeilen hinweg.
 const SVG_OPEN_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='27' x2='12' y2='36'/%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2' fill='%23ffffff'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E")`;
 const SVG_OPEN_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='27' x2='12' y2='36'/%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E")`;
 const SVG_CLOSED_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='12' y1='14' x2='12' y2='22'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E")`;
 const SVG_CLOSED_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='12' y1='14' x2='12' y2='22'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E")`;
-const SVG_LINE_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' shape-rendering='crispEdges' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cline x1='12' y1='0' x2='12' y2='24'/%3E%3C/svg%3E")`;
-const SVG_LINE_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' shape-rendering='crispEdges' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cline x1='12' y1='0' x2='12' y2='24'/%3E%3C/svg%3E")`;
+const SVG_LINE_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round'%3E%3Cline x1='12' y1='0' x2='12' y2='36'/%3E%3C/svg%3E")`;
+const SVG_LINE_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round'%3E%3Cline x1='12' y1='0' x2='12' y2='36'/%3E%3C/svg%3E")`;
 const SVG_END_LIGHT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 18 L24 18'/%3E%3C/svg%3E")`;
 const SVG_END_DARK = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 18 L24 18'/%3E%3C/svg%3E")`;
 
@@ -304,8 +305,9 @@ const hostTheme = EditorView.theme({
         backgroundRepeat: "no-repeat",
         pointerEvents: "none",
     },
-    // Linie über die ganze Zelle strecken (durchgehend); Marker/Elbow seitenverhältnistreu, mittig.
-    ".cm-ftree-line": { backgroundSize: "100% 100%" },
+    // Alle vier identisch skaliert (auto 100% = seitenverhältnistreu, mittig) → Linie, Stummel und
+    // Elbow haben dieselbe Strichstärke; die Linie (viewBox 24×36, volle Höhe) läuft nahtlos durch.
+    ".cm-ftree-line": { backgroundSize: "auto 100%" },
     ".cm-ftree-open": { backgroundSize: "auto 100%", cursor: "pointer", pointerEvents: "auto" },
     ".cm-ftree-closed": { backgroundSize: "auto 100%", cursor: "pointer", pointerEvents: "auto" },
     ".cm-ftree-end": { backgroundSize: "auto 100%" },
