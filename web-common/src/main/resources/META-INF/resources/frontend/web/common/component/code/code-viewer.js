@@ -123,7 +123,18 @@ function computeFoldRegions(state) {
         if (lastLine <= n) {
             continue; // einzeilige (oder leer-getrimmte) Faltung – kein Baum zu zeichnen
         }
-        regions.push({ headLine: n, lastLine, indent: leadingColumns(line.text, tabSize), range });
+        // Nur echte verschachtelte Blöcke als Baum zeichnen: die erste Inhaltszeile muss tiefer
+        // eingerückt sein als der Kopf. Sonst entstünde ein Baum aus Geschwistern – etwa bei einer
+        // flachen YAML-Sequenz („- eins / - zwei / - drei"), deren Einträge auf gleicher Ebene liegen.
+        const headIndent = leadingColumns(line.text, tabSize);
+        let bodyLine = n + 1;
+        while (bodyLine <= lastLine && doc.line(bodyLine).text.trim() === "") {
+            bodyLine++;
+        }
+        if (bodyLine > lastLine || leadingColumns(doc.line(bodyLine).text, tabSize) <= headIndent) {
+            continue;
+        }
+        regions.push({ headLine: n, lastLine, indent: headIndent, range });
     }
     const coverers = new Map();
     for (const region of regions) {
