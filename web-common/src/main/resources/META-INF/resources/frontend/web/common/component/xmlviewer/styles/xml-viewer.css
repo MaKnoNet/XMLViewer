@@ -36,15 +36,17 @@
        (Quadrat mit Minus + austretender Linien-Stummel), zugeklappter Marker (Quadrat mit Plus),
        End-/Elbow-Symbol und die senkrechte Linie. Sie werden als `background-image` gezeichnet
        (nicht als Maske), damit die weiße Innenfläche des Quadrats erhalten bleibt.
-       Marker-SVGs nutzen viewBox 24×36 (Seitenverhältnis 2:3 = 1.25em-Box × 1.5em-Zeilenhöhe), damit
-       der Stummel die volle Zeilenhöhe ausfüllt und lückenlos in die Kinder-Linie übergeht. Das
-       Linien-SVG ist 24×24 mit preserveAspectRatio='none' (auf volle Container-Höhe gestreckt).
+       Alle vier SVGs nutzen viewBox 24×36 (Seitenverhältnis 2:3 = 1.25em-Box × 1.5em-Zeilenhöhe) und
+       werden UNIFORM (seitenverhältnistreu, anti-aliased) gerendert – die Marker via background-size
+       contain, die Linie als 1em×1.5em-Kachel mit repeat-y (s. .xml-children). Dadurch haben Stummel,
+       Linie und Elbow exakt dieselbe Strichstärke (2·(1.5em/36)) und Anmutung; kein nicht-uniformes
+       Strecken, kein shape-rendering='crispEdges'.
        Die Strichfarbe ist im SVG fest eingebacken (stroke=%2364748b). Zum Umfärben den Hex-Wert in
        der jeweiligen Property ändern – `--xmlviewer-marker-color` wirkt hier NICHT (nur Text-Fallback). */
     --xmlviewer-marker-expanded: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='12' y1='27' x2='12' y2='36'/%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2' fill='%23ffffff'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E");
     --xmlviewer-marker-collapsed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='9' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='12' y1='14' x2='12' y2='22'/%3E%3Cline x1='8' y1='18' x2='16' y2='18'/%3E%3C/svg%3E");
-    --xmlviewer-marker-endtag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 18 L24 18'/%3E%3C/svg%3E");
-    --xmlviewer-marker-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' shape-rendering='crispEdges' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cline x1='12' y1='0' x2='12' y2='24'/%3E%3C/svg%3E");
+    --xmlviewer-marker-endtag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 0 L12 18 L19 18'/%3E%3C/svg%3E");
+    --xmlviewer-marker-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 36' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cline x1='12' y1='0' x2='12' y2='36'/%3E%3C/svg%3E");
     --xmlviewer-marker-color: var(--xmlviewer-punct-color); /* Text-Fallback-Farbe (SVGs s. oben) */
 
     /* ---- Führungslinie: Variablen bleiben für Text-Fallback erhalten (wirken nicht auf das SVG-Bild). */
@@ -91,17 +93,24 @@
     white-space: pre;
 }
 
-/* Kinder-Container trägt die vertikale Führungslinie (SVG-Bild). Sie läuft vom öffnenden Tag bis zum
-   letzten Kind (nicht bis zum schließenden Tag); das Abschluss-Symbol am End-Tag markiert das Ende.
-   Das 1em breite Linien-Bild ist links so positioniert, dass seine Mitte (x=12 im viewBox) auf
-   indent/2 (= padding-box-Kante) liegt – exakt unter der Mitte des Aufklapp-Markers. Die Höhe ist
-   100% und das Linien-SVG nutzt preserveAspectRatio='none' → es wird über die volle Container-Höhe
-   gestreckt (durchgehende Linie auch bei vielen Kindern; ohne 'none' würde das SVG zentriert und
-   oben/unten Lücken lassen). Beim Zuklappen ist der Container ausgeblendet, die Linie verschwindet. */
-.xml-children {
-    margin-left: calc(var(--xmlviewer-indent-width) / 2);
-    padding-left: calc(var(--xmlviewer-indent-width) / 2);
-    background: var(--xmlviewer-marker-line) -0.5em 0 / 1em 100% no-repeat;
+/* Kinder-Container: nur noch Gruppierung für das Auf-/Zuklappen (wird beim Zuklappen ausgeblendet).
+   Einrückung UND die senkrechten Führungslinien liefern jetzt die .xml-rail-Zellen pro Zeile (eine je
+   Vorfahr-Ebene) – wie die Pro-Zeile-Zellen des CodeViewers. Daher hier keine eigene Einrückung/Linie. */
+
+/* Eine Führungslinien-/Einrückungs-Zelle pro Vorfahr-Ebene (gleiche Breite wie der Toggle, Linie
+   mittig). Das 24×36-Linien-SVG wird – exakt wie Marker und Elbow – UNIFORM auf die Zeilenhöhe
+   skaliert (auto 100%); die Strichstärke ist damit 2·(1.5em/36), identisch zu Stummel und Elbow. Die
+   volle Linie (y=0..36) füllt die Zelle, sodass die übereinander gestapelten Zellen der Zeilen eine
+   durchgehende, gleich starke Linie ergeben (Pro-Zeile-Segmente statt eines gestreckten Bildes). */
+.xml-rail {
+    display: inline-block;
+    width: var(--xmlviewer-indent-width);
+    height: 1.5em;
+    vertical-align: bottom;
+    /* Exakt dieselbe Background-Spezifikation wie Marker/Elbow (center / contain) → identische
+       Sub-Pixel-Rasterung, damit die Linie pixelgenau unter dem Marker sitzt (24×36 in der 1.25em×1.5em-
+       Box ist höhen-begrenzt, contain == auto 100% in der Größe, aber gleicher Render-Pfad wie ::before). */
+    background: var(--xmlviewer-marker-line) center / contain no-repeat;
 }
 
 /* Aufklapp-Marker und Platzhalter: gleiche Breite, Marker mittig -> bündig über der Führungslinie. */
@@ -114,8 +123,9 @@
 }
 
 /* Symbol am Ende der Linie vor dem schließenden Tag (Elbow-SVG). Die Vertikale liegt bei x=12
-   (Bild-Mitte) → in der zentrierten 1.25em-Box trifft sie die Führungslinie nahtlos; die Horizontale
-   zeigt zum </tag>-Text. */
+   (Bild-Mitte) → in der zentrierten 1.25em-Box trifft sie die Führungslinie nahtlos; die kurze
+   Horizontale (nur bis x=19, nicht bis zur Box-Kante x=24) zeigt Richtung </tag>, endet aber mit
+   etwas Abstand davor – berührt das „</" also bewusst nicht. */
 .xml-endtag-marker {
     display: inline-block;
     width: var(--xmlviewer-indent-width);

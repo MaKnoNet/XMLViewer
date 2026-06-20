@@ -42,17 +42,23 @@ final class XmlTreeRenderer {
     RenderedTree render(Element root) {
         Div container = new Div();
         container.addClassName(CssClasses.TREE);
-        renderElement(root, container);
+        renderElement(root, container, 0);
         return new RenderedTree(container, elementHeaders, childContainers, endTags, toggles, tokens);
     }
 
-    private void renderElement(Element element, Div container) {
+    /**
+     * Rendert {@code element} in {@code container}. {@code depth} = Anzahl der Vorfahr-Ebenen (= Anzahl
+     * der voranzustellenden {@link CssClasses#RAIL}-Zellen, die die Einrückung und die senkrechten
+     * Führungslinien der Vorfahren tragen – wie die Pro-Zeile-Zellen des CodeViewers).
+     */
+    private void renderElement(Element element, Div container, int depth) {
         List<Content> meaningful = meaningfulContent(element);
         boolean hasContent = !meaningful.isEmpty();
         boolean inlineText = isSingleInlineText(meaningful);
 
         Div header = newLine();
         elementHeaders.put(element, header);
+        prependRails(header, depth);
         header.add(collapsible && hasContent && !inlineText ? newToggle(element) : newIndent());
         header.add(punct("<"));
         header.add(tag(element));
@@ -77,22 +83,22 @@ final class XmlTreeRenderer {
 
         header.add(punct(">"));
         container.add(header);
-        container.add(renderChildren(element, meaningful));
-        Div endTag = endTagLine(element);
+        container.add(renderChildren(element, meaningful, depth + 1));
+        Div endTag = endTagLine(element, depth);
         endTags.put(element, endTag);
         container.add(endTag);
     }
 
-    private Div renderChildren(Element element, List<Content> meaningful) {
+    private Div renderChildren(Element element, List<Content> meaningful, int depth) {
         Div children = new Div();
         children.addClassName(CssClasses.CHILDREN);
         childContainers.put(element, children);
         for (Content content : meaningful) {
             switch (content) {
-                case Element child -> renderElement(child, children);
-                case CDATA cdata -> children.add(cdataLine(cdata.getText(), element));
-                case Comment comment -> children.add(commentLine(comment.getText(), element));
-                case Text text -> children.add(textLine(text.getText().trim(), element));
+                case Element child -> renderElement(child, children, depth);
+                case CDATA cdata -> children.add(cdataLine(cdata.getText(), element, depth));
+                case Comment comment -> children.add(commentLine(comment.getText(), element, depth));
+                case Text text -> children.add(textLine(text.getText().trim(), element, depth));
                 default -> {
                     /* andere Knotentypen werden nicht dargestellt */
                 }
@@ -128,9 +134,10 @@ final class XmlTreeRenderer {
         return group;
     }
 
-    private Div endTagLine(Element element) {
+    private Div endTagLine(Element element, int depth) {
         Div line = newLine();
         line.addClassName(CssClasses.ENDTAG);
+        prependRails(line, depth);
         // Zentrierte Marker-Box (gleiche Breite wie der Toggle); das Symbol liefert CSS
         // (.xml-endtag-marker::before), damit Entwickler es ersetzen können.
         line.add(endTagMarker());
@@ -146,15 +153,17 @@ final class XmlTreeRenderer {
         return marker;
     }
 
-    private Div textLine(String text, Element owner) {
+    private Div textLine(String text, Element owner, int depth) {
         Div line = newLine();
+        prependRails(line, depth);
         line.add(newIndent());
         line.add(token(CssClasses.TEXT, text, owner));
         return line;
     }
 
-    private Div commentLine(String text, Element owner) {
+    private Div commentLine(String text, Element owner, int depth) {
         Div line = newLine();
+        prependRails(line, depth);
         line.add(newIndent());
         line.add(punct("<!--"));
         line.add(plain(" "));
@@ -164,8 +173,9 @@ final class XmlTreeRenderer {
         return line;
     }
 
-    private Div cdataLine(String text, Element owner) {
+    private Div cdataLine(String text, Element owner, int depth) {
         Div line = newLine();
+        prependRails(line, depth);
         line.add(newIndent());
         line.add(punct("<![CDATA["));
         line.add(token(CssClasses.TEXT, text, owner));
@@ -195,6 +205,23 @@ final class XmlTreeRenderer {
         Span indent = new Span();
         indent.addClassName(CssClasses.INDENT);
         return indent;
+    }
+
+    /**
+     * Stellt einer Zeile pro Vorfahr-Ebene eine {@link CssClasses#RAIL}-Zelle voran (vor Toggle/Marker/
+     * Inhalt aufgerufen → linksbündig). Die Zellen liefern Einrückung und die senkrechten Führungslinien
+     * der Vorfahren – je Zeile, statt als ein gestrecktes Hintergrundbild am Kinder-Container.
+     */
+    private void prependRails(Div line, int depth) {
+        for (int i = 0; i < depth; i++) {
+            line.add(rail());
+        }
+    }
+
+    private static Span rail() {
+        Span rail = new Span();
+        rail.addClassName(CssClasses.RAIL);
+        return rail;
     }
 
     private static Span punct(String text) {
