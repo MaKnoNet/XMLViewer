@@ -93,19 +93,21 @@
     white-space: pre;
 }
 
-/* Kinder-Container trägt die vertikale Führungslinie (SVG-Bild). Sie läuft vom öffnenden Tag bis zum
-   letzten Kind (nicht bis zum schließenden Tag); das Abschluss-Symbol am End-Tag markiert das Ende.
-   Das 1em breite Linien-Bild ist links so positioniert, dass seine Mitte (x=12 im viewBox) auf
-   indent/2 (= padding-box-Kante) liegt – exakt unter der Mitte des Aufklapp-Markers.
-   Statt das SVG nicht-uniform über die volle Höhe zu strecken (würde die Strichstärke verfälschen),
-   wird es – wie die Marker – UNIFORM gerendert: eine Kachel pro Zeilenhöhe (1em × 1.5em, identisches
-   Seitenverhältnis 2:3 wie viewBox 24×36) und vertikal getilt (repeat-y). Jede Kachel hat damit exakt
-   die Marker-/Elbow-Strichstärke (2·(1.5em/36)); die volle Linie (y=0..36) der Kacheln ergibt eine
-   durchgehende, gleich starke Linie. Beim Zuklappen ist der Container ausgeblendet, die Linie weg. */
-.xml-children {
-    margin-left: calc(var(--xmlviewer-indent-width) / 2);
-    padding-left: calc(var(--xmlviewer-indent-width) / 2);
-    background: var(--xmlviewer-marker-line) -0.5em 0 / 1em 1.5em repeat-y;
+/* Kinder-Container: nur noch Gruppierung für das Auf-/Zuklappen (wird beim Zuklappen ausgeblendet).
+   Einrückung UND die senkrechten Führungslinien liefern jetzt die .xml-rail-Zellen pro Zeile (eine je
+   Vorfahr-Ebene) – wie die Pro-Zeile-Zellen des CodeViewers. Daher hier keine eigene Einrückung/Linie. */
+
+/* Eine Führungslinien-/Einrückungs-Zelle pro Vorfahr-Ebene (gleiche Breite wie der Toggle, Linie
+   mittig). Das 24×36-Linien-SVG wird – exakt wie Marker und Elbow – UNIFORM auf die Zeilenhöhe
+   skaliert (auto 100%); die Strichstärke ist damit 2·(1.5em/36), identisch zu Stummel und Elbow. Die
+   volle Linie (y=0..36) füllt die Zelle, sodass die übereinander gestapelten Zellen der Zeilen eine
+   durchgehende, gleich starke Linie ergeben (Pro-Zeile-Segmente statt eines gestreckten Bildes). */
+.xml-rail {
+    display: inline-block;
+    width: var(--xmlviewer-indent-width);
+    height: 1.5em;
+    vertical-align: bottom;
+    background: var(--xmlviewer-marker-line) center / auto 100% no-repeat;
 }
 
 /* Aufklapp-Marker und Platzhalter: gleiche Breite, Marker mittig -> bündig über der Führungslinie. */

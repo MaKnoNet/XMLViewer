@@ -29,6 +29,12 @@ final class CssClasses {
     static final String TOGGLE_COLLAPSED = "xml-toggle--collapsed";
     /** Einrückungs-Platzhalter (gleiche Breite wie das Dreieck). */
     static final String INDENT = "xml-indent";
+    /**
+     * Eine Einrückungs-/Führungslinien-Zelle pro Vorfahr-Ebene, die einer Zeile vorangestellt wird
+     * (gleiche Breite wie der Toggle). Trägt das senkrechte Linien-Segment dieser Ebene – analog zu den
+     * Pro-Zeile-Zellen des CodeViewers, sodass Marker, Linie und Elbow exakt gleich gerendert werden.
+     */
+    static final String RAIL = "xml-rail";
 
     /** Tag-Name. */
     static final String TAG = "xml-tag";
