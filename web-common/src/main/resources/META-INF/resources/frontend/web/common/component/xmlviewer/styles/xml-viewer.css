@@ -107,7 +107,10 @@
     width: var(--xmlviewer-indent-width);
     height: 1.5em;
     vertical-align: bottom;
-    background: var(--xmlviewer-marker-line) center / auto 100% no-repeat;
+    /* Exakt dieselbe Background-Spezifikation wie Marker/Elbow (center / contain) → identische
+       Sub-Pixel-Rasterung, damit die Linie pixelgenau unter dem Marker sitzt (24×36 in der 1.25em×1.5em-
+       Box ist höhen-begrenzt, contain == auto 100% in der Größe, aber gleicher Render-Pfad wie ::before). */
+    background: var(--xmlviewer-marker-line) center / contain no-repeat;
 }
 
 /* Aufklapp-Marker und Platzhalter: gleiche Breite, Marker mittig -> bündig über der Führungslinie. */
