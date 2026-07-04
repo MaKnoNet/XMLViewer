@@ -2,6 +2,10 @@
 
 ## 2026-07-06
 
+* **Update**: `CLAUDE.md`-Routine von „End-of-Session" auf „Pre-Commit" verschärft —
+  betroffene OKF-Konzepte werden ab sofort vor jedem einzelnen Commit mit Code-/
+  Architekturänderungen aktualisiert statt gebündelt am Sitzungsende;
+  [Entwicklerdoku](/conventions/okf-entwicklerdoku.md) entsprechend angepasst.
 * **Creation**: neues Konzept
   [Entwicklerdoku – OKF-Wissensdatenbank pflegen](/conventions/okf-entwicklerdoku.md) —
   Bundle-Struktur, Frontmatter-Konvention, Schritt-für-Schritt „Neues Konzept anlegen",
