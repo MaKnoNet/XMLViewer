@@ -402,4 +402,3 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
 }
 
 // KB-Verifikationstest (wird revertiert)
-// zweite Testzeile
