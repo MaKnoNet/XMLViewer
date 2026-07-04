@@ -61,3 +61,22 @@ subprojects {
         }
     }
 }
+
+// Aktiviert die versionierten Team-Git-Hooks (.githooks/) fuer dieses Clone.
+// Wird beim ersten Build automatisch mitausgefuehrt; manuell: ./gradlew installGitHooks
+// Defensiv: ohne .git-Verzeichnis (Quell-Tarball, CI-Checkout ohne Git) passiert nichts.
+tasks.register('installGitHooks') {
+    description = 'Setzt git config core.hooksPath auf .githooks (Team-Hooks aktivieren)'
+    group = 'setup'
+    def gitDir = rootProject.file('.git')
+    onlyIf { gitDir.exists() }
+    doLast {
+        exec { commandLine 'git', 'config', 'core.hooksPath', '.githooks' }
+    }
+}
+
+subprojects {
+    tasks.matching { it.name == 'compileJava' }.configureEach {
+        dependsOn rootProject.tasks.named('installGitHooks')
+    }
+}

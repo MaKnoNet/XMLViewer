@@ -1,0 +1,2 @@
+# Team-Git-Hooks: immer LF, sonst scheitert sh unter Git fuer Windows
+.githooks/* text eol=lf

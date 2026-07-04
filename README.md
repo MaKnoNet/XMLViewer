@@ -298,6 +298,41 @@ Rendering-Prinzip: pro `Element` eine Start-Tag-Zeile (`Span`-Folge), ein einger
 Kinder-Container und eine End-Tag-Zeile. Ein `IdentityHashMap<Element, Div>` bildet Elemente auf ihre
 Knoten ab (für `highlight`); eine Token-Liste trägt die durchsuchbaren Spans.
 
+## Knowledge Base
+
+Das Repo führt eine **automatisch aktualisierte Wissensdatenbank** mit:
+
+| Was | Wo | Pflege |
+|---|---|---|
+| Wissensgraph (Code-Struktur) | `graphify-out/graph.json`, Report `GRAPH_REPORT.md`, interaktive Ansicht **`graphify-out/graph.html`** (im Browser öffnen) | automatisch per Pre-Commit-Hook |
+| OKF-Bundle (kuratierte Konzepte: Architektur, Komponenten, Konventionen) | `docs/okf/xmlviewer/` (Markdown + YAML-Frontmatter, [Open Knowledge Format v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md)) | Prosa manuell/per Claude-Session; `index.md`-Dateien werden generiert |
+
+**Einmalige Aktivierung nach dem Klonen** (läuft beim ersten Build automatisch mit):
+
+```bash
+./gradlew installGitHooks     # oder manuell: git config core.hooksPath .githooks
+```
+
+Der Hook aktualisiert bei jedem Commit mit Java-Änderungen den Wissensgraphen (deterministisch,
+ohne LLM) und regeneriert bei OKF-Änderungen die `index.md`-Dateien. **Er blockiert nie einen
+Commit** – fehlt ein Werkzeug, erscheint nur ein Hinweis. Optionale Werkzeuge:
+
+```bash
+uv tool install graphifyy     # graphify-CLI (Wissensgraph); Python 3 für die Index-Generierung
+```
+
+**Wissensstand eines Releases ansehen:** Die KB ist normaler Repo-Inhalt – jeder Tag/Branch
+trägt seinen passenden Stand:
+
+```bash
+git worktree add ../xmlviewer-v1.0.0 v1.0.0   # Release auschecken, Arbeitskopie bleibt unberührt
+# dann ../xmlviewer-v1.0.0/graphify-out/graph.html im Browser öffnen bzw. docs/okf/ lesen
+```
+
+**Vor einem Release-Tag:** OKF-Konzepte + `docs/okf/xmlviewer/log.md` auffrischen und
+`graphify update .` laufen lassen (Details: CLAUDE.md, Abschnitt „Knowledge Base").
+Für Agenten steht optional ein MCP-Server bereit: `python -m graphify.serve graphify-out/graph.json`.
+
 ## Eclipse
 
 Import als **Existing Gradle Project** (Buildship). Encoding (UTF-8) und Java-21-Compliance kommen
