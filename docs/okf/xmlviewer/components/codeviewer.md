@@ -24,6 +24,9 @@ Sprachunterstützung liegt in `CodeLanguage` (CM6-Id + Dateiendungen) und
   per npm über das Vaadin-Plugin der Demo-App; die Bibliothek `web-common` selbst bleibt
   npm-frei und kompiliert/testet ohne Node — siehe
   [Frontend-Integration](/architecture/frontend-integration.md).
+- `CodeCssClasses` hat nur einen Eintrag (`ROOT`, das Host-Element): Das eigentliche
+  Editor-Styling liefert CodeMirror selbst per JS, hier steht nur der Rahmen des
+  Host-Elements und die Suchtreffer-Markierung aus `code/styles/code-viewer.css`.
 - Demo unter `/code` (`app.CodeDemoView` mit `app.SampleCodeFactory`).
 
 # Citations

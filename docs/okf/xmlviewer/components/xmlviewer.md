@@ -42,6 +42,16 @@ viewer.highlight(einElement);
 viewer.search("EUR");
 ```
 
+# Interne Bausteine
+
+`XmlTreeRenderer` liefert sein Ergebnis als `RenderedTree`-Record (Wurzel-`Div`, je eine
+identitätsbasierte `Element→Div`-Abbildung für Start-Tag-Zeile/Kinder-Container/End-Tag-Zeile,
+`Element→Span` für die Klapp-Dreiecke, plus die Liste der `SearchableToken`s in
+Dokumentreihenfolge). `SearchableToken` bündelt den gerenderten `Span`, dessen Klartext separat
+(die Suche zerlegt den Span-Inhalt temporär in Treffer-/Nicht-Treffer-Teilspans und stellt ihn
+danach aus dem Klartext wieder her) und das besitzende `Element` (zum Aufklappen der Vorfahren
+bei einem Treffer).
+
 # Besonderheiten
 
 - **Sicher:** Rendering über echte Vaadin-Komponenten (`setText`), XML-Sonderzeichen korrekt

@@ -21,6 +21,10 @@ verwenden und `MatchNavigable` implementieren — der
 - Suchtreffer werden wie beim XmlViewer über das geteilte Frontend-Modul
   `search/search-highlighter.js` (CSS Custom Highlight API) gezeichnet — kein DOM-Knoten pro
   Treffer, siehe [Frontend-Integration](/architecture/frontend-integration.md).
+- `TextCssClasses` bündelt die CSS-Klassennamen der Komponente (Wurzel, Zeilen-Gutter,
+  Zeileninhalt, Umbruch-Modifier); der `SEARCH_TOKEN`-Klassenname muss exakt dem
+  `TOKEN_SELECTOR` in `search/search-highlighter.js` entsprechen, weil das Frontend darüber
+  die Treffer-Knoten positionsbasiert findet.
 - Demo unter `/text` (`app.TextDemoView` mit `app.SampleTextFactory`).
 
 # Citations
