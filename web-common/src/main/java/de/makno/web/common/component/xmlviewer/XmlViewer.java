@@ -400,5 +400,3 @@ public class XmlViewer extends Composite<Div> implements HasSize, HasStyle, Matc
                 .orElseGet(Set::of);
     }
 }
-
-// KB-Verifikationstest (wird revertiert)
