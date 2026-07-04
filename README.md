@@ -330,7 +330,7 @@ git worktree add ../xmlviewer-v1.0.0 v1.0.0   # Release auschecken, Arbeitskopie
 ```
 
 **Vor einem Release-Tag:** OKF-Konzepte + `docs/okf/xmlviewer/log.md` auffrischen und
-`graphify update .` laufen lassen (Details: CLAUDE.md, Abschnitt „Knowledge Base").
+`graphify update .` laufen lassen (Details: AGENTS.md, Abschnitt „Knowledge Base").
 Für Agenten steht optional ein MCP-Server bereit: `python -m graphify.serve graphify-out/graph.json`.
 
 ## Eclipse
