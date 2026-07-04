@@ -1,5 +1,12 @@
 # Update-Log
 
+## 2026-07-06
+
+* **Creation**: neues Konzept
+  [Entwicklerdoku – OKF-Wissensdatenbank pflegen](/conventions/okf-entwicklerdoku.md) —
+  Bundle-Struktur, Frontmatter-Konvention, Schritt-für-Schritt „Neues Konzept anlegen",
+  Automatisierung/Hybrid-Strategie, bekannte Stolpersteine.
+
 ## 2026-07-04
 
 * **Initialisierung**: OKF-Bundle angelegt — Architektur-Konzepte
