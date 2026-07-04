@@ -24,10 +24,12 @@ fi
 
 # --- OKF-Indizes: nur wenn Bundle-Dateien im Commit sind ---
 if printf '%s\n' "$STAGED" | grep -q '^docs/okf/'; then
+    # Interpreter validieren statt nur finden: der Windows-Store-Alias-Stub
+    # (python3.exe in WindowsApps) besteht command -v, ist aber kein Python.
     PY=""
-    if command -v python3 >/dev/null 2>&1; then PY=python3;
-    elif command -v python >/dev/null 2>&1; then PY=python;
-    elif command -v py >/dev/null 2>&1; then PY="py -3"; fi
+    for CANDIDATE in python3 python "py -3"; do
+        if $CANDIDATE -c "import sys" >/dev/null 2>&1; then PY=$CANDIDATE; break; fi
+    done
     if [ -n "$PY" ]; then
         if $PY tools/kb/generate_okf_index.py; then
             git add docs/okf 2>/dev/null
