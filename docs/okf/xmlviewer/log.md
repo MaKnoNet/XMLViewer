@@ -1,5 +1,13 @@
 # Update-Log
 
+## 2026-07-06 (2)
+
+* **Update**: Projekt-Konventionen von `CLAUDE.md` nach `AGENTS.md` migriert
+  (herstellerneutraler Standard, damit Instruktionen über verschiedene KI-Coding-Tools
+  portabel bleiben). `CLAUDE.md` ist jetzt nur noch ein dünner `@AGENTS.md`-Import.
+  Betrifft die „Single Source of Truth"-Verweise in dieser
+  [Entwicklerdoku](/conventions/okf-entwicklerdoku.md).
+
 ## 2026-07-06
 
 * **Update**: `CLAUDE.md`-Routine von „End-of-Session" auf „Pre-Commit" verschärft —
