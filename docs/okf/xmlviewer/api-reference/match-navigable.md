@@ -31,6 +31,30 @@ bzw. Referenz auf das Interface):
 Da `MatchNavigable` ein Interface ohne Implementierung ist, gibt es keine Konstruktoren zu
 dokumentieren.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public interface MatchNavigable extends Serializable`.
+
+- **Erweitertes Interface:** `java.io.Serializable` — JDK-Standard-Interface (Marker-Interface,
+  keine Methoden), kein Projekt-Typ, daher kein Cross-Link. Ermöglicht, dass eine
+  `SearchNavigator`-Instanz ihre `MatchNavigable`-Quelle mit der Vaadin-Session
+  serialisiert (siehe Überblick).
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `implements ... MatchNavigable` über den
+gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **drei Treffer**,
+alle Konsumenten des zentralen Entkopplungs-Interfaces:
+
+- [XmlViewer](/api-reference/xml-viewer.md) — `public class XmlViewer extends Composite<Div>
+  implements HasSize, HasStyle, MatchNavigable`.
+- [TextViewer](/api-reference/text-viewer.md) — `public class TextViewer extends Composite<Div>
+  implements HasSize, HasStyle, MatchNavigable`.
+- [CodeViewer](/api-reference/code-viewer.md) — `public class CodeViewer extends Div implements
+  MatchNavigable`.
+
+Damit ist `MatchNavigable` das mit Abstand am weitesten verbreitete projektinterne Interface
+in diesem Package-Baum — die zentrale Dependency-Inversion-Nahtstelle zwischen
+[SearchNavigator](/api-reference/search-navigator.md) und den drei konkreten Viewer-Komponenten.
+
 # Methoden
 
 ## `void search(String query)`

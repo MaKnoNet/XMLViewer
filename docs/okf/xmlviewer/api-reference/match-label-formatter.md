@@ -24,6 +24,24 @@ jeweilige Lambda-/Methoden-Implementierung, die die Anwendung übergibt (z. B. d
 Da es sich um ein Interface ohne Implementierung handelt, gibt es keine Konstruktoren zu
 dokumentieren.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public interface MatchLabelFormatter extends
+Serializable`.
+
+- **Erweitertes Interface:** `java.io.Serializable` — JDK-Standard-Interface (Marker-Interface,
+  keine Methoden), kein Projekt-Typ, daher kein Cross-Link. Ermöglicht, dass eine
+  vom Anwendungscode übergebene Lambda-Implementierung mit der Vaadin-Session serialisiert
+  werden kann.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `implements ... MatchLabelFormatter` bzw.
+`extends MatchLabelFormatter` über den gesamten
+`web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer** durch eine
+benannte Klasse. Es gibt keine projektinterne Klasse, die dieses funktionale Interface
+formal implementiert; `SearchNavigator` hält lediglich eine anonyme Lambda-Instanz als
+`DEFAULT_LABEL_FORMATTER`-Konstante (Verwendung als Wert, keine Vererbungsbeziehung — siehe
+[Verwendungskontext](#verwendungskontext) unten).
+
 # Methoden
 
 ## `String format(int matchCount, int currentPosition)`

@@ -24,6 +24,24 @@ Token-Text, `end` der exklusive End-Offset.
 **Thread-Safety:** Records sind unveränderliche Value-Types mit ausschließlich
 primitiven (`int`) Feldern — trivial thread-sicher, beliebig teilbar.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public record TokenMatch(int tokenIndex, int start, int
+end) implements Serializable`.
+
+- **Superklasse:** implizit `java.lang.Record` — JDK-Typ, kein Cross-Link.
+- **Interfaces:**
+  - `java.io.Serializable` — JDK-Standard-Interface (Marker-Interface, keine Methoden), kein
+    Projekt-Typ, daher kein Cross-Link.
+- Records sind implizit `final` — es kann keine Subklasse geben.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends TokenMatch` über den gesamten
+`web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**
+(erwartungsgemäß, Records können nicht erweitert werden). `TokenMatch` wird von
+[SearchController](/api-reference/search-controller.md) erzeugt und an einen
+[SearchHighlightRenderer](/api-reference/search-highlight-renderer.md) übergeben
+(Assoziation, nicht Vererbung).
+
 # Konstruktoren
 
 ## Kanonischer Konstruktor (implizit)

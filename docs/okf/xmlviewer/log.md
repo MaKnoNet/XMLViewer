@@ -1,5 +1,17 @@
 # Update-Log
 
+## 2026-07-07 (2)
+
+* **Update**: alle 21 `api-reference/*.md`-Dateien um einen verifizierten
+  Abschnitt `# Vererbungshierarchie` ergänzt (Superklasse/Interfaces vorwärts,
+  bekannte Implementierer/Subklassen rückwärts, per Grep über den gesamten
+  Quellbaum geprüft). Bemerkenswerteste Befunde: `MatchNavigable` wird von
+  `XmlViewer`/`TextViewer`/`CodeViewer` implementiert (jetzt bidirektional
+  verlinkt); `CodeViewer extends Div` direkt, während `XmlViewer`/`TextViewer`
+  über `Composite<Div>` gehen; `SearchController implements Serializable`
+  direkt, inkonsistent zu `SearchHighlightRenderer`/`SearchTermSplitter`, die
+  es über ein eigenes Interface erweitern.
+
 ## 2026-07-07
 
 * **Creation**: neue Kategorie `api-reference/` (21 Dateien, eine pro Klasse unter

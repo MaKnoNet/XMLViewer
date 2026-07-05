@@ -26,6 +26,26 @@ aus dem Session-Thread aufrufen, eine Instanz pro UI. Keine Synchronisation im C
 dem dokumentierten Vertrag (Schutz obliegt dem Vaadin-Session-Lock). `serialVersionUID = 1L` ist
 explizit gesetzt.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public class CodeViewer extends Div implements
+MatchNavigable`.
+
+- **Superklasse:** `Div` — Vaadin-Flow-Framework-Klasse (`com.vaadin.flow.component.html.Div`),
+  kein Projekt-Typ, daher kein Cross-Link. Im Unterschied zu `XmlViewer`/`TextViewer` erweitert
+  `CodeViewer` `Div` direkt statt über `Composite<Div>` zu delegieren.
+- **Interfaces:**
+  - [MatchNavigable](/api-reference/match-navigable.md) — projektinternes
+    Entkopplungs-Interface aus `navigation`; `CodeViewer` implementiert dessen Methoden, um
+    Trefferanzahl/-index serverseitig zu spiegeln und mit dem
+    [SearchNavigator](/api-reference/search-navigator.md) koppelbar zu sein (die eigentliche
+    Suche führt CodeMirror clientseitig aus, siehe Überblick oben).
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends CodeViewer` /
+`implements ... CodeViewer` über den gesamten
+`web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**. Keine
+andere Klasse im Projekt erweitert `CodeViewer`; keine projektinternen Subklassen.
+
 # Konstruktoren
 
 ## `public CodeViewer()`

@@ -28,6 +28,22 @@ zusätzliche Einträge in dieselben Maps/Listen schreiben (kein Reset, keine Gua
 was zu einer inkonsistenten `RenderedTree`-Rückgabe führen könnte. In der Praxis wird pro
 Renderdurchlauf stets eine frische Instanz erzeugt (siehe `XmlViewer.render()`).
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `final class XmlTreeRenderer` (package-private, kein
+`extends`/`implements`).
+
+- **Superklasse:** keine explizite (impliziter `Object`).
+- **Interfaces:** keine.
+- Die Klasse ist `final` und package-private — es kann ohnehin keine Subklasse außerhalb
+  (und aufgrund von `final` auch keine innerhalb) des Pakets geben.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends XmlTreeRenderer` über den
+gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**
+(erwartungsgemäß, die Klasse ist `final`). `XmlTreeRenderer` hat keine projektinterne
+Vererbungsbeziehung; [XmlViewer](/api-reference/xml-viewer.md) hält eine Instanz nur als
+lokales Hilfsobjekt für einen einzelnen Render-Durchlauf (Assoziation, nicht Vererbung).
+
 # Konstruktoren
 
 ```java

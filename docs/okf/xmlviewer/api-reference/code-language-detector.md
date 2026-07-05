@@ -22,6 +22,22 @@ Methoden und `private static final Pattern`-Feldern (`SQL_START`, `PYTHON`, `CSS
 `Matcher` aber stets lokal in der Methode erzeugt, nie geteilt). Damit ist `CodeLanguageDetector`
 **vollständig thread-safe**, es gibt keinen mutablen geteilten Zustand.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public final class CodeLanguageDetector` (kein
+`extends`/`implements`).
+
+- **Superklasse:** keine explizite (impliziter `Object`).
+- **Interfaces:** keine.
+- Die Klasse ist `final` und hat einen `private`-Konstruktor (siehe unten) — keine
+  Subklasse möglich, auch nicht innerhalb des Pakets.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends CodeLanguageDetector` über den
+gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**.
+`CodeLanguageDetector` hat keine projektinterne Vererbungsbeziehung; sie wird von
+[CodeViewer](/api-reference/code-viewer.md) als reine Utility-Klasse aufgerufen (Verwendung,
+keine Vererbung) und liefert Werte vom Typ [CodeLanguage](/api-reference/code-language.md).
+
 # Konstruktoren
 
 ## `private CodeLanguageDetector()`

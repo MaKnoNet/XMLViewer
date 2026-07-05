@@ -21,6 +21,23 @@ Instanzfelder; `matchChangeRegistration` wird beim Detach explizit gelöst
 (`onDetach`/`onAttach`), um ein Session-Memory-Leak zu vermeiden — das ist ein
 dokumentiertes und im Code tatsächlich umgesetztes Verhalten (siehe unten).
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public class SearchNavigator extends Composite<Div>`.
+
+- **Superklasse:** `Composite<Div>` — Vaadin-Flow-Framework-Klasse
+  (`com.vaadin.flow.component.Composite`), kein Projekt-Typ, daher kein Cross-Link.
+- **Interfaces:** keine. Im Unterschied zu `XmlViewer`/`TextViewer`/`CodeViewer` implementiert
+  `SearchNavigator` selbst **nicht** `MatchNavigable` — es ist der Konsument dieses
+  Interfaces (hält eine `MatchNavigable`-Referenz als Konstruktorparameter/Feld, siehe
+  [MatchNavigable](/api-reference/match-navigable.md)), keine Implementierung davon. Das ist
+  die im Überblick erwähnte Dependency Inversion: `SearchNavigator` programmiert gegen das
+  Interface, ohne selbst Teil von dessen Vererbungshierarchie zu sein.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends SearchNavigator` über den
+gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**.
+Keine projektinternen Subklassen.
+
 # Konstruktoren
 
 ## `public SearchNavigator(MatchNavigable navigable)`

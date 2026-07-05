@@ -25,6 +25,24 @@ klassischerweise `IdentityHashMap`-Instanzen aus `XmlTreeRenderer` — diese Map
 [XmlViewer](/api-reference/xml-viewer.md). Kein geteilter veränderlicher Zustand zwischen
 Sessions, da jede Session ihren eigenen `RenderedTree` erhält.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `record RenderedTree(Div root, Map<Element, Div>
+elementHeaders, Map<Element, Div> childContainers, Map<Element, Div> endTags, Map<Element,
+Span> toggles, List<SearchableToken> tokens) implements Serializable` (package-private).
+
+- **Superklasse:** implizit `java.lang.Record` — JDK-Typ, kein Cross-Link.
+- **Interfaces:**
+  - `java.io.Serializable` — JDK-Standard-Interface (Marker-Interface, keine Methoden), kein
+    Projekt-Typ, daher kein Cross-Link.
+- Records sind implizit `final` — es kann keine Subklasse geben.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends RenderedTree` über den gesamten
+`web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**
+(erwartungsgemäß, Records können nicht erweitert werden). `RenderedTree` ist der Rückgabewert
+von [XmlTreeRenderer](/api-reference/xml-tree-renderer.md).render(Element) und wird von
+[XmlViewer](/api-reference/xml-viewer.md) gehalten (Assoziation, nicht Vererbung).
+
 # Konstruktoren
 
 Kanonischer (impliziter) Record-Konstruktor:

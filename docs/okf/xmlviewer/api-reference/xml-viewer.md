@@ -24,6 +24,29 @@ IdentityHashMap<>())`, also identitätsbasiert (kein `equals`-Vergleich der JDOM
 Implementiert [MatchNavigable](/api-reference/match-navigable.md); nutzbar mit
 [SearchNavigator](/api-reference/search-navigator.md).
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public class XmlViewer extends Composite<Div> implements
+HasSize, HasStyle, MatchNavigable`.
+
+- **Superklasse:** `Composite<Div>` — Vaadin-Flow-Framework-Klasse
+  (`com.vaadin.flow.component.Composite`), kein Projekt-Typ, daher kein Cross-Link.
+- **Interfaces:**
+  - `HasSize` — Vaadin-Flow-Framework-Interface, extern.
+  - `HasStyle` — Vaadin-Flow-Framework-Interface, extern.
+  - [MatchNavigable](/api-reference/match-navigable.md) — projektinternes
+    Entkopplungs-Interface aus `navigation`; `XmlViewer` implementiert dessen fünf Methoden
+    (`search`, `nextMatch`, `previousMatch`, `getMatchCount`, `getCurrentMatchIndex`,
+    `addMatchChangeListener`), um vom [SearchNavigator](/api-reference/search-navigator.md)
+    gesteuert werden zu können.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends XmlViewer` /
+`implements ... XmlViewer` über den gesamten
+`web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**. Keine
+andere Klasse im Projekt erweitert `XmlViewer` oder implementiert es als Interface (es ist
+ohnehin eine `class`, kein Interface). `XmlViewer` hat somit keine projektinternen
+Subklassen.
+
 # Konstruktoren
 
 ## `public XmlViewer()`

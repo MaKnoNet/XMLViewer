@@ -16,6 +16,21 @@ per JS-Injektion; diese Klasse liefert nur den Rahmen des Host-Elements. Da auss
 `static final`-Felder vorhanden sind, ist die Klasse **thread-safe by design** — es gibt keinen
 veränderlichen Zustand.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `final class CodeCssClasses` (package-private, kein
+`extends`/`implements`).
+
+- **Superklasse:** keine explizite (impliziter `Object`).
+- **Interfaces:** keine.
+- Die Klasse ist `final` und package-private — keine Subklasse möglich.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends CodeCssClasses` über den
+gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**.
+`CodeCssClasses` hat keine projektinterne Vererbungsbeziehung; sie ist eine reine
+Konstantenklasse, deren Werte von [CodeViewer](/api-reference/code-viewer.md) gelesen werden
+(Verwendung als Konstante, keine Vererbung).
+
 # Konstruktoren
 
 ## `private CodeCssClasses()`

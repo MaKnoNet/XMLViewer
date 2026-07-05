@@ -22,6 +22,23 @@ Der referenzierte `Span` ist eine Vaadin-Komponente und damit an die Session/den
 UI-Thread des [XmlViewer](/api-reference/xml-viewer.md) gebunden, der ihn erzeugt hat —
 kein geteilter Zustand zwischen Sessions.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `record SearchableToken(Span span, String text, Element
+owner) implements Serializable` (package-private).
+
+- **Superklasse:** implizit `java.lang.Record` — JDK-Typ, kein Cross-Link.
+- **Interfaces:**
+  - `java.io.Serializable` — JDK-Standard-Interface (Marker-Interface, keine Methoden), kein
+    Projekt-Typ, daher kein Cross-Link.
+- Records sind implizit `final` — es kann keine Subklasse geben.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends SearchableToken` über den
+gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**
+(erwartungsgemäß, Records können nicht erweitert werden). `SearchableToken` wird von
+[XmlTreeRenderer](/api-reference/xml-tree-renderer.md) erzeugt und ist Teil der Token-Liste
+in [RenderedTree](/api-reference/rendered-tree.md) (Assoziation, nicht Vererbung).
+
 # Konstruktoren
 
 Kanonischer (impliziter) Record-Konstruktor:

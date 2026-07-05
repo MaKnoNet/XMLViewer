@@ -26,6 +26,24 @@ werden. Der referenzierte `onReveal`-Callback selbst ist jedoch typischerweise a
 UI-Instanz (Session-Thread) gebunden — seine Ausführung außerhalb des Session-Threads ist
 Sache des Aufrufers, nicht von `SearchToken`.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public record SearchToken(String text, SerializableRunnable
+onReveal) implements Serializable`.
+
+- **Superklasse:** implizit `java.lang.Record` (jeder Record erweitert automatisch `Record`,
+  kein eigener `extends`-Ausdruck möglich) — JDK-Typ, kein Cross-Link.
+- **Interfaces:**
+  - `java.io.Serializable` — JDK-Standard-Interface (Marker-Interface, keine Methoden), kein
+    Projekt-Typ, daher kein Cross-Link.
+- Records sind implizit `final` — es kann keine Subklasse geben.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends SearchToken` über den gesamten
+`web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**
+(erwartungsgemäß, Records können nicht erweitert werden). `SearchToken` wird von
+[SearchController](/api-reference/search-controller.md) als Element einer
+`List<SearchToken>` verwendet (Assoziation, nicht Vererbung).
+
 # Konstruktoren
 
 ## Kanonischer Konstruktor (kompakt)

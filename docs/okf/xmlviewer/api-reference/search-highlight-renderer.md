@@ -22,6 +22,23 @@ Renderer übergeben, ohne einen echten Client zu benötigen. Architekturkontext 
 hängen von der konkreten Implementierung ab. `FrontendSearchHighlighter` etwa hält nur
 eine unveränderliche Komponentenreferenz und ist an genau eine UI/Session gebunden.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public interface SearchHighlightRenderer extends
+Serializable`.
+
+- **Erweitertes Interface:** `java.io.Serializable` — JDK-Standard-Interface (Marker-Interface,
+  keine Methoden), kein Projekt-Typ, daher kein Cross-Link.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `implements ... SearchHighlightRenderer`
+über den gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **ein
+Treffer**:
+
+- [FrontendSearchHighlighter](/api-reference/frontend-search-highlighter.md) — `public final
+  class FrontendSearchHighlighter implements SearchHighlightRenderer`, die einzige
+  Standardimplementierung im Projekt (Frontend-basiertes Highlighting über die CSS Custom
+  Highlight API, siehe Überblick).
+
 # Methoden
 
 ## `render(List<TokenMatch> matches, int currentIndex)`

@@ -20,6 +20,22 @@ Die Klasse ist nicht instanziierbar: Ein einziger privater No-Arg-Konstruktor oh
 Instanzen von außen; da die Klasse zusätzlich package-private ist, ist selbst dieser Konstruktor nur
 innerhalb des Pakets überhaupt sichtbar.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `final class TextCssClasses` (package-private, kein
+`extends`/`implements`).
+
+- **Superklasse:** keine explizite (impliziter `Object`).
+- **Interfaces:** keine.
+- Die Klasse ist `final` und package-private, zusätzlich mit `private`-Konstruktor — keine
+  Subklasse möglich.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends TextCssClasses` über den
+gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**.
+`TextCssClasses` hat keine projektinterne Vererbungsbeziehung; ihre Konstanten werden von
+[TextViewer](/api-reference/text-viewer.md) gelesen (Verwendung als Konstante, keine
+Vererbung).
+
 # Konstruktoren
 
 ## `private TextCssClasses()`

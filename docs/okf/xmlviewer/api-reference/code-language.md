@@ -22,6 +22,25 @@ strukturell unveränderliche Liste. Die Klasse ist damit **vollständig thread-s
 Synchronisation nötig. Enums sind laut Klassen-Javadoc implizit `Serializable` (Serialisierung über
 den Konstantennamen), daher bewusst ohne eigene `serialVersionUID`.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public enum CodeLanguage` (kein expliziter
+`extends`/`implements`-Ausdruck im Quelltext).
+
+- **Superklasse:** implizit `java.lang.Enum<CodeLanguage>` — jedes Java-Enum erweitert
+  automatisch `Enum<E>`, kein eigener `extends`-Ausdruck möglich; JDK-Typ, kein Cross-Link.
+- **Interfaces:** implizit `java.io.Serializable` und `java.lang.Comparable<CodeLanguage>` —
+  beide werden von `Enum<E>` geerbt, keine eigene Deklaration im Quelltext nötig; beide
+  JDK-Typen, kein Cross-Link.
+- Enums sind implizit `final` — es kann keine Subklasse geben.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends CodeLanguage` über den gesamten
+`web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**
+(erwartungsgemäß, Enums können nicht erweitert werden). `CodeLanguage`-Werte werden von
+[CodeViewer](/api-reference/code-viewer.md) gehalten und von
+[CodeLanguageDetector](/api-reference/code-language-detector.md) zurückgegeben (Verwendung
+als Wert, keine Vererbung).
+
 # Enum-Konstanten
 
 | Konstante | `cm6Id()` | Datei-Endungen | Bedeutung |

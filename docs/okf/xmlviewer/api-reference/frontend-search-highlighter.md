@@ -28,6 +28,23 @@ Wirts-Komponente (und damit an deren Session/UI-Thread) gebunden; `executeJs`-Au
 außerhalb des Session-Threads sind eine Vaadin-weite Einschränkung, keine Besonderheit
 dieser Klasse.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public final class FrontendSearchHighlighter implements
+SearchHighlightRenderer`.
+
+- **Superklasse:** keine explizite (impliziter `Object`).
+- **Interfaces:**
+  - [SearchHighlightRenderer](/api-reference/search-highlight-renderer.md) — projektinternes
+    Abstraktions-Interface aus `search`; `FrontendSearchHighlighter` implementiert dessen
+    Zeichenmethoden per Frontend-Delegation (CSS Custom Highlight API statt Server-DOM, siehe
+    Überblick).
+- Die Klasse ist `final` — es kann ohnehin keine projektinterne oder externe Subklasse geben.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends FrontendSearchHighlighter` über
+den gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein
+Treffer** (erwartungsgemäß, die Klasse ist `final`).
+
 # Konstruktoren
 
 ## `FrontendSearchHighlighter(Component host)`

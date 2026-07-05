@@ -26,6 +26,22 @@ alle Konstanten) und mit `TOKEN_SELECTOR` in `search/search-highlighter.js`
 (`SEARCH_TOKEN`) übereinstimmen — das ist eine externe Konvention, keine vom Compiler
 geprüfte Invariante.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `final class CssClasses` (package-private, kein
+`extends`/`implements`).
+
+- **Superklasse:** keine explizite (impliziter `Object`).
+- **Interfaces:** keine.
+- Die Klasse ist `final` und package-private — keine Subklasse möglich.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends CssClasses` über den gesamten
+`web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**.
+`CssClasses` hat keine projektinterne Vererbungsbeziehung; ihre Konstanten werden von
+[XmlTreeRenderer](/api-reference/xml-tree-renderer.md) und
+[XmlViewer](/api-reference/xml-viewer.md) gelesen (Verwendung als Konstante, keine
+Vererbung).
+
 # Konstruktoren
 
 ```java

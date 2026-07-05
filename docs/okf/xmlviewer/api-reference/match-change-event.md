@@ -22,6 +22,26 @@ Zusammenspiels: implementierende Quellen wie [XmlViewer](/api-reference/xml-view
 wird sie jedoch innerhalb des Session-Locks der auslösenden Komponente erzeugt und verteilt;
 kein eigenständiger Thread-Safety-Vertrag über den von Vaadins Event-Bus hinaus.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public class MatchChangeEvent extends
+ComponentEvent<Component>`.
+
+- **Superklasse:** `ComponentEvent<Component>` — Vaadin-Flow-Framework-Klasse
+  (`com.vaadin.flow.component.ComponentEvent`), kein Projekt-Typ, daher kein Cross-Link.
+  `ComponentEvent` selbst implementiert bereits `Serializable`, daher deklariert
+  `MatchChangeEvent` dies nicht zusätzlich.
+- **Interfaces:** keine direkt deklarierten (über `ComponentEvent` geerbt: `Serializable`,
+  extern).
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends MatchChangeEvent` über den
+gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**.
+Keine projektinternen Subklassen. `MatchChangeEvent` wird von
+[XmlViewer](/api-reference/xml-viewer.md), [TextViewer](/api-reference/text-viewer.md) und
+`CodeViewer` als **Instanz gefeuert** (Assoziation, nicht Vererbung) und vom
+[SearchNavigator](/api-reference/search-navigator.md) über
+`addMatchChangeListener` konsumiert.
+
 # Konstruktoren
 
 ## `public MatchChangeEvent(Component source, int matchCount, int currentMatchIndex)`

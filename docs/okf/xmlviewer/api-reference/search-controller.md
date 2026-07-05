@@ -27,6 +27,27 @@ aus dem Session-Thread erfolgen. Es gibt keinerlei `synchronized`-Blöcke oder
 Concurrency-Utilities im Code — die Aussage ist durch Abwesenheit jeglicher
 Synchronisationsmechanik verifiziert.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public final class SearchController implements
+Serializable`.
+
+- **Superklasse:** keine explizite (impliziter `Object`).
+- **Interfaces:**
+  - `java.io.Serializable` — JDK-Standard-Interface (Marker-Interface, keine Methoden), kein
+    Projekt-Typ, daher kein Cross-Link. `SearchController` implementiert dieses **direkt**
+    (nicht über ein eigenes projektinternes Interface), im Unterschied zu
+    [SearchHighlightRenderer](/api-reference/search-highlight-renderer.md) oder
+    [SearchTermSplitter](/api-reference/search-term-splitter.md), die selbst `Serializable`
+    erweitern und dann von konkreten Typen implementiert werden.
+- Die Klasse ist `final` — es kann keine Subklasse geben.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends SearchController` über den
+gesamten `web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**
+(erwartungsgemäß, die Klasse ist `final`). `SearchController` wird von
+[XmlViewer](/api-reference/xml-viewer.md) und [TextViewer](/api-reference/text-viewer.md) als
+**Feld gehalten** (Komposition, nicht Vererbung) — siehe Überblick.
+
 # Konstruktoren
 
 ## `SearchController(List<SearchToken> tokens, SearchHighlightRenderer highlightRenderer, SerializableRunnable onMatchChange)`

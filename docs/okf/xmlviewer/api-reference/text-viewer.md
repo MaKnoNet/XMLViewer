@@ -28,6 +28,25 @@ selbst implementiert zu werden.
 `serialVersionUID = 1L` ist explizit gesetzt (Komponente ist über `Composite`/`Div` serialisierbar,
 relevant für Session-Clustering).
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public class TextViewer extends Composite<Div> implements
+HasSize, HasStyle, MatchNavigable`.
+
+- **Superklasse:** `Composite<Div>` — Vaadin-Flow-Framework-Klasse
+  (`com.vaadin.flow.component.Composite`), kein Projekt-Typ, daher kein Cross-Link.
+- **Interfaces:**
+  - `HasSize` — Vaadin-Flow-Framework-Interface, extern.
+  - `HasStyle` — Vaadin-Flow-Framework-Interface, extern.
+  - [MatchNavigable](/api-reference/match-navigable.md) — projektinternes
+    Entkopplungs-Interface aus `navigation`; `TextViewer` implementiert dessen Methoden, um
+    vom [SearchNavigator](/api-reference/search-navigator.md) gesteuert werden zu können.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `extends TextViewer` /
+`implements ... TextViewer` über den gesamten
+`web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer**. Keine
+andere Klasse im Projekt erweitert `TextViewer`; keine projektinternen Subklassen.
+
 # Konstruktoren
 
 ## `public TextViewer()`

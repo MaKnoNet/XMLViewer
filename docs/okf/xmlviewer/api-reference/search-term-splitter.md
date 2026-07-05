@@ -21,6 +21,22 @@ thread-sicher ist, hängt von ihr ab — die mitgelieferte Standardimplementieru
 `SearchController.DEFAULT_TERM_SPLITTER` ist eine reine, zustandslose Lambda und damit
 gefahrlos teilbar.
 
+# Vererbungshierarchie
+
+**Vorwärts (eigene Deklaration):** `public interface SearchTermSplitter extends
+Serializable`.
+
+- **Erweitertes Interface:** `java.io.Serializable` — JDK-Standard-Interface (Marker-Interface,
+  keine Methoden), kein Projekt-Typ, daher kein Cross-Link.
+
+**Rückwärts (Abhängige):** Verifiziert per Grep auf `implements ... SearchTermSplitter` bzw.
+`extends SearchTermSplitter` über den gesamten
+`web-common/src/main/java/de/makno/web/common/component/`-Baum — **kein Treffer** durch eine
+benannte Klasse. Die einzige mitgelieferte Implementierung,
+`SearchController.DEFAULT_TERM_SPLITTER`, ist eine anonyme Lambda-Konstante innerhalb von
+[SearchController](/api-reference/search-controller.md) (Verwendung als Wert, keine
+Vererbungsbeziehung).
+
 # Methoden
 
 ## `split(String query)`
