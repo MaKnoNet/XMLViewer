@@ -1,5 +1,21 @@
 # Update-Log
 
+## 2026-07-07
+
+* **Creation**: neue Kategorie `api-reference/` (21 Dateien, eine pro Klasse unter
+  `web-common/src/main/java/de/makno/web/common/component/`) — erschöpfende,
+  code-verifizierte Konstruktor-/Methodenreferenz (Parameter, Null-Verhalten,
+  Rückgabewert-Semantik, tatsächlich geworfene Exceptions), ergänzend zu den
+  narrativen `components/`-/`architecture/`-Dokus. Gegen den echten Code verifiziert
+  statt Javadoc blind zu übernehmen; 5 Diskrepanzen gefunden und richtiggestellt —
+  u. a. fehlendes `Objects.requireNonNull` in `XmlViewer`/`TextViewer`'s
+  `setSearchTermSplitter`, fehlender Null-Guard in `cssClassesOfTokenText`,
+  inkonsistentes Null-Handling zwischen `SearchController`-Konstruktor und
+  `SearchNavigator`-Konstruktor. Details in den jeweiligen `api-reference/*.md`-Dateien.
+* **Update**: [Entwicklerdoku](/conventions/okf-entwicklerdoku.md) und `AGENTS.md`
+  um die `api-reference/`-Konvention (Zweck, Abgrenzung zu `components/`, Pflicht zur
+  Code-Verifikation) ergänzt.
+
 ## 2026-07-06 (2)
 
 * **Update**: Projekt-Konventionen von `CLAUDE.md` nach `AGENTS.md` migriert
