@@ -1,5 +1,18 @@
 # Update-Log
 
+## 2026-07-08
+
+* **Restructure**: `api-reference/` von einer flachen Datei pro Klasse auf **einen
+  Ordner pro Klasse mit einer Datei pro Methode** umgestellt, zusätzlich nach
+  Java-Sub-Package gruppiert (`code/`, `navigation/`, `search/`, `text/`, `xmlviewer/` —
+  21 Klassen-Ordner). Jede Methoden-Überladung landet zusammen in einer Datei, alle
+  Konstruktoren einer Klasse in `constructor.md`. Vier neue Pflichtabschnitte je
+  Klassen-Übersichtsdatei ergänzt: `# Felder`, `# Thread-Safety`, `# Serialisierung`
+  (`serialVersionUID = 1L` durchweg bei den Serializable-Klassen, u. a. `CodeViewer`,
+  `RenderedTree`, `XmlViewer`, `SearchController`, `TextViewer`) und
+  `# equals/hashCode/toString`. 107 Cross-Links im Bundle auf die neuen Pfade migriert,
+  teils methodengenau verlinkt (z. B. `SearchController#splitTerms`).
+
 ## 2026-07-07 (2)
 
 * **Update**: alle 21 `api-reference/*.md`-Dateien um einen verifizierten

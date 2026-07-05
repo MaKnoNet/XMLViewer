@@ -32,8 +32,14 @@ docs/okf/xmlviewer/
 │   └── index.md          # GENERIERT
 ├── components/           # Narrative Übersicht über Klassen/Komponenten
 │   └── index.md          # GENERIERT
-├── api-reference/         # Erschöpfende, verifizierte Methoden-Ebene (siehe unten)
-│   └── index.md          # GENERIERT
+├── api-reference/         # Erschöpfende, verifizierte Methoden-Ebene (siehe unten) -
+│   │                       # gruppiert nach Java-Sub-Package (dieses Projekt hat
+│   │                       # mehrere Packages), dann ein Ordner pro Klasse
+│   └── <code|navigation|search|text|xmlviewer>/
+│       └── <klasse>/
+│           ├── <klasse>.md    # Klassen-Uebersicht (Felder, Vererbung, Vertraege, ...)
+│           ├── constructor.md # alle Konstruktoren der Klasse
+│           └── <methode>.md   # 1 Datei pro Methoden-NAME, Ueberladungen zusammen
 └── conventions/          # Build/Release/Code-Stil/Prozess (auch diese Datei)
     └── index.md          # GENERIERT
 ```
@@ -47,27 +53,45 @@ Wissensdokument). `index.md`-Dateien fassen den Inhalt eines Verzeichnisses zusa
 
 `components/` (bzw. `architecture/`) beschreibt eine Klasse/ein Konzept **narrativ**:
 Zweck, Design-Entscheidungen, Beispiele — üblicherweise mehrere Klassen pro Datei
-gebündelt. `api-reference/` ist die **erschöpfende Methoden-Ebene**: eine Datei pro
-Klasse (`type: API Reference`), die **jeden** Konstruktor und jede öffentliche/
-paketsichtbare Methode auflistet — mit Parametern, ob `null` erlaubt ist, Rückgabewert-
-Semantik und tatsächlich geworfenen Exceptions.
+gebündelt. `api-reference/` ist die **erschöpfende Methoden-Ebene**: **ein Ordner pro
+Klasse** (`api-reference/<sub-package>/<kebab-case-klasse>/` — dieses Projekt hat mehrere
+Java-Packages, deshalb die zusätzliche Gruppierungsebene `code/`, `navigation/`,
+`search/`, `text/`, `xmlviewer/`), darin eine Klassen-Übersichtsdatei (`<klasse>.md`),
+eine `constructor.md` für alle Konstruktoren und **eine Datei pro Methoden-Name**
+(`<methode>.md`) — Überladungen (gleicher Name, andere Signatur) landen zusammen in
+derselben Datei.
 
 **Zwingend: gegen den echten Code verifizieren, nicht nur Javadoc kopieren.** Javadoc-
 Kommentare können veraltet, unvollständig oder schlicht falsch sein (in diesem Projekt
 wurden bereits mehrere solcher Fälle gefunden und in den jeweiligen `api-reference/`-
 Dateien richtiggestellt — z. B. fehlendes `Objects.requireNonNull` in
 `setSearchTermSplitter`, das der Javadoc-Text nicht erwähnt). Bei jeder Änderung an
-einer Methoden-Signatur, einem Null-Check oder einer geworfenen Exception **muss** die
-zugehörige `api-reference/`-Datei aktualisiert werden — Teil der Pre-Commit-Routine
-(siehe unten).
+einer Methoden-Signatur, einem Null-Check, einem Feld oder einer geworfenen Exception
+**muss** die zugehörige `api-reference/`-Datei aktualisiert werden — Teil der
+Pre-Commit-Routine (siehe unten).
 
-**Jede `api-reference/`-Datei enthält direkt nach `# Überblick` einen Pflichtabschnitt
-`# Vererbungshierarchie`:** die eigene `extends`/`implements`-Deklaration (vorwärts) sowie
-— per Grep über den gesamten Quellbaum verifiziert — welche anderen Klassen/Interfaces im
-Projekt diesen Typ erweitern/implementieren (rückwärts), bundle-root-absolut verlinkt (z. B.
-`MatchNavigable` → `XmlViewer`/`TextViewer`/`CodeViewer`, bidirektional). Fehlende
-Implementierer sind ein genauso relevanter, explizit festzuhaltender Befund wie vorhandene.
-Bei jeder neuen Ober-/Unterklassen-Beziehung im Code **muss** dieser Abschnitt aktualisiert
+**Jede Klassen-Übersichtsdatei (`<klasse>.md`) enthält, direkt nach `# Überblick`, diese
+Pflichtabschnitte** (immer vorhanden, auch wenn der Inhalt nur "kein besonderer Vertrag"
+ist):
+- **`# Felder`** — Tabelle `| Feld | Typ | Bedeutung | null-erlaubt |` für jedes Feld der
+  Klasse; bei Records Verweis auf die Record-Komponenten in `constructor.md` statt
+  Duplikat (z. B. `RenderedTree`, `SearchableToken`, `SearchToken`, `TokenMatch`).
+- **`# Thread-Safety`** — auch bei zustandslosen Klassen explizit festhalten.
+- **`# Serialisierung`** — bei `implements Serializable` der tatsächliche
+  `serialVersionUID`-Wert (in diesem Projekt durchweg `1L`, z. B. `CodeViewer`,
+  `RenderedTree`, `XmlViewer`, `SearchController`, `TextViewer`), sonst "Nicht
+  `Serializable`".
+- **`# equals/hashCode/toString`** — bei Records komponentenbasiert, sonst
+  Identitätssemantik von `Object` explizit vermerken (nicht weglassen).
+- **`# Vererbungshierarchie`** — die eigene `extends`/`implements`-Deklaration
+  (vorwärts) sowie — per Grep über den gesamten Quellbaum verifiziert — welche anderen
+  Klassen/Interfaces im Projekt diesen Typ erweitern/implementieren (rückwärts),
+  bundle-root-absolut verlinkt (z. B. `MatchNavigable` → `XmlViewer`/`TextViewer`/
+  `CodeViewer`, bidirektional). Fehlende Implementierer sind ein genauso relevanter,
+  explizit festzuhaltender Befund wie vorhandene.
+
+Bei jeder neuen Ober-/Unterklassen-Beziehung, einem neuen/entfernten Feld oder einer
+geänderten Serialisierbarkeit im Code **muss** der jeweilige Abschnitt aktualisiert
 werden — ebenfalls Teil der Pre-Commit-Routine.
 
 # Frontmatter-Konvention
