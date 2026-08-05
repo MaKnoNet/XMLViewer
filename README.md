@@ -37,7 +37,9 @@ einbettende Anwendung selbst – siehe Demo).
 ## Voraussetzungen
 
 - **Java 21** (Gradle Toolchain)
-- **Vaadin 24** (`vaadin-spring-boot-starter` – nur für die Demo), **JDOM2** (`org.jdom:jdom2`)
+- **Vaadin 24 oder 25** – die Bibliothek nutzt bewusst keine an eine Vaadin-Generation
+  gebundenen APIs und läuft mit beiden. Dieses Repo baut und testet gegen Vaadin 25
+  (`vaadin-spring-boot-starter` – nur für die Demo). **JDOM2** (`org.jdom:jdom2`)
 - Tests: **JUnit 5**
 - Erster Build lädt automatisch **Node.js** herunter und baut das Vaadin-Frontend (Internet nötig).
 - Die **CodeViewer-Demo (`/code`)** zieht dabei zusätzlich **CodeMirror 6** per npm (`@codemirror/*`);

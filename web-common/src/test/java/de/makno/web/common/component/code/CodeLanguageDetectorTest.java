@@ -32,8 +32,7 @@ class CodeLanguageDetectorTest {
 
     @Test
     void erkenntJavaAmInhalt() {
-        String java =
-                """
+        String java = """
                 package com.example;
 
                 public class Foo {
@@ -47,8 +46,7 @@ class CodeLanguageDetectorTest {
 
     @Test
     void erkenntCSharpAmInhalt() {
-        String csharp =
-                """
+        String csharp = """
                 using System;
 
                 namespace Demo {
@@ -62,8 +60,7 @@ class CodeLanguageDetectorTest {
 
     @Test
     void erkenntPythonAmInhalt() {
-        String python =
-                """
+        String python = """
                 def greet(name):
                     return f"Hallo {name}"
                 """;
@@ -77,8 +74,7 @@ class CodeLanguageDetectorTest {
 
     @Test
     void erkenntYamlAmInhalt() {
-        String yaml =
-                """
+        String yaml = """
                 name: Demo
                 version: 1.0.0
                 items:

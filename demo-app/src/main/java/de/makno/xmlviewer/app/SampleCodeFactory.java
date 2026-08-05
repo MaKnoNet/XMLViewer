@@ -27,8 +27,7 @@ final class SampleCodeFactory {
         };
     }
 
-    private static final String JAVA =
-            """
+    private static final String JAVA = """
             package com.example.demo;
 
             import java.util.List;
@@ -54,8 +53,7 @@ final class SampleCodeFactory {
             }
             """;
 
-    private static final String CSHARP =
-            """
+    private static final String CSHARP = """
             using System;
 
             namespace Demo
@@ -78,8 +76,7 @@ final class SampleCodeFactory {
             }
             """;
 
-    private static final String PYTHON =
-            """
+    private static final String PYTHON = """
             from dataclasses import dataclass
 
 
@@ -98,8 +95,7 @@ final class SampleCodeFactory {
                         print(f"Grossauftrag: {order.customer}")
             """;
 
-    private static final String JSON =
-            """
+    private static final String JSON = """
             {
               "name": "Demo-Bibliothek",
               "books": [
@@ -110,8 +106,7 @@ final class SampleCodeFactory {
             }
             """;
 
-    private static final String YAML =
-            """
+    private static final String YAML = """
             name: Demo
             version: 1.0.0
             server:
@@ -123,8 +118,7 @@ final class SampleCodeFactory {
               - drei
             """;
 
-    private static final String HTML =
-            """
+    private static final String HTML = """
             <!DOCTYPE html>
             <html lang="de">
               <head>
@@ -140,8 +134,7 @@ final class SampleCodeFactory {
             </html>
             """;
 
-    private static final String CSS =
-            """
+    private static final String CSS = """
             :root {
               --accent: #2563eb;
             }
@@ -158,8 +151,7 @@ final class SampleCodeFactory {
             }
             """;
 
-    private static final String JAVASCRIPT =
-            """
+    private static final String JAVASCRIPT = """
             function fibonacci(n) {
               const seq = [0, 1];
               for (let i = 2; i < n; i++) {
@@ -171,8 +163,7 @@ final class SampleCodeFactory {
             console.log(fibonacci(10));
             """;
 
-    private static final String XML =
-            """
+    private static final String XML = """
             <?xml version="1.0" encoding="UTF-8"?>
             <library name="Demo">
               <book id="b-001">
@@ -182,8 +173,7 @@ final class SampleCodeFactory {
             </library>
             """;
 
-    private static final String SQL =
-            """
+    private static final String SQL = """
             SELECT b.id, b.title, b.price
             FROM book b
             JOIN author a ON a.id = b.author_id

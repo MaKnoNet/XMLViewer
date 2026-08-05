@@ -1,5 +1,30 @@
 # Update-Log
 
+## 2026-08-05 (2)
+
+* **Update**: Repo-Build von Vaadin 24.5.3 auf **25.2.5** angehoben — damit laufen
+  Demo-App und Tests real gegen die Generation, in der `elemental.json` fehlt.
+  Mitgezogen: Spring Boot 3.3.5 → **4.1.0** (Vaadin 25 unterstützt Boot 3 nicht mehr),
+  Gradle 8.9 → **9.6.1** (Boot 4 verlangt ≥ 8.14), Spotless 6.25.0 → **8.9.0** (erste
+  Gradle-9-taugliche Linie), Servlet-API 6.0.0 → **6.1.0** (Jakarta EE 11, nur Testscope).
+* **Fix**: `installGitHooks` nutzt statt `Project.exec()` den injizierten
+  `ExecOperations`-Service — Gradle 9 hat `Project.exec()` zur Ausführungszeit entfernt.
+* **Fix**: `:demo-app:processResources` deklariert `dependsOn vaadinPrepareFrontend`;
+  Gradle 9 lehnt die vom Vaadin-Plugin nicht deklarierte Abhängigkeit auf
+  `build/vaadin-generated` sonst als „implicit dependency" ab.
+* **Fix**: `developmentOnly 'com.vaadin:vaadin-dev'` in `demo-app` ergänzt — ab Vaadin 25
+  sind die Dev-Tools nicht mehr im Starter enthalten und `bootRun` bricht sonst mit
+  `'vaadin-dev-server' not found` ab.
+* **Update**: [Build, Test und Release](/conventions/build-and-release.md) um die
+  Toolchain-Tabelle, die Gradle-9- und Vaadin-25-Besonderheiten sowie einen offenen Punkt
+  erweitert: Vaadin 25 markiert `META-INF/resources/frontend/` für Add-on-Frontend-Quellen
+  als deprecated, ein Wechsel auf `META-INF/frontend/` bräche aber die
+  Vaadin-24-Kompatibilität — bleibt daher bewusst liegen.
+* **Verifikation**: Demo gegen Vaadin 25 im Browser geprüft — XmlViewer 120 Treffer und
+  120 registrierte Highlight-Ranges, TextViewer 2663/2663, CodeViewer 1/3 über den
+  `@ClientCallable`-Rückweg; leere Suche ergibt 0 Ranges (Leerstring-Pfad in `parseFlat`),
+  keine Konsolenfehler. Die erste Range trägt exakt den Suchtext mit Offsets 0–7.
+
 ## 2026-08-05
 
 * **Fix**: `FrontendSearchHighlighter` überträgt die Suchtreffer nicht mehr als

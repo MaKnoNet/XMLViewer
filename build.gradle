@@ -65,13 +65,23 @@ subprojects {
 // Aktiviert die versionierten Team-Git-Hooks (.githooks/) fuer dieses Clone.
 // Wird beim ersten Build automatisch mitausgefuehrt; manuell: ./gradlew installGitHooks
 // Defensiv: ohne .git-Verzeichnis (Quell-Tarball, CI-Checkout ohne Git) passiert nichts.
+// Gradle 9 hat Project.exec() zur Ausführungszeit entfernt; externe Prozesse laufen über den
+// injizierten ExecOperations-Service. Das Halter-Interface ist der dokumentierte Weg, ihn in einem
+// Build-Skript (ohne eigene Task-Klasse) zu beziehen.
+interface ExecOpsHolder {
+    @javax.inject.Inject
+    ExecOperations getExecOps()
+}
+
+def execOps = objects.newInstance(ExecOpsHolder).execOps
+
 tasks.register('installGitHooks') {
     description = 'Setzt git config core.hooksPath auf .githooks (Team-Hooks aktivieren)'
     group = 'setup'
     def gitDir = rootProject.file('.git')
     onlyIf { gitDir.exists() }
     doLast {
-        exec { commandLine 'git', 'config', 'core.hooksPath', '.githooks' }
+        execOps.exec { commandLine 'git', 'config', 'core.hooksPath', '.githooks' }
     }
 }
 

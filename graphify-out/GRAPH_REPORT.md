@@ -1,16 +1,16 @@
 # Graph Report - XMLViewer  (2026-08-05)
 
 ## Corpus Check
-- 277 files · ~57,921 words
+- 277 files · ~58,694 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1704 nodes · 2590 edges · 293 communities (76 shown, 217 thin omitted)
-- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 303 edges (avg confidence: 0.8)
+- 1755 nodes · 2637 edges · 270 communities (76 shown, 194 thin omitted)
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 303 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `47001d10`
+- Built from commit: `db0b5296`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -48,6 +48,7 @@
 - CodeCssClasses
 - TextCssClasses
 - CssClasses
+- build.gradle
 - codeviewer.md
 - textviewer.md
 - build-and-release.md
@@ -279,38 +280,15 @@
 - @codemirror/lang-java
 - @codemirror/lang-javascript
 - @codemirror/lang-json
-- @codemirror/lang-python
-- @codemirror/lang-sql
-- @codemirror/lang-yaml
-- @codemirror/language
-- @codemirror/legacy-modes
-- @codemirror/state
-- @codemirror/theme-one-dark
-- @codemirror/view
-- date-fns
-- lit
-- @polymer/polymer
-- react
-- react-dom
-- react-router-dom
-- @vaadin/bundles
-- @vaadin/polymer-legacy-adapter
-- @vaadin/react-components
-- @vaadin/vaadin-development-mode-detector
-- @vaadin/vaadin-lumo-styles
-- @vaadin/vaadin-usage-statistics
-- rollup-plugin-visualizer
-- strip-css-comments
-- typescript
 - pre-commit
 
 ## God Nodes (most connected - your core abstractions)
-1. `XmlViewer` - 55 edges
-2. `TextViewer` - 51 edges
-3. `CodeViewer` - 43 edges
-4. `XmlViewerTest` - 37 edges
-5. `SearchController` - 34 edges
-6. `overrides` - 33 edges
+1. `overrides` - 90 edges
+2. `XmlViewer` - 55 edges
+3. `TextViewer` - 51 edges
+4. `CodeViewer` - 43 edges
+5. `XmlViewerTest` - 37 edges
+6. `SearchController` - 34 edges
 7. `SearchNavigator` - 32 edges
 8. `XmlTreeRenderer` - 28 edges
 9. `TextViewerTest` - 27 edges
@@ -331,15 +309,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (293 total, 217 thin omitted)
+## Communities (270 total, 194 thin omitted)
 
 ### Community 0 - "SearchNavigatorTest"
 Cohesion: 0.27
 Nodes (4): Button, Stream, Test, SearchNavigatorTest
 
 ### Community 1 - "CodeViewer"
-Cohesion: 0.18
-Nodes (12): Div, MatchNavigable, NpmPackage, CodeViewer, AttachEvent, ComponentEventListener, CssImport, DetachEvent (+4 more)
+Cohesion: 0.19
+Nodes (10): NpmPackage, CodeViewer, AttachEvent, ComponentEventListener, CssImport, DetachEvent, JsModule, MatchChangeEvent (+2 more)
 
 ### Community 2 - "code-viewer.js"
 Cohesion: 0.08
@@ -350,40 +328,36 @@ Cohesion: 0.15
 Nodes (12): Tag, TextField, FakeNavigable, BeforeEach, Component, ComponentEventListener, List, MatchChangeEvent (+4 more)
 
 ### Community 4 - "overrides"
-Cohesion: 0.06
-Nodes (33): overrides, @codemirror/lang-css, @codemirror/lang-html, @codemirror/lang-java, @codemirror/lang-javascript, @codemirror/lang-json, @codemirror/lang-python, @codemirror/lang-sql (+25 more)
+Cohesion: 0.02
+Nodes (90): overrides, @codemirror/lang-css, @codemirror/lang-html, @codemirror/lang-java, @codemirror/lang-javascript, @codemirror/lang-json, @codemirror/lang-python, @codemirror/lang-sql (+82 more)
 
 ### Community 5 - "TextViewer"
 Cohesion: 0.06
-Nodes (21): String, SampleTextFactory, HorizontalLayout, PageTitle, Route, TextDemoView, TextViewer, VerticalLayout (+13 more)
+Nodes (22): String, SampleTextFactory, HorizontalLayout, PageTitle, Route, TextDemoView, TextViewer, VerticalLayout (+14 more)
 
 ### Community 6 - "package.json"
-Cohesion: 0.33
-Nodes (5): license, name, type, vaadin, hash
+Cohesion: 0.10
+Nodes (23): HasSize, HasStyle, MatchNavigable, SearchableToken, SearchController, SearchHighlightRenderer, Set, SearchTermSplitter (+15 more)
 
 ### Community 7 - "XmlTreeRenderer"
 Cohesion: 0.16
 Nodes (18): Content, Citations, `text()` / `onReveal()` (implizite Accessor-Methoden), Span, Div, Element, Span, RenderedTree (+10 more)
 
 ### Community 8 - "SearchController"
-Cohesion: 0.05
-Nodes (46): HasSize, HasStyle, SearchController, SearchHighlightRenderer, Serializable, SerializableRunnable, Set, FunctionalInterface (+38 more)
+Cohesion: 0.08
+Nodes (26): Serializable, SerializableRunnable, FunctionalInterface, MatchLabelFormatter, List, SearchHighlightRenderer, SearchToken, SerializableRunnable (+18 more)
 
 ### Community 9 - "generate_okf_index.py"
 Cohesion: 0.28
 Nodes (12): Path, bundle_relative_link(), check_conformance(), main(), Warn-only OKF-Checks: type-Pflichtfeld, keine relativen ../-Links., Liest title/description/type aus dem YAML-Frontmatter (naiver Zeilen-Parser)., Bundle-root-absoluter Link gemaess OKF-Spec (Abschnitt 5.1)., Erzeugt den index.md-Inhalt fuer ein Verzeichnis (deterministisch sortiert). (+4 more)
-
-### Community 10 - ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig"
-Cohesion: 0.24
-Nodes (3): ClientCallable, String, Object
 
 ### Community 11 - ".fromContent"
 Cohesion: 0.18
 Nodes (6): Pattern, CodeLanguageDetector, CodeLanguage, String, CodeLanguageDetectorTest, Test
 
 ### Community 12 - "XmlViewer"
-Cohesion: 0.06
-Nodes (25): Element, HorizontalLayout, PageTitle, Route, MainView, SearchableToken, ComponentEventListener, Div (+17 more)
+Cohesion: 0.19
+Nodes (7): String, BeforeEach, Component, Element, List, Test, XmlViewerTest
 
 ### Community 13 - "MatchNavigable"
 Cohesion: 0.12
@@ -394,16 +368,16 @@ Cohesion: 0.29
 Nodes (6): Besonderheiten, Citations, Examples, Interne Bausteine, Schema, Überblick
 
 ### Community 15 - "CodeViewerTest"
-Cohesion: 0.23
-Nodes (7): CodeViewerTest, BeforeEach, Component, List, Stream, String, Test
+Cohesion: 0.24
+Nodes (7): CodeViewerTest, BeforeEach, Component, List, Object, Stream, String
 
 ### Community 16 - "devDependencies"
-Cohesion: 0.09
-Nodes (34): async, @babel/preset-react, devDependencies, async, @babel/preset-react, glob, @preact/signals-react-transform, rollup-plugin-brotli (+26 more)
+Cohesion: 0.06
+Nodes (47): @babel/core, @babel/plugin-transform-react-jsx-development, @babel/preset-react, @babel/types, devDependencies, @babel/core, @babel/plugin-transform-react-jsx-development, @babel/preset-react (+39 more)
 
 ### Community 17 - "FrontendSearchHighlighter"
-Cohesion: 0.19
-Nodes (8): JsonArray, FrontendSearchHighlighter, Component, List, Override, TokenMatch, FrontendSearchHighlighterTest, Test
+Cohesion: 0.18
+Nodes (9): Div, JsonArray, FrontendSearchHighlighter, Component, List, Override, TokenMatch, FrontendSearchHighlighterTest (+1 more)
 
 ### Community 18 - "XMLViewer"
 Cohesion: 0.11
@@ -414,8 +388,8 @@ Cohesion: 0.11
 Nodes (17): Architektur- & Entwicklungsregeln (Vaadin/Java), Architektur & Entwurfsmuster, Claude Code – Projekt-Instruktionen, Clean Code, Code-Formatierung, Code-Qualität, End-of-Session-Routine (Pflicht bei Code-/Architekturänderungen), Fehlerbehandlung & Resilienz (+9 more)
 
 ### Community 20 - "CodeLanguage"
-Cohesion: 0.11
-Nodes (17): cm6Id(), CodeLanguage, CSHARP, CSS, HTML, JAVA, JAVASCRIPT, JSON (+9 more)
+Cohesion: 0.12
+Nodes (15): CodeLanguage, String, SampleCodeFactory, CodeLanguage, CSHARP, CSS, HTML, JAVA (+7 more)
 
 ### Community 21 - "design-rules.md"
 Cohesion: 0.40
@@ -470,8 +444,8 @@ Cohesion: 0.12
 Nodes (16): Architektur- & Entwicklungsregeln (Vaadin/Java), Architektur & Entwurfsmuster, Clean Code, Code-Formatierung, Code-Qualität, Fehlerbehandlung & Resilienz, Graph-First-Regel, Knowledge Base (graphify + OKF) (+8 more)
 
 ### Community 46 - "CodeDemoView.java"
-Cohesion: 0.17
-Nodes (10): CodeViewer, CodeDemoView, CodeLanguage, HorizontalLayout, PageTitle, Route, CodeLanguage, String (+2 more)
+Cohesion: 0.24
+Nodes (7): CodeViewer, CodeDemoView, CodeLanguage, HorizontalLayout, PageTitle, Route, Select
 
 ### Community 47 - "SearchNavigator"
 Cohesion: 0.23
@@ -482,8 +456,8 @@ Cohesion: 0.17
 Nodes (11): api-reference/ vs. components/, Automatisierung, Bekannte Stolpersteine, Bundle-Struktur dieses Projekts, Citations, Frontmatter-Konvention, Graphify-Zusammenspiel, Neues Konzept anlegen (+3 more)
 
 ### Community 50 - "SampleXmlFactory"
-Cohesion: 0.33
-Nodes (4): Element, String, SampleXmlFactory, Namespace
+Cohesion: 0.18
+Nodes (10): Element, HorizontalLayout, PageTitle, Route, MainView, Element, String, SampleXmlFactory (+2 more)
 
 ### Community 51 - "code-css-classes.md"
 Cohesion: 0.20
@@ -602,12 +576,12 @@ Cohesion: 0.20
 Nodes (9): Citations, equals/hashCode/toString, Felder, Konstruktoren, Methoden, Serialisierung, Thread-Safety, Vererbungshierarchie (+1 more)
 
 ### Community 260 - "dependencies"
-Cohesion: 0.22
-Nodes (9): @codemirror/lang-css, @codemirror/search, @codemirror/lang-css, @codemirror/search, @vaadin/router, @vaadin/vaadin-material-styles, dependencies, @vaadin/router (+1 more)
+Cohesion: 0.15
+Nodes (5): CssImport, Div, JsModule, RenderedTree, XmlViewer
 
 ### Community 261 - "dependencies"
-Cohesion: 0.22
-Nodes (9): @codemirror/lang-java, construct-style-sheets-polyfill, dependencies, @codemirror/lang-java, construct-style-sheets-polyfill, @vaadin/common-frontend, @vaadin/vaadin-themable-mixin, @vaadin/common-frontend (+1 more)
+Cohesion: 0.05
+Nodes (56): @codemirror/lang-css, @codemirror/lang-html, @codemirror/lang-java, @codemirror/lang-javascript, @codemirror/lang-json, @codemirror/lang-python, @codemirror/lang-sql, @codemirror/lang-xml (+48 more)
 
 ### Community 262 - "vaadin-versionsunabhaengigkeit.md"
 Cohesion: 0.33
@@ -617,25 +591,33 @@ Nodes (5): Citations, Gelebtes Beispiel, Prüfpunkte bei Änderungen, Regel, War
 Cohesion: 0.83
 Nodes (3): gradlew script, die(), warn()
 
+### Community 267 - "@codemirror/lang-javascript"
+Cohesion: 0.29
+Nodes (3): CodeLanguage, String, Test
+
+### Community 268 - "@codemirror/lang-json"
+Cohesion: 0.47
+Nodes (4): cm6Id(), extensions(), List, String
+
 ## Knowledge Gaps
-- **785 isolated node(s):** `name`, `license`, `type`, `@codemirror/lang-css`, `@codemirror/lang-html` (+780 more)
+- **838 isolated node(s):** `name`, `license`, `type`, `@codemirror/lang-css`, `@codemirror/lang-html` (+833 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **217 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **194 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `XmlViewer` connect `XmlViewer` to `CodeViewer`, `XmlTreeRenderer`, `SearchController`, `MatchNavigable`, `SearchNavigator`, `SampleXmlFactory`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
-- **Why does `Span` connect `XmlTreeRenderer` to `FakeNavigable`, `TextViewer`, `SearchController`, `XmlViewer`, `CodeViewerTest`, `SearchNavigator`?**
-  _High betweenness centrality (0.020) - this node is a cross-community bridge._
-- **Why does `CodeLanguage` connect `CodeLanguage` to `CodeViewer`, `SearchController`, `.fromContent`, `CodeDemoView.java`, `CodeViewerTest`?**
-  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `XmlViewer` connect `dependencies` to `package.json`, `XmlTreeRenderer`, `SearchController`, `@codemirror/lang-html`, `@codemirror/lang-java`, `XmlViewer`, `MatchNavigable`, `SearchNavigator`, `SampleXmlFactory`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Why does `TextViewer` connect `TextViewer` to `SearchController`, `MatchNavigable`, `package.json`, `SearchNavigator`?**
+  _High betweenness centrality (0.021) - this node is a cross-community bridge._
+- **Why does `of()` connect `SearchController` to `SearchNavigatorTest`, `dependencies`, `TextViewer`, `@codemirror/lang-html`, `.istVollstaendigSerialisierbarUndBleibtFunktionsfaehig`, `CodeViewerTest`, `CodeLanguage`?**
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **What connects `name`, `license`, `type` to the rest of the system?**
-  _785 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _838 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `code-viewer.js` be split into smaller, more focused modules?**
   _Cohesion score 0.07692307692307693 - nodes in this community are weakly interconnected._
 - **Should `FakeNavigable` be split into smaller, more focused modules?**
   _Cohesion score 0.14736842105263157 - nodes in this community are weakly interconnected._
 - **Should `overrides` be split into smaller, more focused modules?**
-  _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.022222222222222223 - nodes in this community are weakly interconnected._

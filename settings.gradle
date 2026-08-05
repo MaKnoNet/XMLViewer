@@ -8,8 +8,10 @@ pluginManagement {
     // gradle.properties (vaadinVersion) – damit können Plugin und vaadin-bom nicht
     // auseinanderdriften (beide haben dieselbe Quelle).
     plugins {
-        id 'com.diffplug.spotless' version '6.25.0'
-        id 'org.springframework.boot' version '3.3.5'
+        // Spotless 8.x ist die erste Linie, die Gradle 9 unterstützt (6.x bricht dort).
+        id 'com.diffplug.spotless' version '8.9.0'
+        // Spring Boot 4 / Spring Framework 7 ist für Vaadin 25 Pflicht; Boot 3 wird nicht unterstützt.
+        id 'org.springframework.boot' version '4.1.0'
         id 'com.vaadin' version "${vaadinVersion}"
     }
 }

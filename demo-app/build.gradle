@@ -13,6 +13,17 @@ dependencies {
     implementation project(':web-common')
     // Vaadin Flow + eingebetteter Spring-Boot-Server (nur für die lauffähige Demo nötig).
     implementation 'com.vaadin:vaadin-spring-boot-starter'
+    // Ab Vaadin 25 sind die Dev-Tools (vaadin-dev-server) NICHT mehr im Starter enthalten; ohne
+    // diese Abhängigkeit bricht `bootRun` im Dev-Mode beim Start ab ("'vaadin-dev-server' not
+    // found"). developmentOnly -> landet nicht im Production-Build.
+    developmentOnly 'com.vaadin:vaadin-dev'
+}
+
+// vaadinPrepareFrontend schreibt nach build/vaadin-generated, das processResources als Input liest.
+// Gradle 9 lehnt diese undeklarierte Abhängigkeit ab (Validierungsfehler "implicit dependency");
+// das Vaadin-Plugin deklariert sie selbst nicht.
+tasks.named('processResources') {
+    dependsOn tasks.named('vaadinPrepareFrontend')
 }
 
 // Die Demo wird ausschließlich per `bootRun` gestartet und nie distribuiert – weder das
