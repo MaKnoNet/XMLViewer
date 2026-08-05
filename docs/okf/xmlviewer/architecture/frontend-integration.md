@@ -2,7 +2,7 @@
 type: Architecture Concept
 title: Frontend-Integration (CSS Custom Highlight API, CodeMirror 6, META-INF-Ressourcen)
 description: Wie die Bibliothek Frontend-Arbeit in den Browser verlagert und ihre CSS/JS-Ressourcen npm-frei im Maven-Artefakt ausliefert.
-resource: web-common/src/main/resources/META-INF/resources/frontend/web/common/component/search/search-highlighter.js
+resource: web-common/src/main/resources/META-INF/frontend/web/common/component/search/search-highlighter.js
 tags: [architecture, frontend, css, performance, codemirror]
 timestamp: '2026-07-04T16:30:00+02:00'
 ---
@@ -21,8 +21,13 @@ Drei Frontend-Prinzipien prägen die Bibliothek:
    Marker-SVGs und Führungslinien kommen aus den mitgelieferten Stylesheets und sind über
    **CSS Custom Properties** (`--xmlviewer-*`, `--search-*`) override-bar, ohne Java zu ändern.
 3. **Auslieferung im Artefakt:** CSS/JS liegen unter
-   `META-INF/resources/frontend/web/common/component/...` und werden von Vaadin beim
-   Konsumenten automatisch aufgelöst — kein zusätzliches Setup.
+   `META-INF/frontend/web/common/component/...` und werden von Vaadin beim Konsumenten
+   automatisch aufgelöst — kein zusätzliches Setup. Das ist ab Vaadin 25 der Ort für
+   **Bundle-Quellen** (`@JsModule`/`@CssImport`); das frühere
+   `META-INF/resources/frontend/` ist deprecated. Reine Laufzeit-Ressourcen
+   (`@StyleSheet`/`@JavaScript`) gehörten stattdessen nach `META-INF/resources/` — die
+   Bibliothek nutzt ausschließlich Bundle-Quellen. Die Pfade in den Annotationen
+   (`./web/common/component/...`) bleiben davon unberührt.
 
 # Draht-Format Server → Browser
 

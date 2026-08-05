@@ -1,7 +1,7 @@
 # Graph Report - XMLViewer  (2026-08-05)
 
 ## Corpus Check
-- 277 files · ~59,040 words
+- 277 files · ~59,286 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cf16977e`
+- Built from commit: `027777d7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -311,8 +311,8 @@ Cohesion: 0.32
 Nodes (3): Button, Test, SearchNavigatorTest
 
 ### Community 1 - "CodeViewer"
-Cohesion: 0.17
-Nodes (13): ClientCallable, Div, MatchNavigable, NpmPackage, CodeViewer, AttachEvent, ComponentEventListener, CssImport (+5 more)
+Cohesion: 0.18
+Nodes (12): Div, MatchNavigable, NpmPackage, CodeViewer, AttachEvent, ComponentEventListener, CssImport, DetachEvent (+4 more)
 
 ### Community 2 - "code-viewer.js"
 Cohesion: 0.08
@@ -367,8 +367,8 @@ Cohesion: 0.29
 Nodes (6): Besonderheiten, Citations, Examples, Interne Bausteine, Schema, Überblick
 
 ### Community 15 - ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig"
-Cohesion: 0.21
-Nodes (3): CodeLanguage, String, Test
+Cohesion: 0.24
+Nodes (3): ClientCallable, String, Object
 
 ### Community 16 - "devDependencies"
 Cohesion: 0.06
@@ -387,8 +387,8 @@ Cohesion: 0.11
 Nodes (17): Architektur- & Entwicklungsregeln (Vaadin/Java), Architektur & Entwurfsmuster, Claude Code – Projekt-Instruktionen, Clean Code, Code-Formatierung, Code-Qualität, End-of-Session-Routine (Pflicht bei Code-/Architekturänderungen), Fehlerbehandlung & Resilienz (+9 more)
 
 ### Community 20 - "CodeLanguage"
-Cohesion: 0.14
-Nodes (16): cm6Id(), CodeLanguage, CSHARP, CSS, HTML, JAVA, JAVASCRIPT, JSON (+8 more)
+Cohesion: 0.11
+Nodes (17): cm6Id(), CodeLanguage, CSHARP, CSS, HTML, JAVA, JAVASCRIPT, JSON (+9 more)
 
 ### Community 21 - "design-rules.md"
 Cohesion: 0.40
@@ -443,8 +443,8 @@ Cohesion: 0.12
 Nodes (16): Architektur- & Entwicklungsregeln (Vaadin/Java), Architektur & Entwurfsmuster, Clean Code, Code-Formatierung, Code-Qualität, Fehlerbehandlung & Resilienz, Graph-First-Regel, Knowledge Base (graphify + OKF) (+8 more)
 
 ### Community 46 - "CodeDemoView.java"
-Cohesion: 0.20
-Nodes (9): CodeDemoView, CodeLanguage, HorizontalLayout, PageTitle, Route, CodeLanguage, String, SampleCodeFactory (+1 more)
+Cohesion: 0.17
+Nodes (10): CodeViewer, CodeDemoView, CodeLanguage, HorizontalLayout, PageTitle, Route, CodeLanguage, String (+2 more)
 
 ### Community 47 - "SearchNavigator"
 Cohesion: 0.19
@@ -455,8 +455,8 @@ Cohesion: 0.17
 Nodes (11): api-reference/ vs. components/, Automatisierung, Bekannte Stolpersteine, Bundle-Struktur dieses Projekts, Citations, Frontmatter-Konvention, Graphify-Zusammenspiel, Neues Konzept anlegen (+3 more)
 
 ### Community 49 - "CodeViewerTest"
-Cohesion: 0.20
-Nodes (8): CodeViewer, CodeViewerTest, BeforeEach, Component, List, Object, Stream, String
+Cohesion: 0.23
+Nodes (7): CodeViewerTest, BeforeEach, Component, List, Stream, String, Test
 
 ### Community 50 - "SampleXmlFactory"
 Cohesion: 0.18

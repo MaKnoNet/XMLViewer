@@ -4,7 +4,7 @@
     {
       "name": "xmlviewer-demo",
       "runtimeExecutable": "cmd",
-      "runtimeArgs": ["/c", "gradlew.bat", ":demo-app:bootRun", "--console=plain"],
+      "runtimeArgs": ["/c", ".\\gradlew.bat", ":demo-app:bootRun", "--console=plain"],
       "port": 8080
     }
   ]

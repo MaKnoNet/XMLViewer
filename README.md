@@ -119,7 +119,7 @@ viewer.setSearchTermSplitter(List::of);
 
 Im Java-Code werden **nur CSS-Klassen** gesetzt. Farben/Größen kommen aus der mitgelieferten
 `xml-viewer.css` (im Artefakt unter
-`META-INF/resources/frontend/web/common/component/xmlviewer/styles/`) und sind über **CSS Custom
+`META-INF/frontend/web/common/component/xmlviewer/styles/`) und sind über **CSS Custom
 Properties** anpassbar – ohne Java zu ändern. Property auf `.xmlviewer` (oder einem Vorfahren)
 überschreiben:
 
@@ -236,7 +236,7 @@ implementation 'de.makno:web-common:1.0.0-SNAPSHOT'
 ```
 
 Die Frontend-Dateien (CSS/JS) liegen im Artefakt unter
-`META-INF/resources/frontend/web/common/component/...` und werden von Vaadin beim Konsumenten
+`META-INF/frontend/web/common/component/...` und werden von Vaadin beim Konsumenten
 automatisch aufgelöst – kein zusätzliches Setup nötig.
 
 ### Migration von `de.makno.xmlviewer:xmlviewer`
@@ -276,7 +276,7 @@ Modul `demo-app` (`de.makno.xmlviewer.app`).
 | `navigation.MatchLabelFormatter` | Funktionales Interface: Label-Format frei bestimmbar (Standard „12/66") |
 | `navigation.SearchNavigator` | Such-Pille: Eingabefeld + Treffer-Label + Vor/Zurück (Buttons nur bei Treffern aktiv); steuert ein `MatchNavigable` |
 | `…/frontend/web/common/component/search/search-highlighter.js` + `styles/search.css` | Geteiltes Frontend-Highlighting (CSS Custom Highlight API) |
-| `…/frontend/web/common/component/{xmlviewer,text}/styles/*.css` | Farb-/Layout-Regeln + Custom Properties je Komponente (unter `META-INF/resources`) |
+| `…/frontend/web/common/component/{xmlviewer,text}/styles/*.css` | Farb-/Layout-Regeln + Custom Properties je Komponente (unter `META-INF/frontend`) |
 | `…/frontend/web/common/component/code/code-viewer.js` + `styles/code-viewer.css` | CodeMirror-6-Glue (Editor + selbst gesteuerte Suche) |
 | `app.Application` | Spring-Boot-Start der Demo |
 | `app.MainView` / `app.SampleXmlFactory` | XmlViewer-Demo (`/`) / großer Beispielbaum |

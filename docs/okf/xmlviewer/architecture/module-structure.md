@@ -27,7 +27,7 @@ Package-Layout der Bibliothek (`de.makno.web.common.component.*`): `xmlviewer`
 - **Keine Spring-Abhängigkeit in der Bibliothek** — nur die Demo nutzt Spring Boot; das
   Artefakt liefert den `vaadin-spring-boot-starter` NICHT transitiv mit, Konsumenten
   deklarieren ihn selbst.
-- **Frontend-Ressourcen reisen im Artefakt** unter `META-INF/resources/frontend/...` und
+- **Frontend-Ressourcen reisen im Artefakt** unter `META-INF/frontend/...` und
   werden von Vaadin beim Konsumenten automatisch aufgelöst — siehe
   [Frontend-Integration](/architecture/frontend-integration.md).
 - **Migration von `de.makno.xmlviewer:xmlviewer`:** neue Koordinaten `de.makno:web-common`,

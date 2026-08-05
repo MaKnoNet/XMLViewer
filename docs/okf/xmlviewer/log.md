@@ -1,5 +1,28 @@
 # Update-Log
 
+## 2026-08-05 (4)
+
+* **Restructure**: Alle sieben Frontend-Ressourcen von
+  `META-INF/resources/frontend/web/...` nach `META-INF/frontend/web/...` verschoben (2
+  JS-Module, 5 Stylesheets). Ab Vaadin 25 ist das der Ort für **Bundle-Quellen**
+  (`@JsModule`/`@CssImport`); der alte Pfad ist deprecated und löste beim Frontend-Build
+  eine Warnung aus. Die Pfade in den Annotationen (`./web/common/component/…`) bleiben
+  unverändert — nur der Ort im Jar ändert sich. Möglich geworden, weil Vaadin 24 nicht
+  mehr unterstützt werden muss (Vaadin 24 kennt `META-INF/frontend/` nicht).
+* **Stolperstein**: Nach dem Verschieben blieb `META-INF/resources/` als **leeres
+  Verzeichnis** auf der Platte zurück. Git ignoriert leere Verzeichnisse, Gradle packt sie
+  aber ins Jar — der Vaadin-Build warnte deshalb unverändert weiter, obwohl dort keine
+  Datei mehr lag. Erst das Löschen des Verzeichnisses beendete die Warnung. In
+  [Build, Test und Release](/conventions/build-and-release.md) festgehalten.
+* **Fix**: `.claude/launch.json` startete die Demo nicht — `cmd /c` löst `gradlew.bat` ohne
+  vorangestelltes `.\` nicht auf. Pfad explizit gemacht.
+* **Verifikation**: Frontend-Build ohne Deprecation-Warnung; im Browser gegen Vaadin 25
+  geprüft, dass Vaadin die Ressourcen am neuen Ort auflöst — `window.SearchHighlighter`
+  und `window.MaknoCodeViewer` geladen, 25 Stylesheet-Regeln der Bibliothek aktiv
+  (darunter `.search-token::highlight(search-match)` aus `search.css`), `.xml-tag` in
+  `rgb(37, 99, 235)` statt Default-Schwarz, XmlViewer-Suche 120/120 Ranges,
+  CodeMirror rendert 24 Zeilen im Shadow-Root mit Zähler 1/3.
+
 ## 2026-08-05 (3)
 
 * **Correction**: Die am selben Tag dokumentierte **Doppelkompatibilität (Vaadin 24 und 25)

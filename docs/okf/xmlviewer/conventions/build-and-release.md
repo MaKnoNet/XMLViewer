@@ -56,13 +56,16 @@ Untergrenze fest — Details in [Vaadin-API-Nutzung](/conventions/vaadin-api-nut
   `developmentOnly 'com.vaadin:vaadin-dev'` bricht `bootRun` im Dev-Mode beim Start ab
   (`'vaadin-dev-server' not found`).
 
-## Offener Punkt
+## Ablageort der Frontend-Ressourcen
 
-Vaadin 25 markiert `META-INF/resources/frontend/` für Add-on-Frontend-Quellen als **deprecated**
-(Empfehlung: `META-INF/frontend/` für `@JsModule`/`@CssImport`-Quellen, `META-INF/resources/` für
-`@StyleSheet`/`@JavaScript`-Laufzeitressourcen). Der Build gibt darauf eine Warnung aus. Da Vaadin
-24 nicht mehr unterstützt wird, steht dem Wechsel nichts mehr im Weg — er ist offen, weil er das
-Verschieben aller CSS-/JS-Ressourcen von `web-common` bedeutet und separat verifiziert gehört.
+Die CSS-/JS-Ressourcen der Bibliothek liegen unter `META-INF/frontend/` — ab Vaadin 25 der Ort für
+**Bundle-Quellen** (`@JsModule`/`@CssImport`). Das frühere `META-INF/resources/frontend/` ist
+deprecated und löste beim Frontend-Build eine Warnung aus. Reine Laufzeit-Ressourcen
+(`@StyleSheet`/`@JavaScript`) gehörten nach `META-INF/resources/` — die Bibliothek nutzt keine.
+
+Beim Verschieben darauf achten, dass `META-INF/resources/` nicht als **leeres Verzeichnis**
+zurückbleibt: Gradle packt es sonst mit ins Jar, und der Vaadin-Build warnt weiter, obwohl keine
+Datei mehr dort liegt.
 
 # Regeln
 
