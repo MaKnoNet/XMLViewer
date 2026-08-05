@@ -24,6 +24,19 @@ Drei Frontend-Prinzipien prägen die Bibliothek:
    `META-INF/resources/frontend/web/common/component/...` und werden von Vaadin beim
    Konsumenten automatisch aufgelöst — kein zusätzliches Setup.
 
+# Draht-Format Server → Browser
+
+Die Treffer gehen als **flache Zahlenfolge** `"tokenIndex,start,end,tokenIndex,…"` über
+`executeJs` an `window.SearchHighlighter.apply(...)`; leere Trefferliste = leerer String. Der
+Browser zerlegt sie in `parseFlat` und findet den Treffer-Knoten positionsbasiert über die
+Klasse `.search-token` (Dokumentreihenfolge == Token-Reihenfolge).
+
+Bewusst eine Zeichenkette und **kein JSON-Typ**: `String` ist der einzige
+`executeJs`-Parametertyp, den alle Vaadin-Generationen unverändert unterstützen. Vaadin 25 hat
+`elemental.json` entfernt — Begründung und Prüfpunkte in
+[Vaadin-Versionsunabhängigkeit](/conventions/vaadin-versionsunabhaengigkeit.md), Signatur in
+[`toFlatCsv`](/api-reference/search/frontend-search-highlighter/to-flat-csv.md).
+
 # Abgrenzung npm
 
 Die Bibliothek `web-common` ist **npm-frei** (kompiliert/testet ohne Node). Nur die

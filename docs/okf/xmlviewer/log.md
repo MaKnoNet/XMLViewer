@@ -1,5 +1,30 @@
 # Update-Log
 
+## 2026-08-05
+
+* **Fix**: `FrontendSearchHighlighter` überträgt die Suchtreffer nicht mehr als
+  `elemental.json.JsonArray`, sondern als flache Zahlenfolge
+  `"tokenIndex,start,end,…"` (`toFlatCsv`, package-private `static`). Vaadin 25 hat
+  `elemental.json` entfernt (Ersatz: Jackson 3) — in einer Vaadin-25-Host-Anwendung
+  scheiterte die Suche deshalb zur Laufzeit mit `NoClassDefFoundError`. `String` ist
+  der einzige `executeJs`-Parametertyp, den Vaadin 24 **und** 25 unterstützen; damit
+  bleibt ein Artefakt auf beiden Generationen lauffähig, ohne Jackson und ohne
+  Branch-Aufspaltung. Gegenstück `search-highlighter.js` zerlegt die Folge in
+  `parseFlat`; Trennzeichen beidseitig als Konstante `SEPARATOR`.
+* **Creation**: neue Konvention
+  [Vaadin-Versionsunabhängigkeit](/conventions/vaadin-versionsunabhaengigkeit.md) —
+  Tabelle der je Vaadin-Generation zulässigen `executeJs`-Parametertypen plus
+  Prüfpunkte für künftige Änderungen.
+* **Update**: `api-reference/search/frontend-search-highlighter/to-flat-array.md` →
+  `to-flat-csv.md` (verifizierte Signatur, `null`-Verhalten jetzt über `matches.size()`
+  statt Schleifen-Iterator); Klassenübersicht um die Felder `SEPARATOR` und
+  `CHARS_PER_MATCH` ergänzt; `render.md` auf die neue Hilfsmethode umgestellt;
+  [Frontend-Integration](/architecture/frontend-integration.md) um den bislang
+  undokumentierten Abschnitt „Draht-Format Server → Browser" erweitert.
+* **Update**: neuer Unit-Test `FrontendSearchHighlighterTest` sichert das Draht-Format
+  und die No-op-Zusicherung ohne gebundene UI ab — die Kodierung war bisher
+  ungetestet (`SearchControllerTest` nutzt nur den `RecordingRenderer`).
+
 ## 2026-07-08
 
 * **Restructure**: `api-reference/` von einer flachen Datei pro Klasse auf **einen

@@ -1,8 +1,6 @@
 package de.makno.web.common.component.search;
 
 import com.vaadin.flow.component.Component;
-import elemental.json.Json;
-import elemental.json.JsonArray;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,6 +23,13 @@ public final class FrontendSearchHighlighter implements SearchHighlightRenderer 
     private static final String JS_MOVE_CURRENT = "window.SearchHighlighter.moveCurrent(this, $0)";
     private static final String JS_CLEAR = "window.SearchHighlighter.clear(this)";
 
+    // Trennzeichen der Treffer-Zahlenfolge; identisch im Gegenstück search-highlighter.js.
+    private static final char SEPARATOR = ',';
+
+    // Grosszuegige Schaetzung je Treffer (3 Zahlen + 3 Trennzeichen) fuer die StringBuilder-Kapazitaet:
+    // vermeidet Umkopieren des internen Arrays bei vielen Treffern.
+    private static final int CHARS_PER_MATCH = 16;
+
     private final Component host;
 
     public FrontendSearchHighlighter(Component host) {
@@ -36,7 +41,7 @@ public final class FrontendSearchHighlighter implements SearchHighlightRenderer 
         if (host.getUI().isEmpty()) {
             return;
         }
-        host.getElement().executeJs(JS_APPLY, toFlatArray(matches), currentIndex);
+        host.getElement().executeJs(JS_APPLY, toFlatCsv(matches), currentIndex);
     }
 
     @Override
@@ -55,15 +60,32 @@ public final class FrontendSearchHighlighter implements SearchHighlightRenderer 
         host.getElement().executeJs(JS_CLEAR);
     }
 
-    /** Flaches Zahlen-Array [tokenIndex, start, end, …] für eine kompakte Übertragung. */
-    private JsonArray toFlatArray(List<TokenMatch> matches) {
-        JsonArray array = Json.createArray();
-        int position = 0;
+    /**
+     * Flache Zahlenfolge {@code "tokenIndex,start,end,…"} für eine kompakte Übertragung; das
+     * Gegenstück {@code search-highlighter.js} zerlegt sie wieder in Zahlen.
+     *
+     * <p>Bewusst ein {@code String} und kein JSON-Typ: {@code String} ist der einzige
+     * {@code executeJs}-Parametertyp, den alle Vaadin-Generationen unverändert unterstützen. Vaadin
+     * 25 hat die früher hier genutzte Bibliothek {@code elemental.json} entfernt (Ersatz: Jackson);
+     * ein {@code JsonArray} führte dort zum {@code NoClassDefFoundError} bzw. würde als Parameter
+     * abgelehnt. Collections akzeptiert erst Vaadin 25, nicht 24 – siehe
+     * {@code /conventions/vaadin-versionsunabhaengigkeit.md} im OKF-Bundle.
+     *
+     * @param matches Treffer in Dokumentreihenfolge; {@code null} ist nicht erlaubt
+     * @return die Zahlenfolge, bei leerer Trefferliste der leere String – nie {@code null}
+     */
+    static String toFlatCsv(List<TokenMatch> matches) {
+        StringBuilder csv = new StringBuilder(matches.size() * CHARS_PER_MATCH);
         for (TokenMatch match : matches) {
-            array.set(position++, match.tokenIndex());
-            array.set(position++, match.start());
-            array.set(position++, match.end());
+            if (csv.length() > 0) {
+                csv.append(SEPARATOR);
+            }
+            csv.append(match.tokenIndex())
+                    .append(SEPARATOR)
+                    .append(match.start())
+                    .append(SEPARATOR)
+                    .append(match.end());
         }
-        return array;
+        return csv.toString();
     }
 }

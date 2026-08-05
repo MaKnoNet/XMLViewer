@@ -21,7 +21,7 @@ dependencies {
     // vaadin-core-Sammelartefakts (~45 Module: Grid, Login, Upload, Themes, ...) – das hält den
     // Compile-Classpath der Konsumenten schlank. Alle Versionen kommen aus der vaadin-bom.
     api platform("com.vaadin:vaadin-bom:${vaadinVersion}")
-    api 'com.vaadin:flow-server' // Component/Composite/Events/@CssImport/@JsModule, elemental.json
+    api 'com.vaadin:flow-server' // Component/Composite/Events/@CssImport/@JsModule
     api 'com.vaadin:flow-html-components' // Div, Span
     api 'com.vaadin:flow-data' // ValueChangeMode
     api 'com.vaadin:vaadin-button-flow'

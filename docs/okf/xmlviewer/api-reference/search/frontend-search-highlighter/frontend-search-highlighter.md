@@ -12,10 +12,13 @@ timestamp: '2026-07-07T10:00:00+02:00'
 
 `FrontendSearchHighlighter` ist die `final`, `Serializable` Standardimplementierung von
 [SearchHighlightRenderer](/api-reference/search/search-highlight-renderer/search-highlight-renderer.md). Sie überträgt
-Treffer als flaches Zahlen-Array (`[tokenIndex, start, end, …]`) per `executeJs` an das
+Treffer als flache Zahlenfolge (`"tokenIndex,start,end,…"`) per `executeJs` an das
 Frontend-Modul `search-highlighter.js`, das die Bereiche via CSS Custom Highlight API
 zeichnet — dadurch entsteht kein zusätzlicher DOM-Knoten und kein zusätzlicher
-Session-Heap pro Treffer. Mehr zur Rolle im Gesamtbild in
+Session-Heap pro Treffer. Die Zahlenfolge ist bewusst ein `String` und kein JSON-Typ, damit
+die Bibliothek an keine Vaadin-Generation gebunden ist (siehe
+[Vaadin-Versionsunabhängigkeit](/conventions/vaadin-versionsunabhaengigkeit.md)). Mehr zur
+Rolle im Gesamtbild in
 [Geteilte Such-Engine](/architecture/search-engine.md) und
 [Frontend-Integration](/architecture/frontend-integration.md).
 
@@ -37,6 +40,8 @@ dieser Klasse.
 | `JS_APPLY` | `private static final String` | JS-Snippet `"window.SearchHighlighter.apply(this, $0, $1)"`, ruft das Frontend-Modul zum Zeichnen aller Treffer auf. | nein — Kompilierzeit-Konstante |
 | `JS_MOVE_CURRENT` | `private static final String` | JS-Snippet `"window.SearchHighlighter.moveCurrent(this, $0)"`, verschiebt nur die Hervorhebung des aktuellen Treffers. | nein — Kompilierzeit-Konstante |
 | `JS_CLEAR` | `private static final String` | JS-Snippet `"window.SearchHighlighter.clear(this)"`, entfernt alle Markierungen. | nein — Kompilierzeit-Konstante |
+| `SEPARATOR` | `private static final char` | Trennzeichen `','` der Treffer-Zahlenfolge; identisch mit der Konstante `SEPARATOR` in `search-highlighter.js`. | entfällt (primitiv `char`) |
+| `CHARS_PER_MATCH` | `private static final int` | Kapazitätsschätzung `16` Zeichen je Treffer für die Vordimensionierung des `StringBuilder` in `toFlatCsv`. | entfällt (primitiv `int`) |
 | `host` | `private final Component` | Wirts-Komponente; deren Wurzel-Element dient als `this`-Scope für alle `executeJs`-Aufrufe. | nein — Konstruktor erzwingt `Objects.requireNonNull(host, "host")` |
 
 # Thread-Safety
@@ -98,7 +103,7 @@ Treffer** (erwartungsgemäß, die Klasse ist `final`).
 - [`render(List<TokenMatch> matches, int currentIndex)`](./render.md)
 - [`moveCurrent(int currentIndex)`](./move-current.md)
 - [`clear()`](./clear.md)
-- [`toFlatArray(List<TokenMatch> matches)`](./to-flat-array.md) *(private Hilfsmethode)*
+- [`toFlatCsv(List<TokenMatch> matches)`](./to-flat-csv.md) *(package-private `static`, für Tests sichtbar)*
 
 # Citations
 

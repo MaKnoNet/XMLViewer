@@ -7,8 +7,10 @@
  * registrierten Highlights `search-match` (alle Treffer) und `search-current` (aktueller Treffer);
  * ihr Aussehen kommt aus den `::highlight(...)`-Regeln in styles/search.css.
  *
- * Der Server übergibt Treffer als flaches Zahlen-Array [tokenIndex, start, end, tokenIndex, …]. Über
- * die Klasse `.search-token` (Dokumentreihenfolge == Token-Reihenfolge) wird der Treffer-Knoten
+ * Der Server übergibt Treffer als flache Zahlenfolge "tokenIndex,start,end,tokenIndex,…" – bewusst
+ * als Zeichenkette und nicht als JSON-Array: String ist der einzige executeJs-Parametertyp, den alle
+ * Vaadin-Generationen unverändert unterstützen (Vaadin 25 hat elemental.json entfernt). Über die
+ * Klasse `.search-token` (Dokumentreihenfolge == Token-Reihenfolge) wird der Treffer-Knoten
  * positionsbasiert gefunden.
  *
  * Geteilt von allen Viewer-Komponenten (XmlViewer, TextViewer, …). Mehrere Instanzen je Seite werden
@@ -20,6 +22,9 @@
     const CURRENT_HIGHLIGHT = "search-current";
     const TOKEN_SELECTOR = ".search-token";
     const VALUES_PER_MATCH = 3;
+    // Trennzeichen der vom Server gelieferten Zahlenfolge; identisch im Gegenstueck
+    // FrontendSearchHighlighter.java (SEPARATOR).
+    const SEPARATOR = ",";
 
     // Wurzel-Element -> flaches Treffer-Array [tokenIndex, start, end, …]
     const matchesByRoot = new Map();
@@ -50,6 +55,15 @@
         range.setStart(textNode, from);
         range.setEnd(textNode, to);
         return range;
+    }
+
+    // Zerlegt die Server-Zahlenfolge "tokenIndex,start,end,…" in ein Zahlen-Array. Leerer/fehlender
+    // Wert (keine Treffer) ergibt ein leeres Array – split("") lieferte sonst [""] -> [NaN].
+    function parseFlat(csv) {
+        if (!csv) {
+            return [];
+        }
+        return csv.split(SEPARATOR).map(Number);
     }
 
     function currentFromFlat(flat, index) {
@@ -116,7 +130,7 @@
 
     window.SearchHighlighter = {
         apply(root, flat, currentIndex) {
-            const numbers = Array.from(flat || []);
+            const numbers = parseFlat(flat);
             matchesByRoot.set(root, numbers);
             const current = currentFromFlat(numbers, currentIndex);
             currentByRoot.set(root, current);

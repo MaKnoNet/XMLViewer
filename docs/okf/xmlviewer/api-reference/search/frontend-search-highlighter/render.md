@@ -17,10 +17,9 @@ public void render(List<TokenMatch> matches, int currentIndex)
 
 - `matches` (`List<TokenMatch>`) — null-erlaubt: **nein, faktisch nicht geprüft, aber
   würde zur NPE führen**. Es gibt keinen expliziten Null-Check im Methodenbody; `matches`
-  wird direkt an die private Hilfsmethode `toFlatArray(matches)` weitergereicht, die per
-  erweiterter `for`-Schleife (`for (TokenMatch match : matches)`) iteriert — bei
-  `matches == null` würde dies eine `NullPointerException` auslösen (implizit über
-  `Iterable.iterator()` auf `null`). In der Praxis unkritisch, da der einzige Aufrufer
+  wird direkt an die Hilfsmethode [`toFlatCsv(matches)`](./to-flat-csv.md) weitergereicht,
+  die mit `matches.size()` beginnt — bei `matches == null` löst dies eine
+  `NullPointerException` aus. In der Praxis unkritisch, da der einzige Aufrufer
   ([SearchController](/api-reference/search/search-controller/search-controller.md)) immer eine nicht-null
   `List` (ggf. `List.of()`) übergibt.
 - `currentIndex` (`int`) — null-erlaubt: entfällt (primitiver Typ). Kein Bereichs-Check;
