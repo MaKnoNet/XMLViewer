@@ -16,8 +16,8 @@ Treffer als flache Zahlenfolge (`"tokenIndex,start,end,…"`) per `executeJs` an
 Frontend-Modul `search-highlighter.js`, das die Bereiche via CSS Custom Highlight API
 zeichnet — dadurch entsteht kein zusätzlicher DOM-Knoten und kein zusätzlicher
 Session-Heap pro Treffer. Die Zahlenfolge ist bewusst ein `String` und kein JSON-Typ, damit
-die Bibliothek an keine Vaadin-Generation gebunden ist (siehe
-[Vaadin-Versionsunabhängigkeit](/conventions/vaadin-versionsunabhaengigkeit.md)). Mehr zur
+die Bibliothek an keine JSON-Bibliothek gebunden ist (siehe
+[Vaadin-API-Nutzung](/conventions/vaadin-api-nutzung.md)). Mehr zur
 Rolle im Gesamtbild in
 [Geteilte Such-Engine](/architecture/search-engine.md) und
 [Frontend-Integration](/architecture/frontend-integration.md).

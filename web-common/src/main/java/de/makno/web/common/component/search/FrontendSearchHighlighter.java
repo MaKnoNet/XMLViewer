@@ -64,12 +64,11 @@ public final class FrontendSearchHighlighter implements SearchHighlightRenderer 
      * Flache Zahlenfolge {@code "tokenIndex,start,end,…"} für eine kompakte Übertragung; das
      * Gegenstück {@code search-highlighter.js} zerlegt sie wieder in Zahlen.
      *
-     * <p>Bewusst ein {@code String} und kein JSON-Typ: {@code String} ist der einzige
-     * {@code executeJs}-Parametertyp, den alle Vaadin-Generationen unverändert unterstützen. Vaadin
-     * 25 hat die früher hier genutzte Bibliothek {@code elemental.json} entfernt (Ersatz: Jackson);
-     * ein {@code JsonArray} führte dort zum {@code NoClassDefFoundError} bzw. würde als Parameter
-     * abgelehnt. Collections akzeptiert erst Vaadin 25, nicht 24 – siehe
-     * {@code /conventions/vaadin-versionsunabhaengigkeit.md} im OKF-Bundle.
+     * <p>Bewusst ein {@code String} und kein JSON-Typ: Vaadin 25 hat die früher hier genutzte
+     * Bibliothek {@code elemental.json} entfernt und durch Jackson 3 ersetzt (samt Paketwechsel
+     * {@code com.fasterxml.jackson} → {@code tools.jackson}). Ein {@code JsonArray} führte zum
+     * {@code NoClassDefFoundError}; sich an Jackson zu binden, verschöbe das Problem nur auf die
+     * nächste Jackson-Generation. Siehe {@code /conventions/vaadin-api-nutzung.md} im OKF-Bundle.
      *
      * @param matches Treffer in Dokumentreihenfolge; {@code null} ist nicht erlaubt
      * @return die Zahlenfolge, bei leerer Trefferliste der leere String – nie {@code null}

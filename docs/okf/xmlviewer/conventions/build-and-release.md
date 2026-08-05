@@ -34,10 +34,10 @@ speist Plugin wie BOM beider Module.
 | Servlet-API (nur Testscope) | 6.1.0 | Vaadin 25 = Servlet 6.1 / Jakarta EE 11 |
 | Node | 24+ | lädt das Vaadin-Plugin selbst herunter |
 
-**Die Bibliothek `web-common` ist davon bewusst entkoppelt** und läuft auch in
-Vaadin-24-Anwendungen — siehe
-[Vaadin-Versionsunabhängigkeit](/conventions/vaadin-versionsunabhaengigkeit.md). Diese Tabelle
-beschreibt nur die Build-Umgebung dieses Repositories.
+**Vaadin 25 ist damit auch die Laufzeit-Untergrenze des publizierten Artefakts.** Weil die
+`executeJs`-Überladungen sich zwischen 24 und 25 unterscheiden, legt die Compile-Version die
+Untergrenze fest — Details in [Vaadin-API-Nutzung](/conventions/vaadin-api-nutzung.md). Alles
+Übrige in dieser Tabelle betrifft nur die Build-Umgebung dieses Repositories.
 
 ## Gradle-9-Besonderheiten
 
@@ -59,9 +59,10 @@ beschreibt nur die Build-Umgebung dieses Repositories.
 ## Offener Punkt
 
 Vaadin 25 markiert `META-INF/resources/frontend/` für Add-on-Frontend-Quellen als **deprecated**
-(Empfehlung: `META-INF/frontend/`). Ein Wechsel würde die Vaadin-24-Kompatibilität brechen, weil
-24 nur den alten Pfad kennt — bleibt deshalb bewusst unverändert, bis Vaadin 24 nicht mehr
-unterstützt werden muss. Der Build gibt bis dahin eine Deprecation-Warnung aus.
+(Empfehlung: `META-INF/frontend/` für `@JsModule`/`@CssImport`-Quellen, `META-INF/resources/` für
+`@StyleSheet`/`@JavaScript`-Laufzeitressourcen). Der Build gibt darauf eine Warnung aus. Da Vaadin
+24 nicht mehr unterstützt wird, steht dem Wechsel nichts mehr im Weg — er ist offen, weil er das
+Verschieben aller CSS-/JS-Ressourcen von `web-common` bedeutet und separat verifiziert gehört.
 
 # Regeln
 

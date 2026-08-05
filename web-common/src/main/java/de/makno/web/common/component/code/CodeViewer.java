@@ -11,7 +11,6 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.shared.Registration;
 import de.makno.web.common.component.navigation.MatchChangeEvent;
 import de.makno.web.common.component.navigation.MatchNavigable;
-import java.io.Serializable;
 
 /**
  * Read-only Quelltext-Ansicht für viele text-basierte Formate (Java, C#, Python, JSON, YAML, HTML,
@@ -267,8 +266,14 @@ public class CodeViewer extends Div implements MatchNavigable {
     /**
      * Ruft eine Funktion des Frontend-Glues {@code window.MaknoCodeViewer} mit diesem Element als
      * erstem Argument auf – nur bei gebundener UI (im Unit-Test ohne Client wirkungslos).
+     *
+     * <p>{@code Object...} statt {@code Serializable...}: Vaadin 25 hat
+     * {@code executeJs(String, Object...)} eingeführt und die alte {@code Serializable[]}-Überladung
+     * als veraltet markiert. Ein {@code Serializable[]} träfe hier exakt die veraltete Überladung.
+     * Die übergebenen Werte sind ohnehin nur {@code String}/{@code boolean}/{@code int} und werden
+     * direkt weitergereicht, nie in einem Feld gehalten – es entsteht kein Serialisierungsproblem.
      */
-    private void callJs(String function, Serializable... args) {
+    private void callJs(String function, Object... args) {
         if (getUI().isEmpty()) {
             return;
         }

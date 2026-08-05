@@ -31,10 +31,10 @@ Die Treffer gehen als **flache Zahlenfolge** `"tokenIndex,start,end,tokenIndex,�
 Browser zerlegt sie in `parseFlat` und findet den Treffer-Knoten positionsbasiert über die
 Klasse `.search-token` (Dokumentreihenfolge == Token-Reihenfolge).
 
-Bewusst eine Zeichenkette und **kein JSON-Typ**: `String` ist der einzige
-`executeJs`-Parametertyp, den alle Vaadin-Generationen unverändert unterstützen. Vaadin 25 hat
-`elemental.json` entfernt — Begründung und Prüfpunkte in
-[Vaadin-Versionsunabhängigkeit](/conventions/vaadin-versionsunabhaengigkeit.md), Signatur in
+Bewusst eine Zeichenkette und **kein JSON-Typ**: Vaadin 25 hat `elemental.json` entfernt und durch
+Jackson 3 ersetzt; sich an Jackson zu binden, verschöbe das Problem nur auf die nächste
+Jackson-Generation. Begründung und Prüfpunkte in
+[Vaadin-API-Nutzung](/conventions/vaadin-api-nutzung.md), Signatur in
 [`toFlatCsv`](/api-reference/search/frontend-search-highlighter/to-flat-csv.md).
 
 # Abgrenzung npm

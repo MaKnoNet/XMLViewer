@@ -28,15 +28,14 @@ static String toFlatCsv(List<TokenMatch> matches)
   `search-highlighter.js` bildet ihn über `parseFlat` auf ein leeres Array ab.
 - **Geworfene Exceptions:** implizite `NullPointerException` bei `matches == null` (siehe
   oben); keine expliziten `throw`-Statements im Rumpf.
-- **Warum `String` und kein JSON-Typ:** `String` ist der einzige `executeJs`-Parametertyp,
-  den alle Vaadin-Generationen unverändert unterstützen. Vaadin 25 hat `elemental.json`
-  entfernt (Ersatz: Jackson 3), Collections als Parameter kann erst Vaadin 25. Details und
-  Begründung in
-  [Vaadin-Versionsunabhängigkeit](/conventions/vaadin-versionsunabhaengigkeit.md).
+- **Warum `String` und kein JSON-Typ:** Vaadin 25 hat `elemental.json` entfernt und durch
+  Jackson 3 ersetzt (samt Paketwechsel `com.fasterxml.jackson` → `tools.jackson`). Sich an
+  Jackson zu binden, verschöbe das Problem nur auf die nächste Jackson-Generation. Details
+  und Begründung in [Vaadin-API-Nutzung](/conventions/vaadin-api-nutzung.md).
 - **Sichtbarkeit:** `static` und package-private statt `private` — damit ist das
   Draht-Format ohne Browser direkt unit-testbar (`FrontendSearchHighlighterTest`).
 
 # Citations
 
 [1] [FrontendSearchHighlighter (Übersicht)](./frontend-search-highlighter.md)
-[2] [Vaadin-Versionsunabhängigkeit](/conventions/vaadin-versionsunabhaengigkeit.md)
+[2] [Vaadin-API-Nutzung](/conventions/vaadin-api-nutzung.md)

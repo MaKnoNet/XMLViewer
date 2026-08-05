@@ -1,5 +1,32 @@
 # Update-Log
 
+## 2026-08-05 (3)
+
+* **Correction**: Die am selben Tag dokumentierte **Doppelkompatibilität (Vaadin 24 und 25)
+  war falsch** und ist zurückgenommen. Ausgelöst durch eine Deprecation-Warnung des
+  Compilers, die zur Prüfung des erzeugten Bytecodes führte: Vaadin 25 hat
+  `Element.executeJs(String, Object...)` eingeführt und die alte Überladung als
+  `executeJs(String, Serializable[])` deprecated hinterlassen; Vaadin 24 kennt **nur**
+  `Serializable...`. Gegen 25 kompiliert, referenziert jeder Aufruf im Bytecode
+  `(String, Object[])` — auf Vaadin 24 also `NoSuchMethodError`. **Bei
+  `executeJs`/`callJsFunction` bestimmt die Compile-Version die Laufzeit-Untergrenze, nicht
+  der Quelltext.** Der Verzicht auf `elemental.json` bleibt richtig und begründet, die
+  Untergrenze ist aber Vaadin 25.
+* **Fix**: `CodeViewer.callJs` nimmt `Object...` statt `Serializable...`. Ein
+  `Serializable[]` traf exakt die veraltete Überladung — das war die Quelle der
+  Deprecation-Warnung. Die Werte sind ohnehin nur `String`/`boolean`/`int` und werden
+  durchgereicht, nie in einem Feld gehalten; `compileJava` ist damit warnungsfrei.
+* **Restructure**: `conventions/vaadin-versionsunabhaengigkeit.md` →
+  [`vaadin-api-nutzung.md`](/conventions/vaadin-api-nutzung.md) (der alte Name wäre nach
+  dieser Korrektur irreführend). Inhalt neu gefasst: Untergrenze Vaadin 25 samt
+  Bytecode-Begründung, Tabelle der zulässigen Parametertypen, Prüfpunkte inkl.
+  „nie ein `Serializable[]` durchreichen".
+* **Update**: `README.md` (Anforderung wieder „Vaadin 25"),
+  [Build, Test und Release](/conventions/build-and-release.md) (Untergrenze; der Wechsel auf
+  `META-INF/frontend/` ist jetzt nicht mehr durch Vaadin-24-Rücksicht blockiert, bleibt aber
+  als separater Schritt offen), Klassen- und Methodendoku des `FrontendSearchHighlighter`
+  sowie die Kopfkommentare von `search-highlighter.js` und `FrontendSearchHighlighterTest`.
+
 ## 2026-08-05 (2)
 
 * **Update**: Repo-Build von Vaadin 24.5.3 auf **25.2.5** angehoben — damit laufen
@@ -36,10 +63,11 @@
   bleibt ein Artefakt auf beiden Generationen lauffähig, ohne Jackson und ohne
   Branch-Aufspaltung. Gegenstück `search-highlighter.js` zerlegt die Folge in
   `parseFlat`; Trennzeichen beidseitig als Konstante `SEPARATOR`.
-* **Creation**: neue Konvention
-  [Vaadin-Versionsunabhängigkeit](/conventions/vaadin-versionsunabhaengigkeit.md) —
-  Tabelle der je Vaadin-Generation zulässigen `executeJs`-Parametertypen plus
-  Prüfpunkte für künftige Änderungen.
+* **Creation**: neue Konvention „Vaadin-Versionsunabhängigkeit" — Tabelle der je
+  Vaadin-Generation zulässigen `executeJs`-Parametertypen plus Prüfpunkte für künftige
+  Änderungen. *(Am 2026-08-05 (3) umbenannt in
+  [Vaadin-API-Nutzung](/conventions/vaadin-api-nutzung.md); die hier behauptete
+  Doppelkompatibilität hielt nicht — siehe dort.)*
 * **Update**: `api-reference/search/frontend-search-highlighter/to-flat-array.md` →
   `to-flat-csv.md` (verifizierte Signatur, `null`-Verhalten jetzt über `matches.size()`
   statt Schleifen-Iterator); Klassenübersicht um die Felder `SEPARATOR` und

@@ -83,9 +83,13 @@ if (caBundle != null) {
 
 // Vaadin-Tasks schreiben generierte Dateien ins Projektverzeichnis (src/main/frontend/generated,
 // src/main/bundles, package.json), das Spotless als Input-Baum liest. Ohne deklarierte Reihenfolge
-// meldet Gradle einen Validierungsfehler (implicit dependency) – daher ALLE Spotless-Tasks nach
-// ALLEN Vaadin-Tasks ordnen (nicht nur das eine Paar, das zuerst auffiel: auch vaadinBuildFrontend
-// im Production-Build löst sonst denselben Fehler aus).
+// meldet Gradle einen Validierungsfehler (implicit dependency) – beide schreibenden Tasks sind
+// gemeint, nicht nur das Paar, das zuerst auffiel: auch vaadinBuildFrontend im Production-Build.
+//
+// Bewusst namentlich statt `tasks.matching { it.name.startsWith('vaadin') }`: das Matching zwingt
+// Gradle beim Aufloesen der Reihenfolge dazu, ALLE Vaadin-Tasks zu realisieren – darunter welche,
+// die auf eine hier nicht existierende Hilla-Task 'generate' verweisen. `spotlessApply build`
+// scheitert dann mit "Task with name 'generate' not found".
 tasks.matching { it.name.startsWith('spotless') }.configureEach {
-    mustRunAfter tasks.matching { it.name.startsWith('vaadin') }
+    mustRunAfter tasks.named('vaadinPrepareFrontend'), tasks.named('vaadinBuildFrontend')
 }

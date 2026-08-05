@@ -2383,7 +2383,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "demo_app_src_main_java_de_makno_xmlviewer_app_codedemoview_codedemoview_createactionbar",
-      "community": 49,
+      "community": 260,
       "community_name": ".callJs",
       "norm_label": ".createactionbar()"
     },
@@ -2482,8 +2482,8 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "demo_app_src_main_java_de_makno_xmlviewer_app_mainview_mainview_createactionbar",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".createactionbar()"
     },
     {
@@ -2493,8 +2493,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "demo_app_src_main_java_de_makno_xmlviewer_app_samplecodefactory",
-      "community": 20,
-      "community_name": "CodeLanguage",
+      "community": 46,
+      "community_name": "CodeDemoView.java",
       "norm_label": "samplecodefactory.java"
     },
     {
@@ -2504,8 +2504,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "demo_app_src_main_java_de_makno_xmlviewer_app_samplecodefactory_samplecodefactory",
-      "community": 20,
-      "community_name": "CodeLanguage",
+      "community": 46,
+      "community_name": "CodeDemoView.java",
       "norm_label": "samplecodefactory"
     },
     {
@@ -2515,8 +2515,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "demo_app_src_main_java_de_makno_xmlviewer_app_samplecodefactory_samplecodefactory_samplecodefactory",
-      "community": 20,
-      "community_name": "CodeLanguage",
+      "community": 46,
+      "community_name": "CodeDemoView.java",
       "norm_label": ".samplecodefactory()"
     },
     {
@@ -2526,8 +2526,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "demo_app_src_main_java_de_makno_xmlviewer_app_samplecodefactory_samplecodefactory_samplefor",
-      "community": 20,
-      "community_name": "CodeLanguage",
+      "community": 46,
+      "community_name": "CodeDemoView.java",
       "norm_label": ".samplefor()"
     },
     {
@@ -3048,8 +3048,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codelanguage",
-      "community": 268,
-      "community_name": "@codemirror/lang-json",
+      "community": 20,
+      "community_name": "CodeLanguage",
       "norm_label": "codelanguage.java"
     },
     {
@@ -3191,8 +3191,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codelanguage_cm6id",
-      "community": 268,
-      "community_name": "@codemirror/lang-json",
+      "community": 20,
+      "community_name": "CodeLanguage",
       "norm_label": "cm6id()"
     },
     {
@@ -3202,8 +3202,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codelanguage_extensions",
-      "community": 268,
-      "community_name": "@codemirror/lang-json",
+      "community": 20,
+      "community_name": "CodeLanguage",
       "norm_label": "extensions()"
     },
     {
@@ -3298,7 +3298,7 @@
       "label": "CodeViewer",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L38",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
       "community": 1,
@@ -3312,8 +3312,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "div",
-      "community": 17,
-      "community_name": "FrontendSearchHighlighter",
+      "community": 1,
+      "community_name": "CodeViewer",
       "norm_label": "div"
     },
     {
@@ -3353,18 +3353,18 @@
       "label": ".CodeViewer()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L71",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_codeviewer",
-      "community": 267,
-      "community_name": "@codemirror/lang-javascript",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".codeviewer()"
     },
     {
       "label": ".onAttach()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L89",
+      "source_location": "L88",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_onattach",
       "community": 1,
@@ -3397,7 +3397,7 @@
       "label": ".onDetach()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L95",
+      "source_location": "L94",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_ondetach",
       "community": 1,
@@ -3419,10 +3419,10 @@
       "label": ".setText()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L108",
+      "source_location": "L107",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_settext",
-      "community": 10,
+      "community": 15,
       "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".settext()"
     },
@@ -3430,65 +3430,65 @@
       "label": ".getText()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L117",
+      "source_location": "L116",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_gettext",
-      "community": 267,
-      "community_name": "@codemirror/lang-javascript",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".gettext()"
     },
     {
       "label": ".setLanguage()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L122",
+      "source_location": "L121",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setlanguage",
-      "community": 267,
-      "community_name": "@codemirror/lang-javascript",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".setlanguage()"
     },
     {
       "label": ".setLanguageFromFileName()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L128",
+      "source_location": "L127",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setlanguagefromfilename",
-      "community": 267,
-      "community_name": "@codemirror/lang-javascript",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".setlanguagefromfilename()"
     },
     {
       "label": ".getLanguage()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L133",
+      "source_location": "L132",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_getlanguage",
-      "community": 267,
-      "community_name": "@codemirror/lang-javascript",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".getlanguage()"
     },
     {
       "label": ".effectiveLanguageId()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L137",
+      "source_location": "L136",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_effectivelanguageid",
-      "community": 268,
-      "community_name": "@codemirror/lang-json",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".effectivelanguageid()"
     },
     {
       "label": ".setDark()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L147",
+      "source_location": "L146",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setdark",
-      "community": 49,
+      "community": 260,
       "community_name": ".callJs",
       "norm_label": ".setdark()"
     },
@@ -3496,10 +3496,10 @@
       "label": ".isDark()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L152",
+      "source_location": "L151",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_isdark",
-      "community": 49,
+      "community": 260,
       "community_name": ".callJs",
       "norm_label": ".isdark()"
     },
@@ -3507,10 +3507,10 @@
       "label": ".setWrap()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L157",
+      "source_location": "L156",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setwrap",
-      "community": 49,
+      "community": 260,
       "community_name": ".callJs",
       "norm_label": ".setwrap()"
     },
@@ -3518,10 +3518,10 @@
       "label": ".isWrap()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L162",
+      "source_location": "L161",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_iswrap",
-      "community": 49,
+      "community": 260,
       "community_name": ".callJs",
       "norm_label": ".iswrap()"
     },
@@ -3529,21 +3529,21 @@
       "label": ".setShowLineNumbers()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L167",
+      "source_location": "L166",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setshowlinenumbers",
-      "community": 46,
-      "community_name": "CodeDemoView.java",
+      "community": 260,
+      "community_name": ".callJs",
       "norm_label": ".setshowlinenumbers()"
     },
     {
       "label": ".isShowLineNumbers()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L172",
+      "source_location": "L171",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_isshowlinenumbers",
-      "community": 49,
+      "community": 260,
       "community_name": ".callJs",
       "norm_label": ".isshowlinenumbers()"
     },
@@ -3551,10 +3551,10 @@
       "label": ".foldAll()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L177",
+      "source_location": "L176",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_foldall",
-      "community": 49,
+      "community": 260,
       "community_name": ".callJs",
       "norm_label": ".foldall()"
     },
@@ -3562,18 +3562,18 @@
       "label": ".unfoldAll()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L182",
+      "source_location": "L181",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_unfoldall",
-      "community": 1,
-      "community_name": "CodeViewer",
+      "community": 260,
+      "community_name": ".callJs",
       "norm_label": ".unfoldall()"
     },
     {
       "label": ".search()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L195",
+      "source_location": "L194",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_search",
       "community": 1,
@@ -3584,7 +3584,7 @@
       "label": ".nextMatch()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L202",
+      "source_location": "L201",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_nextmatch",
       "community": 1,
@@ -3595,7 +3595,7 @@
       "label": ".previousMatch()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L208",
+      "source_location": "L207",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_previousmatch",
       "community": 1,
@@ -3606,21 +3606,21 @@
       "label": ".clearSearch()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L214",
+      "source_location": "L213",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_clearsearch",
-      "community": 1,
-      "community_name": "CodeViewer",
+      "community": 260,
+      "community_name": ".callJs",
       "norm_label": ".clearsearch()"
     },
     {
       "label": ".getMatchCount()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L220",
+      "source_location": "L219",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_getmatchcount",
-      "community": 10,
+      "community": 15,
       "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".getmatchcount()"
     },
@@ -3628,10 +3628,10 @@
       "label": ".getCurrentMatchIndex()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L226",
+      "source_location": "L225",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_getcurrentmatchindex",
-      "community": 10,
+      "community": 15,
       "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".getcurrentmatchindex()"
     },
@@ -3639,7 +3639,7 @@
       "label": ".setSearchCaseSensitive()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L232",
+      "source_location": "L231",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setsearchcasesensitive",
       "community": 1,
@@ -3650,10 +3650,10 @@
       "label": ".isSearchCaseSensitive()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L239",
+      "source_location": "L238",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_issearchcasesensitive",
-      "community": 49,
+      "community": 260,
       "community_name": ".callJs",
       "norm_label": ".issearchcasesensitive()"
     },
@@ -3661,7 +3661,7 @@
       "label": ".addMatchChangeListener()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L243",
+      "source_location": "L242",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_addmatchchangelistener",
       "community": 1,
@@ -3694,10 +3694,10 @@
       "label": ".onMatchChange()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L256",
+      "source_location": "L255",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_onmatchchange",
-      "community": 10,
+      "community": 15,
       "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".onmatchchange()"
     },
@@ -3708,18 +3708,18 @@
       "source_location": "",
       "_origin": "ast",
       "id": "clientcallable",
-      "community": 10,
-      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
+      "community": 1,
+      "community_name": "CodeViewer",
       "norm_label": "clientcallable"
     },
     {
       "label": ".fireSearchReset()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L263",
+      "source_location": "L262",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_firesearchreset",
-      "community": 10,
+      "community": 15,
       "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".firesearchreset()"
     },
@@ -3727,11 +3727,11 @@
       "label": ".callJs()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L271",
+      "source_location": "L276",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_calljs",
-      "community": 1,
-      "community_name": "CodeViewer",
+      "community": 260,
+      "community_name": ".callJs",
       "norm_label": ".calljs()"
     },
     {
@@ -3829,8 +3829,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_navigation_matchlabelformatter",
-      "community": 8,
-      "community_name": "SearchController",
+      "community": 10,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": "matchlabelformatter.java"
     },
     {
@@ -3840,8 +3840,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_navigation_matchlabelformatter_matchlabelformatter",
-      "community": 8,
-      "community_name": "SearchController",
+      "community": 10,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": "matchlabelformatter"
     },
     {
@@ -3851,8 +3851,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_navigation_matchlabelformatter_java_functionalinterface",
-      "community": 8,
-      "community_name": "SearchController",
+      "community": 10,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": "functionalinterface"
     },
     {
@@ -3862,8 +3862,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_navigation_matchlabelformatter_matchlabelformatter_format",
-      "community": 13,
-      "community_name": "MatchNavigable",
+      "community": 10,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".format()"
     },
     {
@@ -4104,8 +4104,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_navigation_searchnavigator_java_attachevent",
-      "community": 13,
-      "community_name": "MatchNavigable",
+      "community": 47,
+      "community_name": "SearchNavigator",
       "norm_label": "attachevent"
     },
     {
@@ -4236,8 +4236,8 @@
       "source_location": "L154",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_navigation_searchnavigator_searchnavigator_setbuttonsenabled",
-      "community": 13,
-      "community_name": "MatchNavigable",
+      "community": 47,
+      "community_name": "SearchNavigator",
       "norm_label": ".setbuttonsenabled()"
     },
     {
@@ -4332,7 +4332,7 @@
       "label": ".toFlatCsv()",
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/search/FrontendSearchHighlighter.java",
-      "source_location": "L77",
+      "source_location": "L76",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_search_frontendsearchhighlighter_frontendsearchhighlighter_toflatcsv",
       "community": 17,
@@ -4412,8 +4412,8 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_search_searchcontroller_searchcontroller_setcasesensitive",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 8,
+      "community_name": "SearchController",
       "norm_label": ".setcasesensitive()"
     },
     {
@@ -4423,8 +4423,8 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_search_searchcontroller_searchcontroller_settermsplitter",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 8,
+      "community_name": "SearchController",
       "norm_label": ".settermsplitter()"
     },
     {
@@ -4555,8 +4555,8 @@
       "source_location": "L213",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_search_searchcontroller_searchcontroller_hasactivequery",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 8,
+      "community_name": "SearchController",
       "norm_label": ".hasactivequery()"
     },
     {
@@ -4643,8 +4643,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_search_searchtermsplitter_searchtermsplitter",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 8,
+      "community_name": "SearchController",
       "norm_label": "searchtermsplitter"
     },
     {
@@ -4654,8 +4654,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_search_searchtermsplitter_java_functionalinterface",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 8,
+      "community_name": "SearchController",
       "norm_label": "functionalinterface"
     },
     {
@@ -4665,8 +4665,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_search_searchtermsplitter_searchtermsplitter_split",
-      "community": 5,
-      "community_name": "TextViewer",
+      "community": 8,
+      "community_name": "SearchController",
       "norm_label": ".split()"
     },
     {
@@ -4775,8 +4775,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_text_textviewer",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 5,
+      "community_name": "TextViewer",
       "norm_label": "textviewer.java"
     },
     {
@@ -4808,8 +4808,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "hassize",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 5,
+      "community_name": "TextViewer",
       "norm_label": "hassize"
     },
     {
@@ -4819,8 +4819,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "hasstyle",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 5,
+      "community_name": "TextViewer",
       "norm_label": "hasstyle"
     },
     {
@@ -4830,8 +4830,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_text_textviewer_java_cssimport",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 5,
+      "community_name": "TextViewer",
       "norm_label": "cssimport"
     },
     {
@@ -4841,8 +4841,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_text_textviewer_java_jsmodule",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 5,
+      "community_name": "TextViewer",
       "norm_label": "jsmodule"
     },
     {
@@ -5050,8 +5050,8 @@
       "source_location": "L223",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_text_textviewer_textviewer_setsearchtermsplitter",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 8,
+      "community_name": "SearchController",
       "norm_label": ".setsearchtermsplitter()"
     },
     {
@@ -5072,8 +5072,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_text_textviewer_java_componenteventlistener",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 5,
+      "community_name": "TextViewer",
       "norm_label": "componenteventlistener"
     },
     {
@@ -5083,8 +5083,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_text_textviewer_java_registration",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 5,
+      "community_name": "TextViewer",
       "norm_label": "registration"
     },
     {
@@ -5171,8 +5171,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_text_textviewer_java_component",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 5,
+      "community_name": "TextViewer",
       "norm_label": "component"
     },
     {
@@ -5677,8 +5677,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": "xmlviewer.java"
     },
     {
@@ -5688,8 +5688,8 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": "xmlviewer"
     },
     {
@@ -5699,8 +5699,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_div",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": "div"
     },
     {
@@ -5710,8 +5710,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_cssimport",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": "cssimport"
     },
     {
@@ -5721,8 +5721,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_jsmodule",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": "jsmodule"
     },
     {
@@ -5732,8 +5732,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_element",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": "element"
     },
     {
@@ -5743,8 +5743,8 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_xmlviewer",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".xmlviewer()"
     },
     {
@@ -5765,8 +5765,8 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_getroot",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".getroot()"
     },
     {
@@ -5776,8 +5776,8 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_highlight",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".highlight()"
     },
     {
@@ -5787,8 +5787,8 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_clearhighlight",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".clearhighlight()"
     },
     {
@@ -5798,8 +5798,8 @@
       "source_location": "L167",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_expandall",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".expandall()"
     },
     {
@@ -5809,8 +5809,8 @@
       "source_location": "L172",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_collapseall",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".collapseall()"
     },
     {
@@ -5820,8 +5820,8 @@
       "source_location": "L177",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_setcollapsible",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".setcollapsible()"
     },
     {
@@ -5831,8 +5831,8 @@
       "source_location": "L182",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_iscollapsible",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".iscollapsible()"
     },
     {
@@ -5842,8 +5842,8 @@
       "source_location": "L194",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_search",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".search()"
     },
     {
@@ -5853,8 +5853,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_override",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": "override"
     },
     {
@@ -5864,8 +5864,8 @@
       "source_location": "L200",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_nextmatch",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".nextmatch()"
     },
     {
@@ -5875,8 +5875,8 @@
       "source_location": "L206",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_previousmatch",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".previousmatch()"
     },
     {
@@ -5886,8 +5886,8 @@
       "source_location": "L212",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_clearsearch",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".clearsearch()"
     },
     {
@@ -5897,8 +5897,8 @@
       "source_location": "L217",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_getmatchcount",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".getmatchcount()"
     },
     {
@@ -5908,8 +5908,8 @@
       "source_location": "L223",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_getcurrentmatchindex",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".getcurrentmatchindex()"
     },
     {
@@ -5919,8 +5919,8 @@
       "source_location": "L229",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_setsearchcasesensitive",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".setsearchcasesensitive()"
     },
     {
@@ -5930,8 +5930,8 @@
       "source_location": "L234",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_issearchcasesensitive",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".issearchcasesensitive()"
     },
     {
@@ -5941,8 +5941,8 @@
       "source_location": "L245",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_setsearchtermsplitter",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".setsearchtermsplitter()"
     },
     {
@@ -5952,8 +5952,8 @@
       "source_location": "L254",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_addmatchchangelistener",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".addmatchchangelistener()"
     },
     {
@@ -5963,8 +5963,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_componenteventlistener",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": "componenteventlistener"
     },
     {
@@ -5974,8 +5974,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_registration",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": "registration"
     },
     {
@@ -5985,8 +5985,8 @@
       "source_location": "L263",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_render",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".render()"
     },
     {
@@ -5996,8 +5996,8 @@
       "source_location": "L293",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_tosearchtokens",
-      "community": 6,
-      "community_name": "package.json",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".tosearchtokens()"
     },
     {
@@ -6007,8 +6007,8 @@
       "source_location": "L304",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_wiretoggles",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".wiretoggles()"
     },
     {
@@ -6018,8 +6018,8 @@
       "source_location": "L308",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_firematchchange",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".firematchchange()"
     },
     {
@@ -6029,8 +6029,8 @@
       "source_location": "L313",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_firesearchreset",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".firesearchreset()"
     },
     {
@@ -6040,8 +6040,8 @@
       "source_location": "L317",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_togglecollapse",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".togglecollapse()"
     },
     {
@@ -6051,8 +6051,8 @@
       "source_location": "L324",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_setcollapsed",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".setcollapsed()"
     },
     {
@@ -6062,8 +6062,8 @@
       "source_location": "L342",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_expandto",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".expandto()"
     },
     {
@@ -6073,8 +6073,8 @@
       "source_location": "L348",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_scrollto",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".scrollto()"
     },
     {
@@ -6084,8 +6084,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_component",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": "component"
     },
     {
@@ -6095,8 +6095,8 @@
       "source_location": "L353",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_newemptyplaceholder",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".newemptyplaceholder()"
     },
     {
@@ -6106,8 +6106,8 @@
       "source_location": "L361",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_emptytree",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".emptytree()"
     },
     {
@@ -6128,8 +6128,8 @@
       "source_location": "L379",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_isexpanded",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".isexpanded()"
     },
     {
@@ -6139,8 +6139,8 @@
       "source_location": "L384",
       "_origin": "ast",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_xmlviewer_endtagvisible",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".endtagvisible()"
     },
     {
@@ -6909,7 +6909,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest",
-      "community": 15,
+      "community": 49,
       "community_name": "CodeViewerTest",
       "norm_label": "codeviewertest.java"
     },
@@ -6920,7 +6920,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest",
-      "community": 15,
+      "community": 49,
       "community_name": "CodeViewerTest",
       "norm_label": "codeviewertest"
     },
@@ -6931,7 +6931,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_setup",
-      "community": 15,
+      "community": 49,
       "community_name": "CodeViewerTest",
       "norm_label": ".setup()"
     },
@@ -6942,7 +6942,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_java_beforeeach",
-      "community": 15,
+      "community": 49,
       "community_name": "CodeViewerTest",
       "norm_label": "beforeeach"
     },
@@ -6953,8 +6953,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_haelttextundsprache",
-      "community": 267,
-      "community_name": "@codemirror/lang-javascript",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".haelttextundsprache()"
     },
     {
@@ -6964,8 +6964,8 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_java_test",
-      "community": 267,
-      "community_name": "@codemirror/lang-javascript",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": "test"
     },
     {
@@ -6975,8 +6975,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_setlanguagenullaktiviertautoerkennung",
-      "community": 267,
-      "community_name": "@codemirror/lang-javascript",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".setlanguagenullaktiviertautoerkennung()"
     },
     {
@@ -6986,8 +6986,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_leitetspracheausdateinamenab",
-      "community": 267,
-      "community_name": "@codemirror/lang-javascript",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".leitetspracheausdateinamenab()"
     },
     {
@@ -6997,7 +6997,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_togglesetzendenzustand",
-      "community": 49,
+      "community": 260,
       "community_name": ".callJs",
       "norm_label": ".togglesetzendenzustand()"
     },
@@ -7008,7 +7008,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_onmatchchangeaktualisiertgetterundfeuertevent",
-      "community": 10,
+      "community": 15,
       "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".onmatchchangeaktualisiertgetterundfeuertevent()"
     },
@@ -7019,7 +7019,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_neuertextfeuertreseteventundleerttrefferstand",
-      "community": 10,
+      "community": 15,
       "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".neuertextfeuertreseteventundleerttrefferstand()"
     },
@@ -7030,8 +7030,8 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_istvollstaendigserialisierbarundbleibtfunktionsfaehig",
-      "community": 49,
-      "community_name": ".callJs",
+      "community": 15,
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "norm_label": ".istvollstaendigserialisierbarundbleibtfunktionsfaehig()"
     },
     {
@@ -7041,7 +7041,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_arbeitetmitsearchnavigatorzusammen",
-      "community": 15,
+      "community": 49,
       "community_name": "CodeViewerTest",
       "norm_label": ".arbeitetmitsearchnavigatorzusammen()"
     },
@@ -7052,7 +7052,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_labels",
-      "community": 15,
+      "community": 49,
       "community_name": "CodeViewerTest",
       "norm_label": ".labels()"
     },
@@ -7063,7 +7063,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_java_component",
-      "community": 15,
+      "community": 49,
       "community_name": "CodeViewerTest",
       "norm_label": "component"
     },
@@ -7074,7 +7074,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_descendants",
-      "community": 15,
+      "community": 49,
       "community_name": "CodeViewerTest",
       "norm_label": ".descendants()"
     },
@@ -7085,7 +7085,7 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_serialize",
-      "community": 15,
+      "community": 49,
       "community_name": "CodeViewerTest",
       "norm_label": ".serialize()"
     },
@@ -7096,8 +7096,8 @@
       "source_location": "L141",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_codeviewertest_deserialize",
-      "community": 46,
-      "community_name": "CodeDemoView.java",
+      "community": 49,
+      "community_name": "CodeViewerTest",
       "norm_label": ".deserialize()"
     },
     {
@@ -7272,8 +7272,8 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_navigation_searchnavigatortest_searchnavigatortest_searchfield",
-      "community": 0,
-      "community_name": "SearchNavigatorTest",
+      "community": 3,
+      "community_name": "FakeNavigable",
       "norm_label": ".searchfield()"
     },
     {
@@ -7360,8 +7360,8 @@
       "source_location": "L155",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_navigation_searchnavigatortest_searchnavigatortest_descendantsof",
-      "community": 0,
-      "community_name": "SearchNavigatorTest",
+      "community": 3,
+      "community_name": "FakeNavigable",
       "norm_label": ".descendantsof()"
     },
     {
@@ -8295,8 +8295,8 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_suchefindetundzaehlttreffer",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".suchefindetundzaehlttreffer()"
     },
     {
@@ -8306,8 +8306,8 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_sucheiststandardmaessigcaseinsensitive",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".sucheiststandardmaessigcaseinsensitive()"
     },
     {
@@ -8317,8 +8317,8 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_suchefindetmehrerebegriffegetrenntdurchleerzeichen",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".suchefindetmehrerebegriffegetrenntdurchleerzeichen()"
     },
     {
@@ -8328,8 +8328,8 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_mehrfacheleerzeichenzwischenbegriffenwerdenignoriert",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".mehrfacheleerzeichenzwischenbegriffenwerdenignoriert()"
     },
     {
@@ -8339,8 +8339,8 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_ueberlappendebegriffewerdennichtdoppeltgezaehlt",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".ueberlappendebegriffewerdennichtdoppeltgezaehlt()"
     },
     {
@@ -8350,8 +8350,8 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_eigenersplitterbestimmtdastrennzeichen",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".eigenersplitterbestimmtdastrennzeichen()"
     },
     {
@@ -8361,8 +8361,8 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_eigenersplittertrenntnichtanleerzeichen",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".eigenersplittertrenntnichtanleerzeichen()"
     },
     {
@@ -8372,8 +8372,8 @@
       "source_location": "L171",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_casesensitivesucheunterscheidetgrossklein",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".casesensitivesucheunterscheidetgrossklein()"
     },
     {
@@ -8383,8 +8383,8 @@
       "source_location": "L181",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_navigationklapptzugeklapptentrefferzweigwiederauf",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".navigationklapptzugeklapptentrefferzweigwiederauf()"
     },
     {
@@ -8394,8 +8394,8 @@
       "source_location": "L192",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_clearsearchentferntmarkierungen",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".clearsearchentferntmarkierungen()"
     },
     {
@@ -8416,8 +8416,8 @@
       "source_location": "L217",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_leeresucheliefertkeinetreffer",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".leeresucheliefertkeinetreffer()"
     },
     {
@@ -8427,8 +8427,8 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_matchchangelistenerwirdmitkorrektenwertengefeuert",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".matchchangelistenerwirdmitkorrektenwertengefeuert()"
     },
     {
@@ -8449,8 +8449,8 @@
       "source_location": "L248",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_collapseundexpandschaltensichtbarkeit",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".collapseundexpandschaltensichtbarkeit()"
     },
     {
@@ -8460,8 +8460,8 @@
       "source_location": "L257",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_zuklappenblendetschliessendentagaus",
-      "community": 266,
-      "community_name": "@codemirror/lang-java",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".zuklappenblendetschliessendentagaus()"
     },
     {
@@ -8471,8 +8471,8 @@
       "source_location": "L268",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_setcollapsiblerendertneuundbleibtnutzbar",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".setcollapsiblerendertneuundbleibtnutzbar()"
     },
     {
@@ -8548,8 +8548,8 @@
       "source_location": "L349",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_istvollstaendigserialisierbarundbleibtfunktionsfaehig",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".istvollstaendigserialisierbarundbleibtfunktionsfaehig()"
     },
     {
@@ -8559,8 +8559,8 @@
       "source_location": "L361",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_serialize",
-      "community": 265,
-      "community_name": "@codemirror/lang-html",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".serialize()"
     },
     {
@@ -8570,8 +8570,8 @@
       "source_location": "L369",
       "_origin": "ast",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_xmlviewertest_deserialize",
-      "community": 260,
-      "community_name": "dependencies",
+      "community": 12,
+      "community_name": "XmlViewer",
       "norm_label": ".deserialize()"
     },
     {
@@ -8622,7 +8622,7 @@
       "label": "Citations",
       "file_type": "document",
       "source_file": "docs/okf/xmlviewer/api-reference/search/frontend-search-highlighter/to-flat-csv.md",
-      "source_location": "L39",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "docs_okf_xmlviewer_api_reference_search_frontend_search_highlighter_to_flat_csv_citations",
       "community": 264,
@@ -8993,69 +8993,80 @@
       "norm_label": "citations"
     },
     {
-      "label": "vaadin-versionsunabhaengigkeit.md",
+      "label": "vaadin-api-nutzung.md",
       "file_type": "document",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit",
-      "community": 262,
-      "community_name": "vaadin-versionsunabhaengigkeit.md",
-      "norm_label": "vaadin-versionsunabhaengigkeit.md"
+      "id": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung",
+      "community": 6,
+      "community_name": "package.json",
+      "norm_label": "vaadin-api-nutzung.md"
     },
     {
-      "label": "Regel",
+      "label": "Untergrenze: Vaadin 25",
       "file_type": "document",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit_regel",
-      "community": 262,
-      "community_name": "vaadin-versionsunabhaengigkeit.md",
-      "norm_label": "regel"
+      "id": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_untergrenze_vaadin_25",
+      "community": 6,
+      "community_name": "package.json",
+      "norm_label": "untergrenze: vaadin 25"
     },
     {
-      "label": "Warum",
+      "label": "Regel: keine JSON-Bibliothek in der \u00dcbertragung",
       "file_type": "document",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
-      "source_location": "L30",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
+      "source_location": "L25",
       "_origin": "ast",
-      "id": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit_warum",
-      "community": 262,
-      "community_name": "vaadin-versionsunabhaengigkeit.md",
-      "norm_label": "warum"
+      "id": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_regel_keine_json_bibliothek_in_der_\u00fcbertragung",
+      "community": 6,
+      "community_name": "package.json",
+      "norm_label": "regel: keine json-bibliothek in der ubertragung"
+    },
+    {
+      "label": "Warum kein Jackson",
+      "file_type": "document",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_warum_kein_jackson",
+      "community": 6,
+      "community_name": "package.json",
+      "norm_label": "warum kein jackson"
     },
     {
       "label": "Gelebtes Beispiel",
       "file_type": "document",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
-      "source_location": "L48",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
+      "source_location": "L47",
       "_origin": "ast",
-      "id": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit_gelebtes_beispiel",
-      "community": 262,
-      "community_name": "vaadin-versionsunabhaengigkeit.md",
+      "id": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_gelebtes_beispiel",
+      "community": 6,
+      "community_name": "package.json",
       "norm_label": "gelebtes beispiel"
     },
     {
       "label": "Pr\u00fcfpunkte bei \u00c4nderungen",
       "file_type": "document",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
       "source_location": "L60",
       "_origin": "ast",
-      "id": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit_pr\u00fcfpunkte_bei_\u00e4nderungen",
-      "community": 262,
-      "community_name": "vaadin-versionsunabhaengigkeit.md",
+      "id": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_pr\u00fcfpunkte_bei_\u00e4nderungen",
+      "community": 6,
+      "community_name": "package.json",
       "norm_label": "prufpunkte bei anderungen"
     },
     {
       "label": "Citations",
       "file_type": "document",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
-      "source_location": "L70",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
+      "source_location": "L72",
       "_origin": "ast",
-      "id": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit_citations",
-      "community": 262,
-      "community_name": "vaadin-versionsunabhaengigkeit.md",
+      "id": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_citations",
+      "community": 6,
+      "community_name": "package.json",
       "norm_label": "citations"
     },
     {
@@ -9113,9 +9124,9 @@
       "file_type": "code",
       "source_file": "demo-app/src/main/java/de/makno/xmlviewer/app/SampleCodeFactory.java",
       "source_location": "L14",
-      "community": 20,
+      "community": 46,
       "norm_label": "codelanguage",
-      "community_name": "CodeLanguage",
+      "community_name": "CodeDemoView.java",
       "id": "demo_app_src_main_java_de_makno_xmlviewer_app_samplecodefactory_java_codelanguage"
     },
     {
@@ -9123,9 +9134,9 @@
       "file_type": "code",
       "source_file": "demo-app/src/main/java/de/makno/xmlviewer/app/SampleCodeFactory.java",
       "source_location": "L14",
-      "community": 20,
+      "community": 46,
       "norm_label": "string",
-      "community_name": "CodeLanguage",
+      "community_name": "CodeDemoView.java",
       "id": "demo_app_src_main_java_de_makno_xmlviewer_app_samplecodefactory_java_string"
     },
     {
@@ -9153,9 +9164,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeLanguage.java",
       "source_location": "L31",
-      "community": 268,
+      "community": 20,
       "norm_label": "string",
-      "community_name": "@codemirror/lang-json",
+      "community_name": "CodeLanguage",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codelanguage_java_string"
     },
     {
@@ -9163,9 +9174,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeLanguage.java",
       "source_location": "L45",
-      "community": 268,
+      "community": 20,
       "norm_label": "list",
-      "community_name": "@codemirror/lang-json",
+      "community_name": "CodeLanguage",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codelanguage_java_list"
     },
     {
@@ -9193,9 +9204,9 @@
       "file_type": "code",
       "source_file": "",
       "source_location": "",
-      "community": 6,
+      "community": 1,
       "norm_label": "matchnavigable",
-      "community_name": "package.json",
+      "community_name": "CodeViewer",
       "id": "matchnavigable"
     },
     {
@@ -9203,9 +9214,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
       "source_location": "L75",
-      "community": 267,
+      "community": 15,
       "norm_label": "string",
-      "community_name": "@codemirror/lang-javascript",
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_java_string"
     },
     {
@@ -9213,9 +9224,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
       "source_location": "L80",
-      "community": 267,
+      "community": 15,
       "norm_label": "codelanguage",
-      "community_name": "@codemirror/lang-javascript",
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "id": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_java_codelanguage"
     },
     {
@@ -9243,9 +9254,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/navigation/MatchLabelFormatter.java",
       "source_location": "L20",
-      "community": 13,
+      "community": 10,
       "norm_label": "string",
-      "community_name": "MatchNavigable",
+      "community_name": ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig",
       "id": "web_common_src_main_java_de_makno_web_common_component_navigation_matchlabelformatter_java_string"
     },
     {
@@ -9313,9 +9324,9 @@
       "file_type": "code",
       "source_file": "",
       "source_location": "",
-      "community": 6,
+      "community": 17,
       "norm_label": "searchhighlightrenderer",
-      "community_name": "package.json",
+      "community_name": "FrontendSearchHighlighter",
       "id": "searchhighlightrenderer"
     },
     {
@@ -9403,9 +9414,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/search/SearchController.java",
       "source_location": "L78",
-      "community": 6,
+      "community": 8,
       "norm_label": "searchtermsplitter",
-      "community_name": "package.json",
+      "community_name": "SearchController",
       "id": "web_common_src_main_java_de_makno_web_common_component_search_searchcontroller_java_searchtermsplitter"
     },
     {
@@ -9453,9 +9464,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/search/SearchTermSplitter.java",
       "source_location": "L20",
-      "community": 5,
+      "community": 8,
       "norm_label": "string",
-      "community_name": "TextViewer",
+      "community_name": "SearchController",
       "id": "web_common_src_main_java_de_makno_web_common_component_search_searchtermsplitter_java_string"
     },
     {
@@ -9503,9 +9514,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/text/TextViewer.java",
       "source_location": "L223",
-      "community": 6,
+      "community": 5,
       "norm_label": "searchtermsplitter",
-      "community_name": "package.json",
+      "community_name": "TextViewer",
       "id": "web_common_src_main_java_de_makno_web_common_component_text_textviewer_java_searchtermsplitter"
     },
     {
@@ -9513,9 +9524,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/text/TextViewer.java",
       "source_location": "L232",
-      "community": 6,
+      "community": 5,
       "norm_label": "matchchangeevent",
-      "community_name": "package.json",
+      "community_name": "TextViewer",
       "id": "web_common_src_main_java_de_makno_web_common_component_text_textviewer_java_matchchangeevent"
     },
     {
@@ -9583,9 +9594,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/xmlviewer/XmlViewer.java",
       "source_location": "L245",
-      "community": 6,
+      "community": 12,
       "norm_label": "searchtermsplitter",
-      "community_name": "package.json",
+      "community_name": "XmlViewer",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_searchtermsplitter"
     },
     {
@@ -9593,9 +9604,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/xmlviewer/XmlViewer.java",
       "source_location": "L254",
-      "community": 6,
+      "community": 12,
       "norm_label": "matchchangeevent",
-      "community_name": "package.json",
+      "community_name": "XmlViewer",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_matchchangeevent"
     },
     {
@@ -9603,9 +9614,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/xmlviewer/XmlViewer.java",
       "source_location": "L293",
-      "community": 6,
+      "community": 12,
       "norm_label": "list",
-      "community_name": "package.json",
+      "community_name": "XmlViewer",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_list"
     },
     {
@@ -9613,9 +9624,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/xmlviewer/XmlViewer.java",
       "source_location": "L293",
-      "community": 6,
+      "community": 12,
       "norm_label": "searchabletoken",
-      "community_name": "package.json",
+      "community_name": "XmlViewer",
       "id": "searchabletoken"
     },
     {
@@ -9623,9 +9634,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/xmlviewer/XmlViewer.java",
       "source_location": "L293",
-      "community": 6,
+      "community": 12,
       "norm_label": "searchtoken",
-      "community_name": "package.json",
+      "community_name": "XmlViewer",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_searchtoken"
     },
     {
@@ -9633,9 +9644,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/xmlviewer/XmlViewer.java",
       "source_location": "L361",
-      "community": 260,
+      "community": 12,
       "norm_label": "renderedtree",
-      "community_name": "dependencies",
+      "community_name": "XmlViewer",
       "id": "web_common_src_main_java_de_makno_web_common_component_xmlviewer_xmlviewer_java_renderedtree"
     },
     {
@@ -9643,9 +9654,9 @@
       "file_type": "code",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/xmlviewer/XmlViewer.java",
       "source_location": "L394",
-      "community": 6,
+      "community": 12,
       "norm_label": "set",
-      "community_name": "package.json",
+      "community_name": "XmlViewer",
       "id": "set"
     },
     {
@@ -9653,7 +9664,7 @@
       "file_type": "code",
       "source_file": "web-common/src/test/java/de/makno/web/common/component/code/CodeViewerTest.java",
       "source_location": "L121",
-      "community": 15,
+      "community": 49,
       "norm_label": "list",
       "community_name": "CodeViewerTest",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_java_list"
@@ -9663,7 +9674,7 @@
       "file_type": "code",
       "source_file": "web-common/src/test/java/de/makno/web/common/component/code/CodeViewerTest.java",
       "source_location": "L121",
-      "community": 15,
+      "community": 49,
       "norm_label": "string",
       "community_name": "CodeViewerTest",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_java_string"
@@ -9673,7 +9684,7 @@
       "file_type": "code",
       "source_file": "web-common/src/test/java/de/makno/web/common/component/code/CodeViewerTest.java",
       "source_location": "L129",
-      "community": 15,
+      "community": 49,
       "norm_label": "stream",
       "community_name": "CodeViewerTest",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_java_stream"
@@ -9683,7 +9694,7 @@
       "file_type": "code",
       "source_file": "web-common/src/test/java/de/makno/web/common/component/code/CodeViewerTest.java",
       "source_location": "L133",
-      "community": 15,
+      "community": 49,
       "norm_label": "object",
       "community_name": "CodeViewerTest",
       "id": "web_common_src_test_java_de_makno_web_common_component_code_codeviewertest_java_object"
@@ -9693,9 +9704,9 @@
       "file_type": "code",
       "source_file": "web-common/src/test/java/de/makno/web/common/component/code/CodeViewerTest.java",
       "source_location": "L141",
-      "community": 46,
+      "community": 49,
       "norm_label": "codeviewer",
-      "community_name": "CodeDemoView.java",
+      "community_name": "CodeViewerTest",
       "id": "codeviewer"
     },
     {
@@ -9733,9 +9744,9 @@
       "file_type": "code",
       "source_file": "web-common/src/test/java/de/makno/web/common/component/navigation/SearchNavigatorTest.java",
       "source_location": "L155",
-      "community": 0,
+      "community": 3,
       "norm_label": "stream",
-      "community_name": "SearchNavigatorTest",
+      "community_name": "FakeNavigable",
       "id": "web_common_src_test_java_de_makno_web_common_component_navigation_searchnavigatortest_java_stream"
     },
     {
@@ -9773,9 +9784,9 @@
       "file_type": "code",
       "source_file": "web-common/src/test/java/de/makno/web/common/component/search/SearchControllerTest.java",
       "source_location": "L48",
-      "community": 6,
+      "community": 5,
       "norm_label": "searchcontroller",
-      "community_name": "package.json",
+      "community_name": "TextViewer",
       "id": "searchcontroller"
     },
     {
@@ -9833,9 +9844,9 @@
       "file_type": "code",
       "source_file": "web-common/src/test/java/de/makno/web/common/component/xmlviewer/XmlViewerTest.java",
       "source_location": "L361",
-      "community": 265,
+      "community": 12,
       "norm_label": "object",
-      "community_name": "@codemirror/lang-html",
+      "community_name": "XmlViewer",
       "id": "web_common_src_test_java_de_makno_web_common_component_xmlviewer_xmlviewertest_java_object"
     },
     {
@@ -23398,7 +23409,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L60",
+      "source_location": "L59",
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
@@ -23410,7 +23421,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L80",
+      "source_location": "L79",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -23422,7 +23433,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L133",
+      "source_location": "L132",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
@@ -23434,7 +23445,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L122",
+      "source_location": "L121",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -23604,7 +23615,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L129",
+      "source_location": "L128",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setlanguagefromfilename",
@@ -23674,7 +23685,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L138",
+      "source_location": "L137",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_effectivelanguageid",
@@ -23871,22 +23882,10 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer",
-      "target": "serializable",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L38",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer",
@@ -24004,7 +24003,7 @@
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L38",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24025,7 +24024,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L38",
+      "source_location": "L37",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24037,7 +24036,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L243",
+      "source_location": "L242",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24048,7 +24047,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L271",
+      "source_location": "L276",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24059,7 +24058,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L214",
+      "source_location": "L213",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24070,7 +24069,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L80",
+      "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24081,7 +24080,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L137",
+      "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24092,7 +24091,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L263",
+      "source_location": "L262",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24103,7 +24102,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L177",
+      "source_location": "L176",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24114,7 +24113,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L226",
+      "source_location": "L225",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24125,7 +24124,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L133",
+      "source_location": "L132",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24136,7 +24135,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L220",
+      "source_location": "L219",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24147,7 +24146,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L117",
+      "source_location": "L116",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24158,7 +24157,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L152",
+      "source_location": "L151",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24169,7 +24168,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L239",
+      "source_location": "L238",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24180,7 +24179,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L172",
+      "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24191,7 +24190,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L162",
+      "source_location": "L161",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24202,7 +24201,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L202",
+      "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24213,7 +24212,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L89",
+      "source_location": "L88",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24224,7 +24223,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L95",
+      "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24235,7 +24234,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L256",
+      "source_location": "L255",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24246,7 +24245,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L208",
+      "source_location": "L207",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24257,7 +24256,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L195",
+      "source_location": "L194",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24268,7 +24267,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L147",
+      "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24279,7 +24278,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L122",
+      "source_location": "L121",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24290,7 +24289,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L128",
+      "source_location": "L127",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24301,7 +24300,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L232",
+      "source_location": "L231",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24312,7 +24311,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L167",
+      "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24323,7 +24322,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L108",
+      "source_location": "L107",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24334,7 +24333,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L157",
+      "source_location": "L156",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24345,7 +24344,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L182",
+      "source_location": "L181",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24356,7 +24355,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L38",
+      "source_location": "L37",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24368,7 +24367,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L38",
+      "source_location": "L37",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24380,7 +24379,7 @@
       "relation": "implements",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L38",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer",
@@ -24496,7 +24495,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L92",
+      "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_onattach",
@@ -24508,7 +24507,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L92",
+      "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_onattach",
@@ -24519,7 +24518,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L89",
+      "source_location": "L88",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -24531,7 +24530,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L89",
+      "source_location": "L88",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24543,7 +24542,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L243",
+      "source_location": "L242",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24555,7 +24554,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L226",
+      "source_location": "L225",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24567,7 +24566,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L220",
+      "source_location": "L219",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24579,7 +24578,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L202",
+      "source_location": "L201",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24591,7 +24590,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L95",
+      "source_location": "L94",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24603,7 +24602,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L208",
+      "source_location": "L207",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24615,7 +24614,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L195",
+      "source_location": "L194",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -24627,7 +24626,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L95",
+      "source_location": "L94",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -24640,7 +24639,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L113",
+      "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_settext",
@@ -24652,7 +24651,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L113",
+      "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_settext",
@@ -24664,7 +24663,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L114",
+      "source_location": "L113",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_settext",
@@ -24746,7 +24745,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L124",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setlanguage",
@@ -24758,7 +24757,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L124",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setlanguage",
@@ -24781,7 +24780,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L129",
+      "source_location": "L128",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setlanguagefromfilename",
@@ -24898,7 +24897,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L149",
+      "source_location": "L148",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setdark",
@@ -24958,7 +24957,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L159",
+      "source_location": "L158",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setwrap",
@@ -24994,7 +24993,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L169",
+      "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setshowlinenumbers",
@@ -25030,7 +25029,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L178",
+      "source_location": "L177",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_foldall",
@@ -25042,7 +25041,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L183",
+      "source_location": "L182",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_unfoldall",
@@ -25054,7 +25053,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L198",
+      "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_search",
@@ -25077,7 +25076,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L235",
+      "source_location": "L234",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_setsearchcasesensitive",
@@ -25089,7 +25088,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L204",
+      "source_location": "L203",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_nextmatch",
@@ -25101,7 +25100,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L210",
+      "source_location": "L209",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_previousmatch",
@@ -25113,7 +25112,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L216",
+      "source_location": "L215",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_clearsearch",
@@ -25125,7 +25124,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L264",
+      "source_location": "L263",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_firesearchreset",
@@ -25173,7 +25172,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L264",
+      "source_location": "L263",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_firesearchreset",
@@ -25244,7 +25243,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L243",
+      "source_location": "L242",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
@@ -25267,7 +25266,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L243",
+      "source_location": "L242",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
@@ -25279,7 +25278,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L243",
+      "source_location": "L242",
       "weight": 1.0,
       "context": "generic_arg",
       "_origin": "ast",
@@ -25315,7 +25314,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L256",
+      "source_location": "L255",
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
@@ -25328,7 +25327,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L260",
+      "source_location": "L259",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_onmatchchange",
@@ -25388,7 +25387,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/code/CodeViewer.java",
-      "source_location": "L264",
+      "source_location": "L263",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_code_codeviewer_codeviewer_firesearchreset",
@@ -27079,7 +27078,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/search/FrontendSearchHighlighter.java",
-      "source_location": "L77",
+      "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
       "source": "web_common_src_main_java_de_makno_web_common_component_search_frontendsearchhighlighter_frontendsearchhighlighter",
@@ -27254,7 +27253,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "web-common/src/main/java/de/makno/web/common/component/search/FrontendSearchHighlighter.java",
-      "source_location": "L77",
+      "source_location": "L76",
       "weight": 1.0,
       "context": "generic_arg",
       "_origin": "ast",
@@ -41105,7 +41104,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/okf/xmlviewer/api-reference/search/frontend-search-highlighter/to-flat-csv.md",
-      "source_location": "L39",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_okf_xmlviewer_api_reference_search_frontend_search_highlighter_to_flat_csv",
@@ -41456,56 +41455,67 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
-      "source_location": "L70",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit",
-      "target": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit_citations",
+      "source": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung",
+      "target": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_citations",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
-      "source_location": "L48",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
+      "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit",
-      "target": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit_gelebtes_beispiel",
+      "source": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung",
+      "target": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_gelebtes_beispiel",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
       "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit",
-      "target": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit_pr\u00fcfpunkte_bei_\u00e4nderungen",
+      "source": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung",
+      "target": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_pr\u00fcfpunkte_bei_\u00e4nderungen",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung",
+      "target": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_regel_keine_json_bibliothek_in_der_\u00fcbertragung",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit",
-      "target": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit_regel",
+      "source": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung",
+      "target": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_untergrenze_vaadin_25",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "docs/okf/xmlviewer/conventions/vaadin-versionsunabhaengigkeit.md",
-      "source_location": "L30",
+      "source_file": "docs/okf/xmlviewer/conventions/vaadin-api-nutzung.md",
+      "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit",
-      "target": "docs_okf_xmlviewer_conventions_vaadin_versionsunabhaengigkeit_warum",
+      "source": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_regel_keine_json_bibliothek_in_der_\u00fcbertragung",
+      "target": "docs_okf_xmlviewer_conventions_vaadin_api_nutzung_warum_kein_jackson",
       "confidence_score": 1.0
     },
     {
@@ -47864,5 +47874,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "db0b5296c094367abbf51cd1b4955db04c35ec4c"
+  "built_at_commit": "cf16977eca40df9d873c5180b293c7666dbb508d"
 }

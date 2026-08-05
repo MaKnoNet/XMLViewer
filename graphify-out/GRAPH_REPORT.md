@@ -1,16 +1,16 @@
 # Graph Report - XMLViewer  (2026-08-05)
 
 ## Corpus Check
-- 277 files · ~58,694 words
+- 277 files · ~59,040 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1755 nodes · 2637 edges · 270 communities (76 shown, 194 thin omitted)
+- 1756 nodes · 2637 edges · 265 communities (74 shown, 191 thin omitted)
 - Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 303 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `db0b5296`
+- Built from commit: `cf16977e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -30,7 +30,7 @@
 - XmlViewer
 - MatchNavigable
 - xmlviewer.md
-- CodeViewerTest
+- .istVollstaendigSerialisierbarUndBleibtFunktionsfaehig
 - devDependencies
 - FrontendSearchHighlighter
 - XMLViewer
@@ -61,6 +61,7 @@
 - CodeDemoView.java
 - SearchNavigator
 - okf-entwicklerdoku.md
+- CodeViewerTest
 - SampleXmlFactory
 - code-css-classes.md
 - code-language.md
@@ -272,14 +273,8 @@
 - xml-viewer/index.md
 - searchable-token.md
 - dependencies
-- dependencies
-- vaadin-versionsunabhaengigkeit.md
 - gradlew
 - to-flat-csv.md
-- @codemirror/lang-html
-- @codemirror/lang-java
-- @codemirror/lang-javascript
-- @codemirror/lang-json
 - pre-commit
 
 ## God Nodes (most connected - your core abstractions)
@@ -309,75 +304,79 @@
 ## Import Cycles
 - None detected.
 
-## Communities (270 total, 194 thin omitted)
+## Communities (265 total, 191 thin omitted)
 
 ### Community 0 - "SearchNavigatorTest"
-Cohesion: 0.27
-Nodes (4): Button, Stream, Test, SearchNavigatorTest
+Cohesion: 0.32
+Nodes (3): Button, Test, SearchNavigatorTest
 
 ### Community 1 - "CodeViewer"
-Cohesion: 0.19
-Nodes (10): NpmPackage, CodeViewer, AttachEvent, ComponentEventListener, CssImport, DetachEvent, JsModule, MatchChangeEvent (+2 more)
+Cohesion: 0.17
+Nodes (13): ClientCallable, Div, MatchNavigable, NpmPackage, CodeViewer, AttachEvent, ComponentEventListener, CssImport (+5 more)
 
 ### Community 2 - "code-viewer.js"
 Cohesion: 0.08
 Nodes (30): applyMatches(), braceFoldService, buildExtensions(), buildFoldTreeDeco(), clearSearch(), collectMatches(), computeFoldRegions(), create() (+22 more)
 
 ### Community 3 - "FakeNavigable"
-Cohesion: 0.15
-Nodes (12): Tag, TextField, FakeNavigable, BeforeEach, Component, ComponentEventListener, List, MatchChangeEvent (+4 more)
+Cohesion: 0.13
+Nodes (13): Tag, TextField, FakeNavigable, BeforeEach, Component, ComponentEventListener, List, MatchChangeEvent (+5 more)
 
 ### Community 4 - "overrides"
 Cohesion: 0.02
 Nodes (90): overrides, @codemirror/lang-css, @codemirror/lang-html, @codemirror/lang-java, @codemirror/lang-javascript, @codemirror/lang-json, @codemirror/lang-python, @codemirror/lang-sql (+82 more)
 
 ### Community 5 - "TextViewer"
-Cohesion: 0.06
-Nodes (22): String, SampleTextFactory, HorizontalLayout, PageTitle, Route, TextDemoView, TextViewer, VerticalLayout (+14 more)
+Cohesion: 0.05
+Nodes (31): String, SampleTextFactory, HorizontalLayout, PageTitle, Route, TextDemoView, HasSize, HasStyle (+23 more)
 
 ### Community 6 - "package.json"
-Cohesion: 0.10
-Nodes (23): HasSize, HasStyle, MatchNavigable, SearchableToken, SearchController, SearchHighlightRenderer, Set, SearchTermSplitter (+15 more)
+Cohesion: 0.29
+Nodes (6): Citations, Gelebtes Beispiel, Prüfpunkte bei Änderungen, Regel: keine JSON-Bibliothek in der Übertragung, Untergrenze: Vaadin 25, Warum kein Jackson
 
 ### Community 7 - "XmlTreeRenderer"
 Cohesion: 0.16
 Nodes (18): Content, Citations, `text()` / `onReveal()` (implizite Accessor-Methoden), Span, Div, Element, Span, RenderedTree (+10 more)
 
 ### Community 8 - "SearchController"
-Cohesion: 0.08
-Nodes (26): Serializable, SerializableRunnable, FunctionalInterface, MatchLabelFormatter, List, SearchHighlightRenderer, SearchToken, SerializableRunnable (+18 more)
+Cohesion: 0.07
+Nodes (28): Serializable, SerializableRunnable, List, SearchHighlightRenderer, SearchTermSplitter, SearchToken, SerializableRunnable, String (+20 more)
 
 ### Community 9 - "generate_okf_index.py"
 Cohesion: 0.28
 Nodes (12): Path, bundle_relative_link(), check_conformance(), main(), Warn-only OKF-Checks: type-Pflichtfeld, keine relativen ../-Links., Liest title/description/type aus dem YAML-Frontmatter (naiver Zeilen-Parser)., Bundle-root-absoluter Link gemaess OKF-Spec (Abschnitt 5.1)., Erzeugt den index.md-Inhalt fuer ein Verzeichnis (deterministisch sortiert). (+4 more)
+
+### Community 10 - ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig"
+Cohesion: 0.40
+Nodes (3): FunctionalInterface, String, MatchLabelFormatter
 
 ### Community 11 - ".fromContent"
 Cohesion: 0.18
 Nodes (6): Pattern, CodeLanguageDetector, CodeLanguage, String, CodeLanguageDetectorTest, Test
 
 ### Community 12 - "XmlViewer"
-Cohesion: 0.19
-Nodes (7): String, BeforeEach, Component, Element, List, Test, XmlViewerTest
+Cohesion: 0.06
+Nodes (24): SearchableToken, Set, Component, ComponentEventListener, CssImport, Div, Element, JsModule (+16 more)
 
 ### Community 13 - "MatchNavigable"
-Cohesion: 0.12
-Nodes (10): MatchLabelFormatter, String, ComponentEventListener, MatchChangeEvent, Registration, String, MatchNavigable, AttachEvent (+2 more)
+Cohesion: 0.16
+Nodes (8): MatchLabelFormatter, ComponentEventListener, MatchChangeEvent, Registration, String, MatchNavigable, HorizontalLayout, MatchNavigable
 
 ### Community 14 - "xmlviewer.md"
 Cohesion: 0.29
 Nodes (6): Besonderheiten, Citations, Examples, Interne Bausteine, Schema, Überblick
 
-### Community 15 - "CodeViewerTest"
-Cohesion: 0.24
-Nodes (7): CodeViewerTest, BeforeEach, Component, List, Object, Stream, String
+### Community 15 - ".istVollstaendigSerialisierbarUndBleibtFunktionsfaehig"
+Cohesion: 0.21
+Nodes (3): CodeLanguage, String, Test
 
 ### Community 16 - "devDependencies"
 Cohesion: 0.06
 Nodes (47): @babel/core, @babel/plugin-transform-react-jsx-development, @babel/preset-react, @babel/types, devDependencies, @babel/core, @babel/plugin-transform-react-jsx-development, @babel/preset-react (+39 more)
 
 ### Community 17 - "FrontendSearchHighlighter"
-Cohesion: 0.18
-Nodes (9): Div, JsonArray, FrontendSearchHighlighter, Component, List, Override, TokenMatch, FrontendSearchHighlighterTest (+1 more)
+Cohesion: 0.17
+Nodes (9): JsonArray, SearchHighlightRenderer, FrontendSearchHighlighter, Component, List, Override, TokenMatch, FrontendSearchHighlighterTest (+1 more)
 
 ### Community 18 - "XMLViewer"
 Cohesion: 0.11
@@ -388,8 +387,8 @@ Cohesion: 0.11
 Nodes (17): Architektur- & Entwicklungsregeln (Vaadin/Java), Architektur & Entwurfsmuster, Claude Code – Projekt-Instruktionen, Clean Code, Code-Formatierung, Code-Qualität, End-of-Session-Routine (Pflicht bei Code-/Architekturänderungen), Fehlerbehandlung & Resilienz (+9 more)
 
 ### Community 20 - "CodeLanguage"
-Cohesion: 0.12
-Nodes (15): CodeLanguage, String, SampleCodeFactory, CodeLanguage, CSHARP, CSS, HTML, JAVA (+7 more)
+Cohesion: 0.14
+Nodes (16): cm6Id(), CodeLanguage, CSHARP, CSS, HTML, JAVA, JAVASCRIPT, JSON (+8 more)
 
 ### Community 21 - "design-rules.md"
 Cohesion: 0.40
@@ -444,16 +443,20 @@ Cohesion: 0.12
 Nodes (16): Architektur- & Entwicklungsregeln (Vaadin/Java), Architektur & Entwurfsmuster, Clean Code, Code-Formatierung, Code-Qualität, Fehlerbehandlung & Resilienz, Graph-First-Regel, Knowledge Base (graphify + OKF) (+8 more)
 
 ### Community 46 - "CodeDemoView.java"
-Cohesion: 0.24
-Nodes (7): CodeViewer, CodeDemoView, CodeLanguage, HorizontalLayout, PageTitle, Route, Select
+Cohesion: 0.20
+Nodes (9): CodeDemoView, CodeLanguage, HorizontalLayout, PageTitle, Route, CodeLanguage, String, SampleCodeFactory (+1 more)
 
 ### Community 47 - "SearchNavigator"
-Cohesion: 0.23
-Nodes (12): Composite, VaadinIcon, Button, CssImport, DetachEvent, Div, Override, Registration (+4 more)
+Cohesion: 0.19
+Nodes (13): Composite, VaadinIcon, AttachEvent, Button, CssImport, DetachEvent, Div, Override (+5 more)
 
 ### Community 48 - "okf-entwicklerdoku.md"
 Cohesion: 0.17
 Nodes (11): api-reference/ vs. components/, Automatisierung, Bekannte Stolpersteine, Bundle-Struktur dieses Projekts, Citations, Frontmatter-Konvention, Graphify-Zusammenspiel, Neues Konzept anlegen (+3 more)
+
+### Community 49 - "CodeViewerTest"
+Cohesion: 0.20
+Nodes (8): CodeViewer, CodeViewerTest, BeforeEach, Component, List, Object, Stream, String
 
 ### Community 50 - "SampleXmlFactory"
 Cohesion: 0.18
@@ -575,49 +578,33 @@ Nodes (9): Citations, equals/hashCode/toString, Felder, Konstruktoren, Methoden,
 Cohesion: 0.20
 Nodes (9): Citations, equals/hashCode/toString, Felder, Konstruktoren, Methoden, Serialisierung, Thread-Safety, Vererbungshierarchie (+1 more)
 
-### Community 260 - "dependencies"
-Cohesion: 0.15
-Nodes (5): CssImport, Div, JsModule, RenderedTree, XmlViewer
-
 ### Community 261 - "dependencies"
 Cohesion: 0.05
 Nodes (56): @codemirror/lang-css, @codemirror/lang-html, @codemirror/lang-java, @codemirror/lang-javascript, @codemirror/lang-json, @codemirror/lang-python, @codemirror/lang-sql, @codemirror/lang-xml (+48 more)
-
-### Community 262 - "vaadin-versionsunabhaengigkeit.md"
-Cohesion: 0.33
-Nodes (5): Citations, Gelebtes Beispiel, Prüfpunkte bei Änderungen, Regel, Warum
 
 ### Community 263 - "gradlew"
 Cohesion: 0.83
 Nodes (3): gradlew script, die(), warn()
 
-### Community 267 - "@codemirror/lang-javascript"
-Cohesion: 0.29
-Nodes (3): CodeLanguage, String, Test
-
-### Community 268 - "@codemirror/lang-json"
-Cohesion: 0.47
-Nodes (4): cm6Id(), extensions(), List, String
-
 ## Knowledge Gaps
 - **838 isolated node(s):** `name`, `license`, `type`, `@codemirror/lang-css`, `@codemirror/lang-html` (+833 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **194 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **191 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `XmlViewer` connect `dependencies` to `package.json`, `XmlTreeRenderer`, `SearchController`, `@codemirror/lang-html`, `@codemirror/lang-java`, `XmlViewer`, `MatchNavigable`, `SearchNavigator`, `SampleXmlFactory`?**
+- **Why does `XmlViewer` connect `XmlViewer` to `CodeViewer`, `TextViewer`, `XmlTreeRenderer`, `SearchController`, `MatchNavigable`, `SearchNavigator`, `SampleXmlFactory`?**
   _High betweenness centrality (0.024) - this node is a cross-community bridge._
-- **Why does `TextViewer` connect `TextViewer` to `SearchController`, `MatchNavigable`, `package.json`, `SearchNavigator`?**
+- **Why does `TextViewer` connect `TextViewer` to `SearchController`, `CodeViewer`, `MatchNavigable`, `SearchNavigator`?**
   _High betweenness centrality (0.021) - this node is a cross-community bridge._
-- **Why does `of()` connect `SearchController` to `SearchNavigatorTest`, `dependencies`, `TextViewer`, `@codemirror/lang-html`, `.istVollstaendigSerialisierbarUndBleibtFunktionsfaehig`, `CodeViewerTest`, `CodeLanguage`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+- **Why does `of()` connect `SearchController` to `FakeNavigable`, `TextViewer`, `XmlViewer`, `.istVollstaendigSerialisierbarUndBleibtFunktionsfaehig`, `CodeViewerTest`, `CodeLanguage`?**
+  _High betweenness centrality (0.021) - this node is a cross-community bridge._
 - **What connects `name`, `license`, `type` to the rest of the system?**
   _838 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `code-viewer.js` be split into smaller, more focused modules?**
   _Cohesion score 0.07692307692307693 - nodes in this community are weakly interconnected._
 - **Should `FakeNavigable` be split into smaller, more focused modules?**
-  _Cohesion score 0.14736842105263157 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13043478260869565 - nodes in this community are weakly interconnected._
 - **Should `overrides` be split into smaller, more focused modules?**
   _Cohesion score 0.022222222222222223 - nodes in this community are weakly interconnected._

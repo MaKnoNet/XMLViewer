@@ -8,8 +8,8 @@
  * ihr Aussehen kommt aus den `::highlight(...)`-Regeln in styles/search.css.
  *
  * Der Server übergibt Treffer als flache Zahlenfolge "tokenIndex,start,end,tokenIndex,…" – bewusst
- * als Zeichenkette und nicht als JSON-Array: String ist der einzige executeJs-Parametertyp, den alle
- * Vaadin-Generationen unverändert unterstützen (Vaadin 25 hat elemental.json entfernt). Über die
+ * als Zeichenkette und nicht als JSON-Array: Vaadin 25 hat elemental.json entfernt, und eine
+ * Bindung an Jackson waere nur die naechste Kopplung an eine JSON-Bibliothek. Über die
  * Klasse `.search-token` (Dokumentreihenfolge == Token-Reihenfolge) wird der Treffer-Knoten
  * positionsbasiert gefunden.
  *

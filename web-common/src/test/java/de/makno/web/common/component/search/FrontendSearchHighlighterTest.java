@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
  * Unit-Tests für {@link FrontendSearchHighlighter}: prüfen das an das Frontend übertragene Format
  * der Treffer-Offsets sowie die No-op-Zusicherung ohne gebundene UI – ohne Browser.
  *
- * <p>Das Format ist bewusst eine Zeichenkette und kein JSON-Typ: {@code String} ist der einzige
- * {@code executeJs}-Parametertyp, den alle Vaadin-Generationen unverändert unterstützen. Diese Tests
- * halten den Vertrag zum Gegenstück {@code search-highlighter.js} fest.
+ * <p>Das Format ist bewusst eine Zeichenkette und kein JSON-Typ – Vaadin 25 hat
+ * {@code elemental.json} entfernt, und eine Bindung an Jackson wäre nur die nächste Kopplung. Diese
+ * Tests halten den Vertrag zum Gegenstück {@code search-highlighter.js} fest.
  */
 class FrontendSearchHighlighterTest {
 
