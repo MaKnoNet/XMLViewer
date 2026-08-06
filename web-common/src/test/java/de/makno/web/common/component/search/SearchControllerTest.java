@@ -18,6 +18,9 @@ class SearchControllerTest {
 
     /** Zeichnet nicht, sondern merkt sich die übergebenen Treffer für die Prüfung. */
     private static final class RecordingRenderer implements SearchHighlightRenderer {
+
+        private static final long serialVersionUID = 1L;
+
         private List<TokenMatch> lastMatches = List.of();
         private int lastCurrentIndex = -1;
         private int moveCalls;

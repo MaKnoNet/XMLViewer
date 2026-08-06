@@ -67,7 +67,9 @@ exakt die veraltete Überladung und erzeugte eine Deprecation-Warnung. Die Werte
   (z. B. `CodeViewer.onMatchChange(int, int)`).
 - Neue Draht-Formate mit einem Unit-Test ohne Browser festhalten
   (`FrontendSearchHighlighterTest` als Vorlage).
-- Deprecation-Details sichtbar machen: `compileJava` mit `-Xlint:deprecation` laufen lassen.
+- Deprecation-Details muss man nicht mehr selbst anfordern: `-Xlint:deprecation -Werror` ist im
+  Root-`build.gradle` fest verdrahtet, jede veraltete API **bricht den Build** (Details in
+  [Build, Test und Release](/conventions/build-and-release.md)).
 
 # Citations
 

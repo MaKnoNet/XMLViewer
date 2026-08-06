@@ -29,6 +29,14 @@ subprojects {
     // und String-Literalen; ohne diese Festlegung verwendet javac unter Windows Cp1252 und zerstört sie.
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
+        // Projekt-Konvention: NIEMALS als @Deprecated markierte APIs verwenden. Ohne -Xlint:deprecation
+        // meldet javac nur den unbrauchbaren Sammel-Hinweis "verwendet eine veraltete API" ohne Fundstelle;
+        // mit -Werror bricht der Build, statt dass die Warnung im Log untergeht.
+        //
+        // -Werror ist hier bewusst eng: NUR deprecation ist als Lint aktiviert, alle uebrigen
+        // javac-Lints (serial, this-escape, unchecked, ...) bleiben aus und koennen den Build nicht
+        // brechen. Deprecations bei einem Framework-Upgrade sollen dagegen sofort auffallen.
+        options.compilerArgs.addAll(['-Xlint:deprecation', '-Werror'])
     }
     tasks.withType(Javadoc).configureEach {
         options.encoding = 'UTF-8'

@@ -1,5 +1,31 @@
 # Update-Log
 
+## 2026-08-05 (5)
+
+* **Update**: Root-`build.gradle` setzt für alle `JavaCompile`-Tasks
+  `-Xlint:deprecation -Werror`. Die Konvention „niemals `@Deprecated`-APIs verwenden" ist
+  damit **erzwungen** statt nur aufgeschrieben — ohne `-Xlint:deprecation` meldet javac nur
+  den fundstellenlosen Sammel-Hinweis, ohne `-Werror` geht die Warnung im Log unter. Genau
+  dieser Sammel-Hinweis hatte die veraltete `executeJs(String, Serializable[])`-Überladung
+  verdeckt. `-Werror` ist bewusst eng: nur `deprecation` ist als Lint aktiv, `serial`,
+  `this-escape` und `unchecked` bleiben aus und können den Build nicht brechen.
+  Verifiziert: voller Build grün; mit zusätzlichem `-Xlint:all` bricht er mit „Warnungen
+  gefunden und -Werror angegeben" — der Schalter greift also nachweislich.
+* **Fix**: `serialVersionUID` in den Test-Hilfsklassen `FakeNavigable`
+  (`SearchNavigatorTest`) und `RecordingRenderer` (`SearchControllerTest`) ergänzt — beide
+  sind über `Component` bzw. `SearchHighlightRenderer` serialisierbar und verletzten die
+  Konvention „Serializable-Klassen erhalten immer eine explizite `serialVersionUID`".
+* **Prüfung ohne Befund**: `-Xlint:deprecation` und `-Xlint:all` über beide Module
+  (`main` + `test`, `--rerun-tasks`) melden **keine** veraltete API mehr. Die verbleibenden
+  `-Xlint:all`-Funde sind `serial` an vier Collection-Feldern in `TextViewer`/`XmlViewer`
+  und zwölf `this-escape` in Komponenten-/View-Konstruktoren. Die `serial`-Funde betreffen
+  nur den **deklarierten** Interface-Typ; zur Laufzeit stehen dort ausschließlich
+  serialisierbare Implementierungen (`List.of()`, `ArrayList`, `HashSet`,
+  `Collections.newSetFromMap(new IdentityHashMap<>())`), was die bestehenden
+  `istVollstaendigSerialisierbarUndBleibtFunktionsfaehig`-Tests end-to-end absichern. Die
+  Felddeklarationen bleiben deshalb bei den Interface-Typen (Dependency Inversion);
+  `this-escape` ist bei Vaadin-Komponenten mit Layout-Aufbau im Konstruktor kaum vermeidbar.
+
 ## 2026-08-05 (4)
 
 * **Restructure**: Alle sieben Frontend-Ressourcen von

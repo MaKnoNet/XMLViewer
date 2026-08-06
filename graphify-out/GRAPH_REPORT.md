@@ -1,7 +1,7 @@
-# Graph Report - XMLViewer  (2026-08-05)
+# Graph Report - XMLViewer  (2026-08-06)
 
 ## Corpus Check
-- 277 files · ~59,286 words
+- 277 files · ~59,711 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `027777d7`
+- Built from commit: `07f86ef9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

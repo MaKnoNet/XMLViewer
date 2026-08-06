@@ -161,6 +161,8 @@ class SearchNavigatorTest {
     @com.vaadin.flow.component.Tag("div")
     private static class FakeNavigable extends Component implements MatchNavigable {
 
+        private static final long serialVersionUID = 1L;
+
         private int matchCount = 0;
         private int currentMatchIndex = -1;
         private int nextCalls = 0;

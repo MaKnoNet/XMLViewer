@@ -67,6 +67,21 @@ Beim Verschieben darauf achten, dass `META-INF/resources/` nicht als **leeres Ve
 zurückbleibt: Gradle packt es sonst mit ins Jar, und der Vaadin-Build warnt weiter, obwohl keine
 Datei mehr dort liegt.
 
+## Deprecation-Sperre im Compiler
+
+Das Root-`build.gradle` setzt für alle `JavaCompile`-Tasks `-Xlint:deprecation -Werror`. Damit ist
+die Konvention „niemals als `@Deprecated` markierte APIs verwenden" **erzwungen** statt nur
+aufgeschrieben: Ohne `-Xlint:deprecation` meldet javac lediglich den fundstellenlosen Sammel-Hinweis
+„verwendet eine veraltete API", und ohne `-Werror` geht die Warnung im Log unter.
+
+`-Werror` ist bewusst eng gefasst: Aktiviert ist **nur** der `deprecation`-Lint. Alle übrigen
+javac-Lints (`serial`, `this-escape`, `unchecked`, …) bleiben ausgeschaltet und können den Build
+nicht brechen. Wer sie sehen will, hängt für einen Analyse-Lauf `-Xlint:all` an — dann bricht der
+Build allerdings wegen `-Werror`; das ist als einmalige Prüfung gedacht, nicht als Dauerzustand.
+
+Konsequenz beim Framework-Upgrade: Deprecations fallen **sofort** auf, statt sich anzusammeln.
+Genau so wurde die veraltete `executeJs(String, Serializable[])`-Überladung gefunden.
+
 # Regeln
 
 - **Tests:** JUnit 5 (JUnit-Platform für alle Module erzwungen); Business-Logik mit
