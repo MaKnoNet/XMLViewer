@@ -1,8 +1,10 @@
 pluginManagement {
+    // Kein vaadin-prereleases-Repo: die genutzte Vaadin-Version ist ein GA-Release und liegt auf
+    // Maven Central. Wer bewusst gegen eine Vaadin-Vorabversion bauen will, ergaenzt hier
+    // temporaer `maven { url = 'https://maven.vaadin.com/vaadin-prereleases' }`.
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        maven { url = 'https://maven.vaadin.com/vaadin-prereleases' }
     }
     // Zentrale Versionspflege ALLER Plugins. Das Vaadin-Plugin liest seine Version aus
     // gradle.properties (vaadinVersion) – damit können Plugin und vaadin-bom nicht

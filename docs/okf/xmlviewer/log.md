@@ -1,5 +1,16 @@
 # Update-Log
 
+## 2026-08-05 (6)
+
+* **Update**: Das Repository `https://maven.vaadin.com/vaadin-prereleases` aus
+  `settings.gradle` (`pluginManagement`) entfernt. Es stammte aus der Zeit, als gegen
+  Vaadin-Vorabversionen gebaut wurde; die jetzt genutzte Version ist ein GA-Release und
+  liegt vollständig auf Maven Central. Ein Kommentar an der Stelle nennt den Weg zurück,
+  falls doch einmal eine Vorabversion gebraucht wird. Verifiziert mit
+  `clean build --refresh-dependencies` (erzwingt Neuauflösung statt Cache): alle drei
+  Plugins — `com.vaadin`, `org.springframework.boot`, `com.diffplug.spotless` — lösen aus
+  Gradle Plugin Portal und Maven Central auf, Build und 95 Tests grün.
+
 ## 2026-08-05 (5)
 
 * **Update**: Root-`build.gradle` setzt für alle `JavaCompile`-Tasks
